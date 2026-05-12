@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="[REPLACE: Blog post description for SEO]"/>
+<title>[REPLACE: Blog Post Title] – JMC Engineering Blog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--navy:#0d2250;--navy-dark:#07163a;--blue:#2563eb;--blue-light:#60a5fa;--bg:#f0f4f8;--white:#ffffff;--text:#1e293b;--text-muted:#64748b;--border:#e2e8f0;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);}
+h1,h2,h3{font-family:'Rajdhani',sans-serif;}
+
+nav{background:var(--navy-dark);padding:14px 5%;display:flex;align-items:center;justify-content:space-between;}
+.nav-brand{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:#fff;text-decoration:none;}
+.nav-brand span{color:var(--blue-light);}
+.back-btn{color:rgba(255,255,255,.7);font-size:13px;text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s;}
+.back-btn:hover{color:#fff;}
+
+.blog-hero{background:linear-gradient(135deg,var(--navy-dark),var(--navy));padding:60px 5% 48px;}
+.blog-cat-badge{display:inline-block;background:var(--blue);color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:4px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;}
+.blog-hero h1{font-size:clamp(28px,5vw,48px);font-weight:700;color:#fff;line-height:1.2;max-width:760px;margin-bottom:14px;}
+.blog-hero-meta{display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+.meta-item{color:rgba(255,255,255,.55);font-size:13px;display:flex;align-items:center;gap:6px;}
+.meta-sep{width:4px;height:4px;background:rgba(255,255,255,.25);border-radius:50%;}
+
+.blog-body{max-width:760px;margin:0 auto;padding:52px 5%;}
+.blog-content h2{font-size:26px;font-weight:700;color:var(--text);margin:36px 0 14px;}
+.blog-content h3{font-size:20px;font-weight:700;color:var(--text);margin:28px 0 10px;}
+.blog-content p{font-size:15px;color:var(--text-muted);line-height:1.85;margin-bottom:18px;}
+.blog-content ul,.blog-content ol{margin:0 0 18px 22px;}
+.blog-content li{font-size:15px;color:var(--text-muted);line-height:1.8;margin-bottom:6px;}
+.blog-content strong{color:var(--text);font-weight:600;}
+.blog-content img{width:100%;border-radius:12px;margin:24px 0;}
+.callout{background:#eff6ff;border-left:4px solid var(--blue);border-radius:0 10px 10px 0;padding:18px 20px;margin:24px 0;}
+.callout p{margin:0;color:var(--navy);font-weight:500;}
+
+.blog-footer{border-top:1px solid var(--border);padding-top:28px;margin-top:40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:gap;}
+.author{display:flex;align-items:center;gap:12px;}
+.author-avatar{width:44px;height:44px;background:var(--navy);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:16px;}
+.author-name{font-size:14px;font-weight:600;color:var(--text);}
+.author-role{font-size:12px;color:var(--text-muted);}
+.share-btns{display:flex;gap:8px;}
+.share-btn{padding:8px 16px;border-radius:8px;font-size:12px;font-weight:600;text-decoration:none;border:1px solid var(--border);color:var(--text);transition:background .2s;}
+.share-btn:hover{background:var(--bg);}
+.share-btn.wa{background:#25d366;color:#fff;border-color:#25d366;}
+.share-btn.wa:hover{background:#1da851;}
+
+footer-strip{display:block;background:var(--navy-dark);padding:20px 5%;text-align:center;color:rgba(255,255,255,.35);font-size:12px;}
+
+/* HOW TO USE NOTE */
+.template-notice{background:#fffbeb;border:2px dashed #f59e0b;border-radius:10px;padding:20px 24px;margin:32px 0;}
+.template-notice h3{color:#92400e;font-size:16px;margin-bottom:8px;}
+.template-notice p{color:#78350f;font-size:13px;line-height:1.6;margin-bottom:6px;}
+.template-notice code{background:#fef3c7;padding:2px 6px;border-radius:4px;font-family:monospace;font-size:12px;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">JMC <span>Engineering</span></a>
+  <a href="index.html#blog" class="back-btn">← Back to Blog</a>
+</nav>
+
+<div class="blog-hero">
+  <span class="blog-cat-badge">[REPLACE: Category — e.g. Press Tools]</span>
+  <h1>[REPLACE: Your Full Blog Post Title Here]</h1>
+  <div class="blog-hero-meta">
+    <span class="meta-item">📅 [REPLACE: Date — e.g. May 12, 2025]</span>
+    <span class="meta-sep"></span>
+    <span class="meta-item">✍ JMC Engineering</span>
+    <span class="meta-sep"></span>
+    <span class="meta-item">⏱ [REPLACE: Read time — e.g. 4 min read]</span>
+  </div>
+</div>
+
+<div class="blog-body">
+
+  <!-- TEMPLATE INSTRUCTIONS (delete this section when publishing) -->
+  <div class="template-notice">
+    <h3>📋 How to use this template</h3>
+    <p>1. <strong>Copy this file</strong> and rename it — e.g. <code>blog-press-tools.html</code></p>
+    <p>2. Replace all <code>[REPLACE: ...]</code> placeholders with your content.</p>
+    <p>3. Write your blog content inside the <code>.blog-content</code> div below.</p>
+    <p>4. Delete this yellow box before publishing.</p>
+    <p>5. Link the new file from <code>index.html</code> blog section.</p>
+  </div>
+  <!-- END TEMPLATE INSTRUCTIONS -->
+
+  <div class="blog-content">
+
+    <p>[REPLACE: Opening paragraph — introduce the topic in 2-3 sentences. What is this post about and why should a manufacturer or engineer care?]</p>
+
+    <h2>[REPLACE: Section 1 Heading]</h2>
+    <p>[REPLACE: Content for section 1. Write naturally about the topic — explain concepts, share experience from the shop floor, give examples.]</p>
+    <p>[REPLACE: Continue section 1 content...]</p>
+
+    <div class="callout">
+      <p>💡 [REPLACE: A key tip, insight, or highlight from this section — something memorable.]</p>
+    </div>
+
+    <h2>[REPLACE: Section 2 Heading]</h2>
+    <p>[REPLACE: Content for section 2.]</p>
+    <ul>
+      <li>[REPLACE: Point 1]</li>
+      <li>[REPLACE: Point 2]</li>
+      <li>[REPLACE: Point 3]</li>
+    </ul>
+
+    <h2>[REPLACE: Section 3 Heading]</h2>
+    <p>[REPLACE: Content for section 3.]</p>
+
+    <h3>[REPLACE: Sub-section heading if needed]</h3>
+    <p>[REPLACE: Sub-section content.]</p>
+
+    <h2>Conclusion</h2>
+    <p>[REPLACE: Wrap up the post — summarize the key takeaway and what the reader should do next.]</p>
+    <p>Have a project in mind? <strong><a href="index.html#contact" style="color:#2563eb;">Reach out to JMC Engineering</a></strong> — we'll review your requirements and get back within 24 hours.</p>
+
+  </div>
+
+  <div class="blog-footer">
+    <div class="author">
+      <div class="author-avatar">JMC</div>
+      <div>
+        <div class="author-name">JMC Engineering</div>
+        <div class="author-role">Precision Tooling Specialists, Padi, Chennai</div>
+      </div>
+    </div>
+    <div class="share-btns">
+      <a href="https://wa.me/?text=Check%20out%20this%20article%20from%20JMC%20Engineering:%20[REPLACE: page URL]" target="_blank" class="share-btn wa">Share on WhatsApp</a>
+      <a href="index.html#blog" class="share-btn">All Posts</a>
+    </div>
+  </div>
+
+</div>
+
+<footer-strip>© 2025 JMC Engineering · info@jmcengg.com · +91 73051 87874 · GSTIN: 33AXRPJ5951H1Z5</footer-strip>
+
+</body>
+</html>

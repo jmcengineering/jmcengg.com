@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="JMC Engineering – Precision Jig Fixtures, Press Tools, Plastic Moulds & Gauges manufacturer in Padi, Chennai. MSME Registered. 30+ years expertise."/>
+<meta name="keywords" content="jig fixtures Chennai, press tools manufacturer Padi, plastic moulds Chennai, precision engineering Tamil Nadu, JMC Engineering"/>
+<title>JMC Engineering – Where Quality Meets Timeliness</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --navy:#0d2250;
+  --navy-dark:#07163a;
+  --navy-mid:#1a3a8f;
+  --blue:#2563eb;
+  --blue-light:#60a5fa;
+  --accent:#f59e0b;
+  --bg:#f0f4f8;
+  --white:#ffffff;
+  --text:#1e293b;
+  --text-muted:#64748b;
+  --border:#e2e8f0;
+  --card:#ffffff;
+  --radius:12px;
+  --shadow:0 4px 24px rgba(13,34,80,0.10);
+  --shadow-lg:0 12px 48px rgba(13,34,80,0.18);
+  --transition:0.38s cubic-bezier(.4,0,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
+h1,h2,h3,h4,h5{font-family:'Rajdhani',sans-serif;line-height:1.2;}
+
+/* ── PRELOADER ── */
+#preloader{position:fixed;inset:0;background:var(--navy-dark);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:opacity .6s ease,visibility .6s ease;}
+#preloader.hide{opacity:0;visibility:hidden;}
+.pre-logo{font-family:'Rajdhani',sans-serif;font-size:32px;font-weight:700;color:#fff;letter-spacing:2px;}
+.pre-logo span{color:var(--blue-light);}
+.pre-bar{width:160px;height:3px;background:rgba(255,255,255,.15);border-radius:4px;overflow:hidden;}
+.pre-fill{height:100%;background:var(--blue-light);border-radius:4px;animation:prefill 1.6s ease forwards;}
+@keyframes prefill{from{width:0}to{width:100%}}
+
+/* ── NAVBAR ── */
+#navbar{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 5%;display:flex;align-items:center;justify-content:space-between;transition:var(--transition);}
+#navbar.scrolled{background:rgba(7,22,58,.96);backdrop-filter:blur(12px);padding:12px 5%;box-shadow:0 2px 24px rgba(0,0,0,.3);}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo-mark{width:38px;height:38px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.nav-logo-mark svg{width:24px;height:24px;}
+.nav-brand{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:#fff;letter-spacing:.5px;}
+.nav-brand span{color:var(--blue-light);}
+.nav-links{display:flex;align-items:center;gap:26px;list-style:none;}
+.nav-links a{color:rgba(255,255,255,.72);font-size:14px;font-weight:500;text-decoration:none;transition:color .25s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:2px;background:var(--blue-light);border-radius:2px;transition:width .28s;}
+.nav-links a:hover,.nav-links a.active{color:#fff;}
+.nav-links a:hover::after,.nav-links a.active::after{width:100%;}
+.nav-cta{background:var(--blue);color:#fff;font-size:13px;font-weight:600;padding:9px 20px;border-radius:8px;text-decoration:none;transition:background .25s,transform .2s;}
+.nav-cta:hover{background:#1d4ed8;transform:translateY(-1px);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+.hamburger span{display:block;width:24px;height:2px;background:#fff;border-radius:2px;transition:.3s;}
+.mobile-menu{display:none;position:fixed;inset:0;background:var(--navy-dark);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:28px;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{color:#fff;font-family:'Rajdhani',sans-serif;font-size:26px;font-weight:700;text-decoration:none;}
+.mobile-menu .m-cta{background:var(--blue);padding:12px 36px;border-radius:10px;font-size:20px;}
+
+/* ── HERO ── */
+#hero{min-height:100vh;background:linear-gradient(135deg,var(--navy-dark) 0%,var(--navy) 60%,#1a3a8f 100%);position:relative;display:flex;align-items:center;overflow:hidden;}
+.hero-particles{position:absolute;inset:0;pointer-events:none;}
+.hero-grid-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
+.hero-glow{position:absolute;right:-100px;top:50%;transform:translateY(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(37,99,235,.25) 0%,transparent 65%);pointer-events:none;}
+.hero-content{position:relative;z-index:2;padding:120px 5% 80px;max-width:780px;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:var(--blue-light);font-size:12px;font-weight:600;padding:6px 14px;border-radius:20px;margin-bottom:22px;letter-spacing:1px;text-transform:uppercase;}
+.hero-badge::before{content:'';width:6px;height:6px;background:#4ade80;border-radius:50%;animation:pulse-dot 1.8s infinite;}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(1.4);}}
+.hero-title{font-size:clamp(38px,6vw,72px);font-weight:700;color:#fff;line-height:1.1;margin-bottom:20px;}
+.hero-title .highlight{color:var(--blue-light);display:block;}
+.hero-title .typing-cursor{display:inline-block;width:3px;background:var(--blue-light);animation:blink .7s infinite;margin-left:3px;vertical-align:baseline;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+.hero-sub{font-size:16px;color:rgba(255,255,255,.65);line-height:1.75;max-width:520px;margin-bottom:32px;}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:52px;}
+.btn-hero-p{background:var(--blue);color:#fff;font-size:14px;font-weight:600;padding:13px 28px;border-radius:10px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:background .25s,transform .2s,box-shadow .25s;box-shadow:0 4px 20px rgba(37,99,235,.4);}
+.btn-hero-p:hover{background:#1d4ed8;transform:translateY(-2px);box-shadow:0 8px 30px rgba(37,99,235,.5);}
+.btn-hero-o{background:transparent;color:#fff;font-size:14px;font-weight:600;padding:13px 28px;border-radius:10px;border:1.5px solid rgba(255,255,255,.3);text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:border-color .25s,background .25s,transform .2s;}
+.btn-hero-o:hover{border-color:rgba(255,255,255,.7);background:rgba(255,255,255,.06);transform:translateY(-2px);}
+.hero-stats{display:flex;gap:36px;flex-wrap:wrap;padding-top:36px;border-top:1px solid rgba(255,255,255,.12);}
+.stat-item{text-align:left;}
+.stat-num{font-family:'Rajdhani',sans-serif;font-size:34px;font-weight:700;color:#fff;line-height:1;}
+.stat-label{font-size:12px;color:rgba(255,255,255,.5);margin-top:4px;letter-spacing:.5px;}
+.hero-scroll-hint{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;color:rgba(255,255,255,.4);font-size:11px;letter-spacing:1px;text-transform:uppercase;}
+.scroll-arrow{width:20px;height:20px;border-right:2px solid rgba(255,255,255,.3);border-bottom:2px solid rgba(255,255,255,.3);transform:rotate(45deg);animation:bounce-arrow 1.6s infinite;}
+@keyframes bounce-arrow{0%,100%{transform:rotate(45deg) translateY(0);}50%{transform:rotate(45deg) translateY(5px);}}
+
+/* ── SECTION BASE ── */
+section{padding:80px 5%;}
+.sec-label{font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--blue);margin-bottom:8px;}
+.sec-title{font-family:'Rajdhani',sans-serif;font-size:clamp(28px,4vw,40px);font-weight:700;color:var(--text);margin-bottom:10px;}
+.sec-sub{font-size:15px;color:var(--text-muted);line-height:1.7;max-width:560px;}
+.sec-head{margin-bottom:44px;}
+
+/* ── SCROLL REVEAL ── */
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-left{opacity:0;transform:translateX(-36px);transition:opacity .65s ease,transform .65s ease;}
+.reveal-left.visible{opacity:1;transform:translateX(0);}
+.reveal-right{opacity:0;transform:translateX(36px);transition:opacity .65s ease,transform .65s ease;}
+.reveal-right.visible{opacity:1;transform:translateX(0);}
+.delay-1{transition-delay:.1s!important;}
+.delay-2{transition-delay:.2s!important;}
+.delay-3{transition-delay:.3s!important;}
+.delay-4{transition-delay:.4s!important;}
+.delay-5{transition-delay:.5s!important;}
+
+/* ── ABOUT ── */
+#about{background:var(--white);}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.about-img-wrap{position:relative;}
+.about-img-box{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);border-radius:20px;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;}
+.about-gear{font-size:120px;opacity:.08;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);}
+.about-img-inner{text-align:center;color:#fff;z-index:2;}
+.about-img-inner p{font-size:13px;opacity:.6;margin-top:8px;}
+.about-badge-float{position:absolute;bottom:-18px;right:-18px;background:var(--accent);color:var(--navy-dark);padding:16px 22px;border-radius:14px;font-family:'Rajdhani',sans-serif;font-weight:700;text-align:center;box-shadow:var(--shadow-lg);}
+.about-badge-float .big{font-size:26px;display:block;line-height:1;}
+.about-badge-float .small{font-size:12px;}
+.about-text p{font-size:15px;color:var(--text-muted);line-height:1.8;margin-bottom:16px;}
+.about-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;}
+.tag{background:#eff6ff;color:var(--navy-mid);font-size:12px;font-weight:600;padding:6px 14px;border-radius:20px;border:1px solid #bfdbfe;}
+
+/* ── SERVICES ── */
+#services{background:var(--bg);}
+.svc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;}
+.svc-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px 24px;cursor:default;transition:transform .3s,box-shadow .3s,border-color .3s;}
+.svc-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-lg);border-color:var(--blue);}
+.svc-card:hover .svc-icon-wrap{background:var(--blue);transform:rotate(-6deg) scale(1.1);}
+.svc-card:hover .svc-icon-wrap svg{stroke:#fff;}
+.svc-icon-wrap{width:52px;height:52px;background:#eff6ff;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;transition:background .3s,transform .3s;}
+.svc-icon-wrap svg{width:26px;height:26px;stroke:var(--navy-mid);stroke-width:2;fill:none;transition:stroke .3s;}
+.svc-title{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px;}
+.svc-desc{font-size:13px;color:var(--text-muted);line-height:1.7;}
+
+/* ── MACHINERY ── */
+#machinery{background:var(--navy-dark);padding:80px 5%;}
+#machinery .sec-label{color:var(--blue-light);}
+#machinery .sec-title{color:#fff;}
+#machinery .sec-sub{color:rgba(255,255,255,.55);}
+.mach-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;}
+.mach-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);padding:22px 20px;display:flex;gap:16px;align-items:flex-start;transition:background .3s,border-color .3s,transform .3s;}
+.mach-card:hover{background:rgba(255,255,255,.1);border-color:var(--blue-light);transform:translateY(-4px);}
+.mach-dot{width:10px;height:10px;background:var(--blue-light);border-radius:50%;margin-top:5px;flex-shrink:0;box-shadow:0 0 10px rgba(96,165,250,.5);}
+.mach-name{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;color:#fff;margin-bottom:4px;}
+.mach-sub{font-size:12px;color:rgba(255,255,255,.45);}
+.mach-badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;margin-top:6px;text-transform:uppercase;letter-spacing:.5px;}
+.mach-badge.inhouse{background:rgba(74,222,128,.15);color:#4ade80;}
+.mach-badge.partner{background:rgba(96,165,250,.15);color:var(--blue-light);}
+
+/* ── SAMPLE WORKS ── */
+#sample-works{background:var(--navy-dark);padding:80px 5%;}
+#sample-works .sec-label{color:var(--blue-light);}
+#sample-works .sec-title{color:#fff;}
+#sample-works .sec-sub{color:rgba(255,255,255,.55);}
+.works-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;margin-top:36px;}
+.work-item{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:1;background:rgba(255,255,255,.05);border:1.5px dashed rgba(255,255,255,.14);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;transition:border-color .3s,background .3s,transform .3s;}
+.work-item:hover{border-color:var(--blue-light);background:rgba(96,165,250,.07);transform:scale(1.03);}
+.work-item img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:12px;transition:transform .4s;}
+.work-item:hover img{transform:scale(1.07);}
+.work-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(7,22,58,.88) 0%,transparent 55%);border-radius:12px;opacity:0;transition:opacity .3s;}
+.work-item:hover .work-overlay{opacity:1;}
+.work-label{position:absolute;bottom:12px;left:12px;right:12px;color:#fff;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s;}
+.work-item:hover .work-label{opacity:1;transform:translateY(0);}
+.work-ph-icon{font-size:30px;opacity:.2;}
+.work-ph-text{color:rgba(255,255,255,.3);font-size:10px;font-weight:600;text-align:center;padding:0 10px;}
+.works-view-btn{display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#fff;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;padding:12px 28px;border-radius:10px;text-decoration:none;transition:background .25s,transform .2s,box-shadow .25s;box-shadow:0 4px 20px rgba(37,99,235,.35);}
+.works-view-btn:hover{background:#1d4ed8;transform:translateY(-2px);box-shadow:0 8px 28px rgba(37,99,235,.45);}
+
+/* ── CLIENTS MARQUEE ── */
+#clients{background:var(--white);overflow:hidden;}
+.marquee-wrapper{position:relative;overflow:hidden;margin-top:36px;}
+.marquee-wrapper::before,.marquee-wrapper::after{content:'';position:absolute;top:0;bottom:0;width:100px;z-index:2;}
+.marquee-wrapper::before{left:0;background:linear-gradient(to right,#fff,transparent);}
+.marquee-wrapper::after{right:0;background:linear-gradient(to left,#fff,transparent);}
+.marquee-track{display:flex;gap:20px;animation:marquee-scroll 28s linear infinite;width:max-content;}
+.marquee-track:hover{animation-play-state:paused;}
+.client-slot{width:160px;height:72px;background:#f8fafc;border:1.5px dashed var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .3s,background .3s;}
+.client-slot:hover{border-color:var(--blue);background:#eff6ff;}
+.client-slot span{font-size:11px;color:var(--text-muted);font-weight:500;text-align:center;padding:0 8px;}
+@keyframes marquee-scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+.clients-note{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-muted);background:#f8fafc;border:1px dashed var(--border);border-radius:8px;padding:10px 16px;margin-bottom:24px;max-width:440px;}
+
+/* ── HOW WE WORK ── */
+#process{background:var(--bg);}
+.timeline{display:flex;flex-direction:column;gap:0;position:relative;max-width:700px;margin:0 auto;}
+.timeline::before{content:'';position:absolute;left:22px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--blue),var(--navy));border-radius:2px;}
+.tl-item{display:flex;gap:28px;padding-bottom:36px;position:relative;}
+.tl-item:last-child{padding-bottom:0;}
+.tl-num{width:46px;height:46px;border-radius:50%;background:var(--blue);color:#fff;font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;z-index:2;box-shadow:0 0 0 4px var(--bg),0 0 0 6px var(--blue);transition:transform .3s,box-shadow .3s;}
+.tl-item:hover .tl-num{transform:scale(1.12);box-shadow:0 0 0 4px var(--bg),0 0 0 6px var(--blue),0 4px 20px rgba(37,99,235,.4);}
+.tl-content{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;flex:1;transition:box-shadow .3s,border-color .3s,transform .3s;}
+.tl-item:hover .tl-content{box-shadow:var(--shadow);border-color:var(--blue);transform:translateX(4px);}
+.tl-title{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.tl-desc{font-size:13px;color:var(--text-muted);line-height:1.7;}
+.tl-time{display:inline-block;font-size:11px;font-weight:600;color:var(--blue);background:#eff6ff;padding:3px 9px;border-radius:4px;margin-top:8px;}
+
+/* ── BLOG ── */
+#blog{background:var(--white);}
+.blog-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px;}
+.blog-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:transform .3s,box-shadow .3s;}
+.blog-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);}
+.blog-thumb{height:160px;background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.blog-thumb-icon{font-size:60px;opacity:.12;position:absolute;}
+.blog-thumb-label{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:rgba(255,255,255,.25);letter-spacing:2px;}
+.blog-cat{position:absolute;top:12px;left:12px;background:var(--accent);color:var(--navy-dark);font-size:10px;font-weight:700;padding:4px 10px;border-radius:4px;text-transform:uppercase;letter-spacing:.5px;}
+.blog-body{padding:20px;}
+.blog-title{font-family:'Rajdhani',sans-serif;font-size:19px;font-weight:700;color:var(--text);line-height:1.35;margin-bottom:10px;}
+.blog-excerpt{font-size:13px;color:var(--text-muted);line-height:1.7;margin-bottom:14px;}
+.blog-meta{display:flex;align-items:center;justify-content:space-between;}
+.blog-date{font-size:11px;color:var(--text-muted);}
+.blog-read{font-size:12px;color:var(--blue);font-weight:600;text-decoration:none;}
+.blog-read:hover{text-decoration:underline;}
+
+/* ── VLOG ── */
+#vlog{background:var(--bg);}
+.vlog-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px;}
+.vlog-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:transform .3s,box-shadow .3s;}
+.vlog-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);}
+.vlog-thumb{height:170px;background:#111827;display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer;}
+.vlog-thumb-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0d2250 0%,#1a1a2e 100%);opacity:.8;}
+.vlog-thumb-gear{position:absolute;font-size:80px;opacity:.06;}
+.play-wrap{position:relative;z-index:2;text-align:center;}
+.play-circle{width:56px;height:56px;background:#ff0000;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;transition:transform .3s,box-shadow .3s;box-shadow:0 4px 20px rgba(255,0,0,.4);}
+.vlog-card:hover .play-circle{transform:scale(1.12);box-shadow:0 8px 32px rgba(255,0,0,.5);}
+.play-circle svg{width:22px;height:22px;fill:#fff;margin-left:4px;}
+.vlog-yt{color:rgba(255,255,255,.6);font-size:11px;}
+.vlog-yt span{color:#ff0000;font-weight:700;}
+.vlog-body{padding:18px 20px;}
+.vlog-title{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px;line-height:1.35;}
+.vlog-meta{font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:6px;}
+.vlog-yt-badge{display:inline-flex;align-items:center;gap:4px;background:#fff0f0;color:#dc2626;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;}
+
+/* ── CREDENTIALS ── */
+#credentials{background:var(--navy);padding:72px 5%;}
+#credentials .sec-label{color:var(--blue-light);}
+#credentials .sec-title{color:#fff;}
+.creds-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:36px;}
+.cred-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);padding:24px 20px;display:flex;align-items:flex-start;gap:14px;transition:background .3s,border-color .3s,transform .3s;}
+.cred-card:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.25);transform:translateY(-4px);}
+.cred-icon{width:44px;height:44px;background:rgba(96,165,250,.15);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.cred-icon svg{width:22px;height:22px;stroke:var(--blue-light);stroke-width:2;fill:none;}
+.cred-name{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;color:#fff;margin-bottom:4px;}
+.cred-detail{font-size:12px;color:rgba(255,255,255,.5);line-height:1.5;}
+
+/* ── CONTACT ── */
+#contact{background:var(--white);}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;}
+.contact-cards{display:flex;flex-direction:column;gap:14px;}
+.contact-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;display:flex;align-items:center;gap:16px;transition:border-color .3s,transform .3s,box-shadow .3s;}
+.contact-card:hover{border-color:var(--blue);transform:translateX(6px);box-shadow:var(--shadow);}
+.cc-icon{width:44px;height:44px;background:#eff6ff;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.cc-icon svg{width:22px;height:22px;stroke:var(--navy-mid);stroke-width:2;fill:none;}
+.cc-label{font-size:11px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+.cc-value{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;color:var(--text);}
+.contact-form{background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:30px;}
+.contact-form h3{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:var(--text);margin-bottom:20px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
+.form-field label{font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;}
+.form-field input,.form-field select,.form-field textarea{background:var(--white);border:1.5px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);outline:none;transition:border-color .25s,box-shadow .25s;}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.12);}
+.form-field textarea{resize:vertical;min-height:90px;}
+.btn-submit{width:100%;background:var(--blue);color:#fff;font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;padding:13px;border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .25s,transform .2s,box-shadow .25s;letter-spacing:.5px;}
+.btn-submit:hover{background:#1d4ed8;transform:translateY(-2px);box-shadow:0 6px 24px rgba(37,99,235,.4);}
+.btn-submit svg{width:18px;height:18px;stroke:#fff;stroke-width:2;fill:none;}
+
+/* ── FOOTER ── */
+footer{background:var(--navy-dark);padding:48px 5% 24px;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;margin-bottom:36px;}
+.footer-brand .nav-brand{font-size:20px;display:block;margin-bottom:10px;}
+.footer-brand p{font-size:13px;color:rgba(255,255,255,.45);line-height:1.7;margin-bottom:16px;}
+.footer-socials{display:flex;gap:10px;}
+.social-btn{width:36px;height:36px;background:rgba(255,255,255,.08);border-radius:8px;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:background .25s,transform .2s;}
+.social-btn:hover{background:var(--blue);transform:translateY(-2px);}
+.social-btn svg{width:17px;height:17px;stroke:#fff;stroke-width:2;fill:none;}
+.footer-col h4{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#fff;margin-bottom:14px;}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:9px;}
+.footer-col ul a{color:rgba(255,255,255,.45);font-size:13px;text-decoration:none;transition:color .25s;}
+.footer-col ul a:hover{color:#fff;}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:22px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.footer-copy{font-size:12px;color:rgba(255,255,255,.3);}
+.footer-gstin{font-size:11px;color:rgba(255,255,255,.3);}
+
+/* ── WHATSAPP FLOAT ── */
+#wa-float{position:fixed;bottom:28px;right:28px;z-index:998;display:flex;flex-direction:column;align-items:flex-end;gap:10px;}
+.wa-tooltip{background:var(--navy-dark);color:#fff;font-size:12px;padding:7px 14px;border-radius:8px;white-space:nowrap;opacity:0;transform:translateX(8px);transition:opacity .25s,transform .25s;pointer-events:none;}
+#wa-float:hover .wa-tooltip{opacity:1;transform:translateX(0);}
+.wa-btn{width:56px;height:56px;background:#25d366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.4);text-decoration:none;animation:wa-pulse 2.5s infinite;}
+@keyframes wa-pulse{0%,100%{box-shadow:0 4px 20px rgba(37,211,102,.4);}50%{box-shadow:0 4px 40px rgba(37,211,102,.7);}}
+.wa-btn svg{width:28px;height:28px;fill:#fff;}
+
+/* ── BACK TO TOP ── */
+#back-top{position:fixed;bottom:100px;right:30px;z-index:997;width:40px;height:40px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transform:translateY(10px);transition:opacity .3s,transform .3s;box-shadow:var(--shadow);}
+#back-top.show{opacity:1;transform:translateY(0);}
+#back-top svg{width:18px;height:18px;stroke:#fff;stroke-width:2.5;fill:none;}
+#back-top:hover{background:#1d4ed8;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .nav-links,.nav-cta{display:none;}
+  .hamburger{display:flex;}
+  .about-grid,.contact-grid,.footer-top{grid-template-columns:1fr;}
+  .form-row{grid-template-columns:1fr;}
+  .about-badge-float{bottom:-10px;right:0;}
+  section{padding:60px 5%;}
+}
+
+/* ── GEAR GAME ── */
+#gear-game{width:100%;height:100%;position:relative;background:linear-gradient(135deg,#07163a 0%,#0d2250 60%,#1a3a8f 100%);border-radius:20px;overflow:hidden;}
+#gear-canvas{width:100%;height:100%;display:block;cursor:pointer;}
+#gear-info-box{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(7,22,58,.88);border:1px solid rgba(96,165,250,.3);border-radius:12px;padding:12px 20px;text-align:center;min-width:220px;pointer-events:none;transition:all .35s ease;backdrop-filter:blur(6px);}
+#gear-info-icon{font-size:22px;margin-bottom:4px;}
+#gear-info-title{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#fff;margin-bottom:3px;}
+#gear-info-text{font-size:12px;color:rgba(255,255,255,.6);line-height:1.5;}
+#gear-hint{position:absolute;top:14px;left:50%;transform:translateX(-50%);background:rgba(37,99,235,.25);border:1px solid rgba(37,99,235,.4);color:rgba(255,255,255,.7);font-size:11px;font-weight:600;padding:5px 14px;border-radius:20px;letter-spacing:.5px;pointer-events:none;animation:hint-fade 3s ease 2s forwards;}
+@keyframes hint-fade{0%{opacity:1;}100%{opacity:0;}}
+</style>
+</head>
+<body>
+
+<!-- PRELOADER -->
+<div id="preloader">
+  <div class="pre-logo">JMC <span>Engineering</span></div>
+  <div class="pre-bar"><div class="pre-fill"></div></div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">
+    <div class="nav-logo-mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#0d2250" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+    </div>
+    <span class="nav-brand">JMC <span>Engineering</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#sample-works">Works</a></li>
+    <li><a href="#clients">Clients</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#blog">Blog</a></li>
+    <li><a href="#vlog">Vlog</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Get Quote →</a>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="toggleMenu()">About</a>
+  <a href="#services" onclick="toggleMenu()">Services</a>
+  <a href="#sample-works" onclick="toggleMenu()">Works</a>
+  <a href="#clients" onclick="toggleMenu()">Clients</a>
+  <a href="#process" onclick="toggleMenu()">Process</a>
+  <a href="#blog" onclick="toggleMenu()">Blog</a>
+  <a href="#vlog" onclick="toggleMenu()">Vlog</a>
+  <a href="#contact" onclick="toggleMenu()">Contact</a>
+  <a href="#contact" class="m-cta" onclick="toggleMenu()">Get Quote</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid-lines"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-badge">MSME Registered &nbsp;·&nbsp; GST Compliant &nbsp;·&nbsp; Padi, Chennai</div>
+    <h1 class="hero-title">
+      Precision Tooling,<br>
+      <span class="highlight"><span id="typing-text"></span><span class="typing-cursor"></span></span>
+    </h1>
+    <p class="hero-sub">Specialists in Jig Fixtures, Press Tools, Plastic Moulds & Gauges. 30+ years of combined engineering expertise — from Singapore to Chennai.</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-hero-p">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        Request a Quote
+      </a>
+      <a href="#services" class="btn-hero-o">
+        View Our Services ↓
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num"><span class="counter" data-target="30">0</span>+</div>
+        <div class="stat-label">Years Expertise</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">On-Time</div>
+        <div class="stat-label">Delivery Commitment</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">24<span style="font-size:20px">hr</span></div>
+        <div class="stat-label">Engineering Review</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num"><span class="counter" data-target="5">0</span>+</div>
+        <div class="stat-label">Machine Capabilities</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-img-wrap reveal-left">
+      <div class="about-img-box" style="padding:0;overflow:hidden;">
+        <!-- INTERACTIVE GEAR GAME -->
+        <div id="gear-game">
+          <canvas id="gear-canvas"></canvas>
+          <div id="gear-info-box">
+            <div id="gear-info-icon">⚙</div>
+            <div id="gear-info-title">Click a gear!</div>
+            <div id="gear-info-text">Discover JMC Engineering</div>
+          </div>
+          <div id="gear-hint">Click any gear to explore</div>
+        </div>
+      </div>
+      <div class="about-badge-float">
+        <span class="big">30+</span>
+        <span class="small">Years of Engineering Excellence</span>
+      </div>
+    </div>
+    <div class="about-text reveal-right">
+      <div class="sec-label">Who We Are</div>
+      <h2 class="sec-title">About JMC Engineering</h2>
+      <p>Founded in 2020, JMC Engineering has rapidly evolved into a trusted name in precision engineering. Our commitment to quality, innovation, and transparency enables us to deliver exceptional solutions to clients across diverse industries.</p>
+      <p>Our CEO brings over 30 years of experience in the Engineering domain (Tool & SPM), including 12 years of expertise in Singapore and 18 years in Chennai — with a strong background in die and tool design, finance, and R&D.</p>
+      <div class="about-tags">
+        <span class="tag">MSME Registered</span>
+        <span class="tag">GST Compliant</span>
+        <span class="tag">ISO 9001 (In Progress)</span>
+        <span class="tag">Singapore Experience</span>
+        <span class="tag">Udyam Certified</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="sec-head reveal">
+    <div class="sec-label">What We Manufacture</div>
+    <h2 class="sec-title">Our Services</h2>
+    <p class="sec-sub">Engineered with precision, delivered with accountability — every component, every time.</p>
+  </div>
+  <div class="svc-grid">
+    <div class="svc-card reveal delay-1">
+      <div class="svc-icon-wrap">
+        <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+      </div>
+      <div class="svc-title">Jig Fixtures</div>
+      <div class="svc-desc">Custom machining and assembly jigs designed for high-accuracy, repeatable production across automotive and industrial applications.</div>
+    </div>
+    <div class="svc-card reveal delay-2">
+      <div class="svc-icon-wrap">
+        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </div>
+      <div class="svc-title">Press Tools</div>
+      <div class="svc-desc">Blanking, piercing, forming, bending, and progressive dies engineered for precision sheet metal operations at scale.</div>
+    </div>
+    <div class="svc-card reveal delay-3">
+      <div class="svc-icon-wrap">
+        <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+      </div>
+      <div class="svc-title">Plastic Moulds</div>
+      <div class="svc-desc">Injection mould tooling for diverse plastic components, designed for dimensional accuracy and long production life.</div>
+    </div>
+    <div class="svc-card reveal delay-4">
+      <div class="svc-icon-wrap">
+        <svg viewBox="0 0 24 24"><path d="M21 3H3v7h18zM21 14H3v7h18zM8 3v18M16 3v18"/></svg>
+      </div>
+      <div class="svc-title">Gauges & SPM</div>
+      <div class="svc-desc">Inspection gauges, go/no-go gauges, and special purpose machines tailored to your quality control requirements.</div>
+    </div>
+    <div class="svc-card reveal delay-5">
+      <div class="svc-icon-wrap">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+      </div>
+      <div class="svc-title">Forming Tools</div>
+      <div class="svc-desc">Deep draw, stretch forming, and compound forming tools for complex geometries requiring tight tolerance control.</div>
+    </div>
+    <div class="svc-card reveal delay-5">
+      <div class="svc-icon-wrap">
+        <svg viewBox="0 0 24 24"><path d="M2 20h20M4 20V10l8-7 8 7v10M10 20v-6h4v6"/></svg>
+      </div>
+      <div class="svc-title">Engineering Works</div>
+      <div class="svc-desc">Custom precision machining, component development, and prototype manufacturing for diverse engineering requirements.</div>
+    </div>
+  </div>
+</section>
+
+<!-- MACHINERY -->
+<section id="machinery">
+  <div class="sec-head reveal">
+    <div class="sec-label">Our Capabilities</div>
+    <h2 class="sec-title" style="color:#fff">Machinery & Sourcing</h2>
+    <p class="sec-sub">In-house precision combined with specialized partner network for complete manufacturing solutions.</p>
+  </div>
+  <div class="mach-grid">
+    <div class="mach-card reveal delay-1">
+      <div class="mach-dot"></div>
+      <div>
+        <div class="mach-name">M1DR Milling Machines</div>
+        <div class="mach-sub">Vertical milling for complex profiles and slots</div>
+        <span class="mach-badge inhouse">In-house</span>
+      </div>
+    </div>
+    <div class="mach-card reveal delay-2">
+      <div class="mach-dot"></div>
+      <div>
+        <div class="mach-name">Precision Surface Grinding</div>
+        <div class="mach-sub">Mirror finish, tight flatness & parallelism</div>
+        <span class="mach-badge inhouse">In-house</span>
+      </div>
+    </div>
+    <div class="mach-card reveal delay-3">
+      <div class="mach-dot"></div>
+      <div>
+        <div class="mach-name">Lathe Operations</div>
+        <div class="mach-sub">Turning, facing, threading & boring</div>
+        <span class="mach-badge partner">Partner Network</span>
+      </div>
+    </div>
+    <div class="mach-card reveal delay-4">
+      <div class="mach-dot"></div>
+      <div>
+        <div class="mach-name">VMC / CNC Machining</div>
+        <div class="mach-sub">3-axis precision CNC for complex components</div>
+        <span class="mach-badge partner">Partner Network</span>
+      </div>
+    </div>
+    <div class="mach-card reveal delay-5">
+      <div class="mach-dot"></div>
+      <div>
+        <div class="mach-name">Wire Cut EDM</div>
+        <div class="mach-sub">Sub-micron accuracy for intricate tool profiles</div>
+        <span class="mach-badge partner">Partner Network</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- SAMPLE WORKS -->
+<section id="sample-works">
+  <div class="sec-head reveal">
+    <div class="sec-label">Our Portfolio</div>
+    <h2 class="sec-title">Sample Works</h2>
+    <p class="sec-sub">A glimpse of what we manufacture — precision tooling crafted in our Padi, Chennai shop floor.</p>
+  </div>
+  <div class="works-grid">
+    <!-- TO ADD: Replace placeholder divs with <img src="your-image.jpg"> inside work-item -->
+    <div class="work-item reveal delay-1">
+      <div class="work-ph-icon">📸</div>
+      <div class="work-ph-text">Add Photo</div>
+      <div class="work-overlay"></div>
+      <div class="work-label">Jig Fixture</div>
+    </div>
+    <div class="work-item reveal delay-1">
+      <div class="work-ph-icon">📸</div>
+      <div class="work-ph-text">Add Photo</div>
+      <div class="work-overlay"></div>
+      <div class="work-label">Press Tool</div>
+    </div>
+    <div class="work-item reveal delay-2">
+      <div class="work-ph-icon">📸</div>
+      <div class="work-ph-text">Add Photo</div>
+      <div class="work-overlay"></div>
+      <div class="work-label">Die Set</div>
+    </div>
+    <div class="work-item reveal delay-2">
+      <div class="work-ph-icon">📸</div>
+      <div class="work-ph-text">Add Photo</div>
+      <div class="work-overlay"></div>
+      <div class="work-label">Gauge</div>
+    </div>
+    <div class="work-item reveal delay-3">
+      <div class="work-ph-icon">📸</div>
+      <div class="work-ph-text">Add Photo</div>
+      <div class="work-overlay"></div>
+      <div class="work-label">Forming Tool</div>
+    </div>
+    <div class="work-item reveal delay-3">
+      <div class="work-ph-icon">📸</div>
+      <div class="work-ph-text">Add Photo</div>
+      <div class="work-overlay"></div>
+      <div class="work-label">Plastic Mould</div>
+    </div>
+    <div class="work-item reveal delay-4">
+      <div class="work-ph-icon">📸</div>
+      <div class="work-ph-text">Add Photo</div>
+      <div class="work-overlay"></div>
+      <div class="work-label">SPM Component</div>
+    </div>
+    <div class="work-item reveal delay-4">
+      <div class="work-ph-icon">📸</div>
+      <div class="work-ph-text">Add Photo</div>
+      <div class="work-overlay"></div>
+      <div class="work-label">Precision Part</div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:32px;" class="reveal">
+    <p style="color:rgba(255,255,255,.4);font-size:13px;margin-bottom:18px;">See more of our work on YouTube</p>
+    <a href="https://www.youtube.com/@jmcengineering" target="_blank" class="works-view-btn">
+      <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      View More on @JMCEngineering
+    </a>
+  </div>
+</section>
+
+<!-- CLIENTS -->
+<section id="clients">
+  <div class="sec-head reveal">
+    <div class="sec-label">Who We Work With</div>
+    <h2 class="sec-title">Our Clients</h2>
+    <p class="sec-sub">Trusted by manufacturers across automotive, industrial, and precision engineering sectors.</p>
+  </div>
+  <div class="clients-note reveal">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    Client logos will be added here — placeholders shown below.
+  </div>
+  <div class="marquee-wrapper">
+    <div class="marquee-track" id="marquee-track">
+      <!-- Slots duplicated for seamless loop -->
+      <div class="client-slot"><span>Client Logo</span></div>
+      <div class="client-slot"><span>Client Logo</span></div>
+      <div class="client-slot"><span>Client Logo</span></div>
+      <div class="client-slot"><span>Client Logo</span></div>
+      <div class="client-slot"><span>Client Logo</span></div>
+      <div class="client-slot"><span>Client Logo</span></div>
+      <div class="client-slot"><span>Client Logo</span></div>
+      <div class="client-slot"><span>Client Logo</span></div>
+      <!-- Duplicates for infinite scroll -->
+      <div class="client-slot"><span>Client Logo</span></div>
+      <div class="client-slot"><span>Client Logo</span></div>
+      <div class="client-slot"><span>Client Logo</span></div>
+      <div class="client-slot"><span>Client Logo</span></div>
+      <div class="client-slot"><span>Client Logo</span></div>
+      <div class="client-slot"><span>Client Logo</span></div>
+      <div class="client-slot"><span>Client Logo</span></div>
+      <div class="client-slot"><span>Client Logo</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW WE WORK -->
+<section id="process">
+  <div class="sec-head reveal" style="text-align:center;">
+    <div class="sec-label">Our Process</div>
+    <h2 class="sec-title">How We Work</h2>
+    <p class="sec-sub" style="margin:0 auto;">A transparent, structured approach — so you always know where your project stands.</p>
+  </div>
+  <div class="timeline">
+    <div class="tl-item reveal">
+      <div class="tl-num">1</div>
+      <div class="tl-content">
+        <div class="tl-title">Inquiry & Consultation</div>
+        <div class="tl-desc">Share your drawings or specifications. We'll have an initial feasibility discussion at no cost — understanding your requirements before anything else.</div>
+        <span class="tl-time">Free · No Commitment</span>
+      </div>
+    </div>
+    <div class="tl-item reveal delay-1">
+      <div class="tl-num">2</div>
+      <div class="tl-content">
+        <div class="tl-title">Engineering Review</div>
+        <div class="tl-desc">Technical feasibility assessment, material & process recommendations, and design optimization suggestions — delivered within 24–48 hours.</div>
+        <span class="tl-time">24–48 Hours</span>
+      </div>
+    </div>
+    <div class="tl-item reveal delay-2">
+      <div class="tl-num">3</div>
+      <div class="tl-content">
+        <div class="tl-title">Detailed Quotation</div>
+        <div class="tl-desc">Itemized cost breakdown, timeline estimation, material specifications, and clear terms & conditions — full transparency, no hidden charges.</div>
+        <span class="tl-time">2–3 Working Days</span>
+      </div>
+    </div>
+    <div class="tl-item reveal delay-3">
+      <div class="tl-num">4</div>
+      <div class="tl-content">
+        <div class="tl-title">Prototype / Sampling</div>
+        <div class="tl-desc">First article inspection, design validation, and client approval before full production — ensuring zero surprises at delivery.</div>
+        <span class="tl-time">If Required</span>
+      </div>
+    </div>
+    <div class="tl-item reveal delay-4">
+      <div class="tl-num">5</div>
+      <div class="tl-content">
+        <div class="tl-title">Production & QC</div>
+        <div class="tl-desc">Regular progress updates, in-process quality checkpoints, and dimensional verification at every critical stage.</div>
+        <span class="tl-time">As Per Timeline</span>
+      </div>
+    </div>
+    <div class="tl-item reveal delay-5">
+      <div class="tl-num">6</div>
+      <div class="tl-content">
+        <div class="tl-title">Delivery & Support</div>
+        <div class="tl-desc">On-time delivery guarantee, full documentation provided, and post-delivery technical support — because our relationship doesn't end at dispatch.</div>
+        <span class="tl-time">On-Time. Always.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOG -->
+<section id="blog">
+  <div class="sec-head reveal">
+    <div class="sec-label">Engineering Insights</div>
+    <h2 class="sec-title">Blog</h2>
+    <p class="sec-sub">Knowledge, industry tips, and updates from the JMC Engineering shop floor.</p>
+  </div>
+  <div class="blog-grid">
+    <div class="blog-card reveal delay-1">
+      <div class="blog-thumb">
+        <div class="blog-thumb-icon">⚙</div>
+        <div class="blog-thumb-label">BLOG</div>
+        <span class="blog-cat">Press Tools</span>
+      </div>
+      <div class="blog-body">
+        <div class="blog-title">How We Design Progressive Dies for Tight Tolerances</div>
+        <div class="blog-excerpt">A walkthrough of our design methodology for complex progressive dies — from strip layout to final tryout and first article approval.</div>
+        <div class="blog-meta">
+          <span class="blog-date">Add your date here</span>
+          <a href="blog-post-template.html" class="blog-read">Read More →</a>
+        </div>
+      </div>
+    </div>
+    <div class="blog-card reveal delay-2">
+      <div class="blog-thumb">
+        <div class="blog-thumb-icon">🔩</div>
+        <div class="blog-thumb-label">BLOG</div>
+        <span class="blog-cat">Jig Fixtures</span>
+      </div>
+      <div class="blog-body">
+        <div class="blog-title">5 Common Fixture Design Mistakes & How to Avoid Them</div>
+        <div class="blog-excerpt">From poor clamping strategy to ignoring datum reference frames — the top mistakes we see and how to get it right the first time.</div>
+        <div class="blog-meta">
+          <span class="blog-date">Add your date here</span>
+          <a href="blog-post-template.html" class="blog-read">Read More →</a>
+        </div>
+      </div>
+    </div>
+    <div class="blog-card reveal delay-3">
+      <div class="blog-thumb">
+        <div class="blog-thumb-icon">🏭</div>
+        <div class="blog-thumb-label">BLOG</div>
+        <span class="blog-cat">Industry</span>
+      </div>
+      <div class="blog-body">
+        <div class="blog-title">Why MSME Toolmakers Are the Backbone of India's Auto Sector</div>
+        <div class="blog-excerpt">India's automotive boom runs on precision tooling — and small MSME shops like JMC are the unseen engine behind it all.</div>
+        <div class="blog-meta">
+          <span class="blog-date">Add your date here</span>
+          <a href="blog-post-template.html" class="blog-read">Read More →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VLOG -->
+<section id="vlog">
+  <div class="sec-head reveal">
+    <div class="sec-label">Watch & Learn</div>
+    <h2 class="sec-title">Vlog — @JMCEngineering</h2>
+    <p class="sec-sub">Shop floor videos, process walkthroughs, and behind-the-scenes from our tool room in Chennai.</p>
+  </div>
+  <div class="vlog-grid">
+    <div class="vlog-card reveal delay-1">
+      <a href="https://www.youtube.com/@jmcengineering" target="_blank" rel="noopener" class="vlog-thumb">
+        <div class="vlog-thumb-bg"></div>
+        <div class="vlog-thumb-gear">⚙</div>
+        <div class="play-wrap">
+          <div class="play-circle">
+            <svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9z"/></svg>
+          </div>
+          <div class="vlog-yt"><span>YouTube</span> @JMCEngineering</div>
+        </div>
+      </a>
+      <div class="vlog-body">
+        <div class="vlog-title">Jig Fixture Manufacturing — Full Process</div>
+        <div class="vlog-meta">
+          <span class="vlog-yt-badge">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0C.488 3.45.029 5.804 0 12c.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0C23.512 20.55 23.971 18.196 24 12c-.029-6.185-.484-8.549-4.385-8.816zM9 16V8l8 4-8 4z"/></svg>
+            YouTube Short
+          </span>
+          <span>Add link from your channel</span>
+        </div>
+      </div>
+    </div>
+    <div class="vlog-card reveal delay-2">
+      <a href="https://www.youtube.com/@jmcengineering" target="_blank" rel="noopener" class="vlog-thumb">
+        <div class="vlog-thumb-bg"></div>
+        <div class="vlog-thumb-gear">🔩</div>
+        <div class="play-wrap">
+          <div class="play-circle">
+            <svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9z"/></svg>
+          </div>
+          <div class="vlog-yt"><span>YouTube</span> @JMCEngineering</div>
+        </div>
+      </a>
+      <div class="vlog-body">
+        <div class="vlog-title">Wire Cut EDM in Action — Precision at its Best</div>
+        <div class="vlog-meta">
+          <span class="vlog-yt-badge">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0C.488 3.45.029 5.804 0 12c.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0C23.512 20.55 23.971 18.196 24 12c-.029-6.185-.484-8.549-4.385-8.816zM9 16V8l8 4-8 4z"/></svg>
+            YouTube Short
+          </span>
+          <span>Add link from your channel</span>
+        </div>
+      </div>
+    </div>
+    <div class="vlog-card reveal delay-3">
+      <a href="https://www.youtube.com/@jmcengineering" target="_blank" rel="noopener" class="vlog-thumb">
+        <div class="vlog-thumb-bg"></div>
+        <div class="vlog-thumb-gear">⚒</div>
+        <div class="play-wrap">
+          <div class="play-circle">
+            <svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9z"/></svg>
+          </div>
+          <div class="vlog-yt"><span>YouTube</span> @JMCEngineering</div>
+        </div>
+      </a>
+      <div class="vlog-body">
+        <div class="vlog-title">Press Tool Assembly Walkthrough — Inside Our Tool Room</div>
+        <div class="vlog-meta">
+          <span class="vlog-yt-badge">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0C.488 3.45.029 5.804 0 12c.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0C23.512 20.55 23.971 18.196 24 12c-.029-6.185-.484-8.549-4.385-8.816zM9 16V8l8 4-8 4z"/></svg>
+            YouTube Short
+          </span>
+          <span>Add link from your channel</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:28px;">
+    <a href="https://www.youtube.com/@jmcengineering" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;background:#ff0000;color:#fff;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;padding:12px 26px;border-radius:10px;text-decoration:none;transition:background .25s,transform .2s;" onmouseover="this.style.background='#cc0000';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#ff0000';this.style.transform='translateY(0)'">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0C.488 3.45.029 5.804 0 12c.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0C23.512 20.55 23.971 18.196 24 12c-.029-6.185-.484-8.549-4.385-8.816zM9 16V8l8 4-8 4z"/></svg>
+      Subscribe on YouTube @JMCEngineering
+    </a>
+  </div>
+</section>
+
+<!-- CREDENTIALS -->
+<section id="credentials">
+  <div class="sec-head reveal">
+    <div class="sec-label">Why Trust Us</div>
+    <h2 class="sec-title">Our Credentials</h2>
+  </div>
+  <div class="creds-grid">
+    <div class="cred-card reveal delay-1">
+      <div class="cred-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <div>
+        <div class="cred-name">MSME Registered</div>
+        <div class="cred-detail">UDYAM-TN-02-004828<br>Government of India certified enterprise</div>
+      </div>
+    </div>
+    <div class="cred-card reveal delay-2">
+      <div class="cred-icon">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <div>
+        <div class="cred-name">GST Compliant</div>
+        <div class="cred-detail">GSTIN: 33AXRPJ5951H1Z5<br>Fully compliant with Indian tax regulations</div>
+      </div>
+    </div>
+    <div class="cred-card reveal delay-3">
+      <div class="cred-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+      </div>
+      <div>
+        <div class="cred-name">30+ Years Expertise</div>
+        <div class="cred-detail">Combined leadership experience across Singapore and Chennai in Tool & SPM domain</div>
+      </div>
+    </div>
+    <div class="cred-card reveal delay-4">
+      <div class="cred-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div>
+        <div class="cred-name">ISO 9001 In Progress</div>
+        <div class="cred-detail">Processes already align with international standards — certification underway</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="sec-head reveal">
+    <div class="sec-label">Get In Touch</div>
+    <h2 class="sec-title">Contact JMC Engineering</h2>
+    <p class="sec-sub">Ready to start your project? Send us your drawings or specifications and we'll get back within 24 hours.</p>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-cards">
+      <div class="contact-card reveal delay-1">
+        <div class="cc-icon">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        </div>
+        <div>
+          <div class="cc-label">Phone</div>
+          <div class="cc-value">+91 73051 87874</div>
+        </div>
+      </div>
+      <div class="contact-card reveal delay-2">
+        <div class="cc-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div>
+          <div class="cc-label">Email</div>
+          <div class="cc-value">info@jmcengg.com</div>
+        </div>
+      </div>
+      <div class="contact-card reveal delay-3">
+        <div class="cc-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+        </div>
+        <div>
+          <div class="cc-label">WhatsApp</div>
+          <div class="cc-value">+91 73051 87874</div>
+        </div>
+      </div>
+      <div class="contact-card reveal delay-4">
+        <div class="cc-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div>
+          <div class="cc-label">Address</div>
+          <div class="cc-value" style="font-size:14px;">#17/9 Asai Thambi St, Mathiyazhagan Nagar,<br>TMP Nagar, Padi, Chennai – 600050</div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-form reveal delay-2">
+      <h3>Send an Enquiry</h3>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Your Name</label>
+          <input type="text" placeholder="e.g. Rajesh Kumar"/>
+        </div>
+        <div class="form-field">
+          <label>Company</label>
+          <input type="text" placeholder="Your company name"/>
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Phone / Email</label>
+        <input type="text" placeholder="+91 98765 43210 or email@company.com"/>
+      </div>
+      <div class="form-field">
+        <label>Service Required</label>
+        <select>
+          <option value="">Select a service...</option>
+          <option>Jig Fixtures</option>
+          <option>Press Tools</option>
+          <option>Plastic Moulds</option>
+          <option>Gauges & SPM</option>
+          <option>Forming Tools</option>
+          <option>Other Engineering Works</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Project Details</label>
+        <textarea placeholder="Describe your requirement — material, quantity, tolerance, delivery timeline..."></textarea>
+      </div>
+      <button class="btn-submit" onclick="handleFormSubmit(this)">
+        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Send Enquiry
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span class="nav-brand">JMC <span>Engineering</span></span>
+      <p>Precision tooling specialists based in Padi, Chennai. Delivering quality jigs, fixtures, press tools, and moulds to manufacturers across India since 2020.</p>
+      <div class="footer-socials">
+        <a href="https://www.youtube.com/@jmcengineering" target="_blank" class="social-btn" title="YouTube">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="white" stroke="none"/></svg>
+        </a>
+        <a href="https://wa.me/917305187874" target="_blank" class="social-btn" title="WhatsApp">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+        </a>
+        <a href="mailto:info@jmcengg.com" class="social-btn" title="Email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#sample-works">Sample Works</a></li>
+        <li><a href="#machinery">Machinery</a></li>
+        <li><a href="#clients">Clients</a></li>
+        <li><a href="#process">How We Work</a></li>
+        <li><a href="#blog">Blog</a></li>
+        <li><a href="#vlog">Vlog</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#services">Jig Fixtures</a></li>
+        <li><a href="#services">Press Tools</a></li>
+        <li><a href="#services">Plastic Moulds</a></li>
+        <li><a href="#services">Gauges & SPM</a></li>
+        <li><a href="#services">Forming Tools</a></li>
+        <li><a href="#contact">Get a Quote</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 JMC Engineering. All rights reserved. | #17/9 Asai Thambi St, Padi, Chennai – 600050</span>
+    <span class="footer-gstin">GSTIN: 33AXRPJ5951H1Z5 &nbsp;|&nbsp; UDYAM-TN-02-004828</span>
+  </div>
+</footer>
+
+<!-- WHATSAPP FLOAT -->
+<div id="wa-float">
+  <div class="wa-tooltip">Chat with us on WhatsApp</div>
+  <a href="https://wa.me/917305187874?text=Hello%20JMC%20Engineering%2C%20I%20would%20like%20to%20enquire%20about%20your%20services." target="_blank" class="wa-btn" title="WhatsApp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+</div>
+
+<!-- BACK TO TOP -->
+<div id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+</div>
+
+<script>
+// PRELOADER
+window.addEventListener('load',()=>{
+  setTimeout(()=>{document.getElementById('preloader').classList.add('hide');},1600);
+});
+
+// NAVBAR SCROLL
+const navbar=document.getElementById('navbar');
+const navLinks=document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',()=>{
+  if(window.scrollY>60){navbar.classList.add('scrolled');}else{navbar.classList.remove('scrolled');}
+  const bt=document.getElementById('back-top');
+  if(window.scrollY>400){bt.classList.add('show');}else{bt.classList.remove('show');}
+  updateActiveNav();
+});
+
+// ACTIVE NAV on scroll
+function updateActiveNav(){
+  const sections=document.querySelectorAll('section[id]');
+  let current='';
+  sections.forEach(s=>{
+    if(window.scrollY>=s.offsetTop-100){current=s.id;}
+  });
+  navLinks.forEach(a=>{
+    a.classList.remove('active');
+    if(a.getAttribute('href')==='#'+current){a.classList.add('active');}
+  });
+}
+
+// MOBILE MENU
+function toggleMenu(){
+  const m=document.getElementById('mobileMenu');
+  m.classList.toggle('open');
+}
+
+// SCROLL REVEAL
+const revealEls=document.querySelectorAll('.reveal,.reveal-left,.reveal-right');
+const observer=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');}});
+},{threshold:0.12});
+revealEls.forEach(el=>observer.observe(el));
+
+// COUNTER ANIMATION
+function animateCounter(el){
+  const target=parseInt(el.dataset.target);
+  const duration=1800;
+  const step=target/duration*16;
+  let current=0;
+  const timer=setInterval(()=>{
+    current+=step;
+    if(current>=target){current=target;clearInterval(timer);}
+    el.textContent=Math.floor(current);
+  },16);
+}
+const counterObserver=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      animateCounter(e.target);
+      counterObserver.unobserve(e.target);
+    }
+  });
+},{threshold:0.5});
+document.querySelectorAll('.counter').forEach(el=>counterObserver.observe(el));
+
+// TYPING EFFECT
+const phrases=['Delivered On Time.','Built to Last.','Made in Chennai.','Engineered to Precision.'];
+let phraseIdx=0,charIdx=0,isDeleting=false;
+const typingEl=document.getElementById('typing-text');
+function typeEffect(){
+  if(!typingEl)return;
+  const phrase=phrases[phraseIdx];
+  if(isDeleting){
+    typingEl.textContent=phrase.substring(0,charIdx-1);
+    charIdx--;
+    if(charIdx===0){isDeleting=false;phraseIdx=(phraseIdx+1)%phrases.length;setTimeout(typeEffect,400);return;}
+    setTimeout(typeEffect,48);
+  }else{
+    typingEl.textContent=phrase.substring(0,charIdx+1);
+    charIdx++;
+    if(charIdx===phrase.length){setTimeout(()=>{isDeleting=true;typeEffect();},2200);return;}
+    setTimeout(typeEffect,80);
+  }
+}
+setTimeout(typeEffect,1800);
+
+// FORM SUBMIT
+function handleFormSubmit(btn){
+  const name=document.querySelector('input[placeholder*="Rajesh"]').value;
+  const service=document.querySelector('select').value;
+  if(!name||!service){alert('Please fill in your name and select a service.');return;}
+  const msg=encodeURIComponent('Hello JMC Engineering,\n\nI would like to enquire about: '+service+'\n\nName: '+name+'\n\nPlease get back to me. Thank you.');
+  window.open('https://wa.me/917305187874?text='+msg,'_blank');
+}
+
+// SMOOTH NAV CLICK
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',function(e){
+    const target=document.querySelector(this.getAttribute('href'));
+    if(target){e.preventDefault();target.scrollIntoView({behavior:'smooth',block:'start'});}
+  });
+});
+
+
+// ── GEAR GAME ──
+(function(){
+  const canvas = document.getElementById('gear-canvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const infoIcon = document.getElementById('gear-info-icon');
+  const infoTitle = document.getElementById('gear-info-title');
+  const infoText = document.getElementById('gear-info-text');
+
+  const facts = [
+    {icon:'🏭', title:'Founded 2020', text:'Started as a promising startup, now a trusted precision engineering name in Chennai.'},
+    {icon:'⏱', title:'30+ Years Expertise', text:'Our CEO has 30+ years in Tool & SPM — 12 yrs in Singapore, 18 yrs in Chennai.'},
+    {icon:'📍', title:'Based in Padi, Chennai', text:'#17/9 Asai Thambi St, Mathiyazhagan Nagar, TMP Nagar, Padi — Tamil Nadu 600050.'},
+    {icon:'🏅', title:'MSME Registered', text:'Government of India certified enterprise. UDYAM-TN-02-004828. GST compliant.'},
+    {icon:'🔧', title:'5 Machine Types', text:'M1DR Milling, Surface Grinding, Lathe, VMC/CNC & Wire Cut EDM capabilities.'},
+    {icon:'📞', title:'24hr Response', text:'Engineering review within 24–48 hours. Quotation in 2–3 working days. Always.'},
+  ];
+
+  // Gear definitions: x%, y%, radius, teeth, speed, direction, color, factIndex
+  const gears = [
+    {xp:.38, yp:.38, r:70, teeth:14, spd:.008, dir:1,  col:'#1e3a8a', stroke:'#3b6fd4', fact:0},
+    {xp:.70, yp:.32, r:42, teeth:9,  spd:.014, dir:-1, col:'#1a3060', stroke:'#2563eb', fact:1},
+    {xp:.72, yp:.65, r:55, teeth:11, spd:.010, dir:1,  col:'#0f2040', stroke:'#1d4ed8', fact:2},
+    {xp:.20, yp:.60, r:48, teeth:10, spd:.012, dir:-1, col:'#162b5c', stroke:'#3b82f6', fact:3},
+    {xp:.55, yp:.75, r:34, teeth:8,  spd:.018, dir:1,  col:'#1a3a8f', stroke:'#60a5fa', fact:4},
+    {xp:.18, yp:.28, r:36, teeth:8,  spd:.016, dir:1,  col:'#0d2250', stroke:'#2563eb', fact:5},
+  ];
+
+  let angles = gears.map(()=>0);
+  let W, H, animId;
+  let activeFact = null;
+  let glowAlpha = 0;
+
+  function resize(){
+    const box = canvas.parentElement;
+    W = canvas.width = box.offsetWidth;
+    H = canvas.height = box.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function drawGear(cx, cy, r, teeth, angle, col, stroke, glowing){
+    const inner = r * .65;
+    const toothH = r * .28;
+    const toothW = (2*Math.PI/teeth) * .38;
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(angle);
+
+    // Glow
+    if(glowing){
+      ctx.shadowColor = '#60a5fa';
+      ctx.shadowBlur = 22;
+    }
+
+    // Body
+    ctx.beginPath();
+    for(let i=0;i<teeth;i++){
+      const a = (i/teeth)*Math.PI*2;
+      const a1 = a - toothW/2;
+      const a2 = a + toothW/2;
+      ctx.lineTo(Math.cos(a1)*r, Math.sin(a1)*r);
+      ctx.lineTo(Math.cos(a1)*(r+toothH), Math.sin(a1)*(r+toothH));
+      ctx.lineTo(Math.cos(a2)*(r+toothH), Math.sin(a2)*(r+toothH));
+      ctx.lineTo(Math.cos(a2)*r, Math.sin(a2)*r);
+    }
+    ctx.closePath();
+    ctx.fillStyle = col;
+    ctx.strokeStyle = stroke;
+    ctx.lineWidth = glowing ? 2 : 1.2;
+    ctx.fill();
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // Inner circle
+    ctx.beginPath();
+    ctx.arc(0,0,inner,0,Math.PI*2);
+    ctx.fillStyle = glowing ? 'rgba(37,99,235,.35)' : 'rgba(7,22,58,.7)';
+    ctx.strokeStyle = stroke;
+    ctx.lineWidth = 1;
+    ctx.fill();
+    ctx.stroke();
+
+    // Hub
+    ctx.beginPath();
+    ctx.arc(0,0,inner*.3,0,Math.PI*2);
+    ctx.fillStyle = stroke;
+    ctx.fill();
+
+    // Spokes
+    for(let i=0;i<4;i++){
+      const a = (i/4)*Math.PI*2;
+      ctx.beginPath();
+      ctx.moveTo(Math.cos(a)*inner*.3, Math.sin(a)*inner*.3);
+      ctx.lineTo(Math.cos(a)*inner*.85, Math.sin(a)*inner*.85);
+      ctx.strokeStyle = stroke;
+      ctx.lineWidth = glowing ? 2 : 1.2;
+      ctx.stroke();
+    }
+
+    ctx.restore();
+  }
+
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+
+    // Subtle grid
+    ctx.strokeStyle = 'rgba(255,255,255,.03)';
+    ctx.lineWidth = 1;
+    for(let x=0;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+    for(let y=0;y<H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+
+    gears.forEach((g,i)=>{
+      angles[i] += g.spd * g.dir;
+      const cx = g.xp * W;
+      const cy = g.yp * H;
+      const glowing = activeFact === i;
+      drawGear(cx, cy, g.r, g.teeth, angles[i], g.col, g.stroke, glowing);
+
+      // Label on gear
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.fillStyle = glowing ? '#fff' : 'rgba(255,255,255,.35)';
+      ctx.font = glowing ? 'bold 13px Rajdhani,sans-serif' : '11px Rajdhani,sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      const labels = ['Founded','CEO','Location','MSME','Machines','Response'];
+      ctx.fillText(labels[i], 0, 0);
+      ctx.restore();
+    });
+
+    animId = requestAnimationFrame(frame);
+  }
+  frame();
+
+  canvas.addEventListener('click', function(e){
+    const rect = canvas.getBoundingClientRect();
+    const mx = (e.clientX - rect.left) * (W / rect.width);
+    const my = (e.clientY - rect.top) * (H / rect.height);
+    let hit = -1;
+    gears.forEach((g,i)=>{
+      const cx = g.xp * W, cy = g.yp * H;
+      const dist = Math.sqrt((mx-cx)**2 + (my-cy)**2);
+      if(dist < g.r + g.r*.28) hit = i;
+    });
+    if(hit >= 0){
+      activeFact = hit;
+      const f = facts[gears[hit].fact];
+      infoIcon.textContent = f.icon;
+      infoTitle.textContent = f.title;
+      infoText.textContent = f.text;
+    }
+  });
+
+  canvas.addEventListener('mousemove', function(e){
+    const rect = canvas.getBoundingClientRect();
+    const mx = (e.clientX - rect.left) * (W / rect.width);
+    const my = (e.clientY - rect.top) * (H / rect.height);
+    let hovering = false;
+    gears.forEach(g=>{
+      const cx = g.xp * W, cy = g.yp * H;
+      if(Math.sqrt((mx-cx)**2 + (my-cy)**2) < g.r + g.r*.28) hovering = true;
+    });
+    canvas.style.cursor = hovering ? 'pointer' : 'default';
+  });
+})();
+
+</script>
+</body>
+</html>
