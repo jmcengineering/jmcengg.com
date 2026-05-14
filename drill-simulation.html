@@ -93,7 +93,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);ove
   </div>
   <div class="loader-spinner"></div>
   <div class="loader-text">Initializing CNC Simulation…</div>
-  <div class="loader-sub">Loading Three.js · Building machine geometry</div>
+  <div class="loader-sub" id="loaderSub">Loading simulation engine…</div>
 </div>
 
 <div id="canvas-container"></div>
@@ -161,7 +161,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);ove
   <span>JMC ENGINEERING · PADI, CHENNAI</span>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// Update loader text while Three.js loads
+const loaderSub = document.getElementById('loaderSub');
+if(loaderSub) loaderSub.textContent = 'Loading Three.js library…';
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" onload="if(document.getElementById('loaderSub'))document.getElementById('loaderSub').textContent='Building CNC machine geometry…'"></script>
 <script>
 // ═══════════════════════════════════════════════════
 // INLINE OrbitControls for r128
@@ -269,14 +274,14 @@ document.getElementById('dimTapDepthVal').textContent = `${(PARAMS.tap * 1.5).to
 const container = document.getElementById('canvas-container');
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x050a18);
-scene.fog = new THREE.FogExp2(0x050a18, 0.010);
+// scene.fog = new THREE.FogExp2(0x050a18, 0.010); // disabled for perf
 
 const camera = new THREE.PerspectiveCamera(42, window.innerWidth/window.innerHeight, 0.1, 200);
 camera.position.set(13, 9, 13);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, window.innerWidth < 768 ? 1 : 1.5));
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -297,7 +302,7 @@ scene.add(new THREE.AmbientLight(0x1a2744, 0.65));
 const dirLight = new THREE.DirectionalLight(0xc4d4f0, 1.25);
 dirLight.position.set(8, 18, 10);
 dirLight.castShadow = true;
-dirLight.shadow.mapSize.set(2048, 2048);
+dirLight.shadow.mapSize.set(1024, 1024);
 dirLight.shadow.camera.near = 0.5; dirLight.shadow.camera.far = 50;
 dirLight.shadow.camera.left = -15; dirLight.shadow.camera.right = 15;
 dirLight.shadow.camera.top = 15; dirLight.shadow.camera.bottom = -15;
@@ -383,8 +388,8 @@ const stripe=new THREE.Mesh(new THREE.BoxGeometry(2.22,0.15,2.82),M.blueAccent);
 
 // Spindle group (spins on Y)
 const spindleGroup = new THREE.Group(); spindleHead.add(spindleGroup);
-const shaft=new THREE.Mesh(new THREE.CylinderGeometry(0.32,0.32,2.5,24),M.chrome); shaft.position.set(0,-2.35,0); spindleGroup.add(shaft);
-const chuck=new THREE.Mesh(new THREE.CylinderGeometry(0.5,0.35,0.8,24),M.chrome); chuck.position.set(0,-3.95,0); spindleGroup.add(chuck);
+const shaft=new THREE.Mesh(new THREE.CylinderGeometry(0.32,0.32,2.5,16),M.chrome); shaft.position.set(0,-2.35,0); spindleGroup.add(shaft);
+const chuck=new THREE.Mesh(new THREE.CylinderGeometry(0.5,0.35,0.8,16),M.chrome); chuck.position.set(0,-3.95,0); spindleGroup.add(chuck);
 for(let i=0;i<3;i++){
   const a=(i/3)*Math.PI*2;
   const j=new THREE.Mesh(new THREE.BoxGeometry(0.06,0.8,0.52),M.darkSteel);
@@ -399,8 +404,8 @@ function makeTapDrill(){
   const body=new THREE.Mesh(new THREE.CylinderGeometry(dia,dia,fl,16),M.hss); body.position.set(0,-1.3-fl/2,0); g.add(body);
   for(let f=0;f<2;f++){
     const pts=[];
-    for(let s=0;s<=60;s++){const t=s/60,y=-1.3-t*fl,a=t*Math.PI*7+f*Math.PI,r=dia*0.92;pts.push(new THREE.Vector3(Math.cos(a)*r,y,Math.sin(a)*r));}
-    const tube=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),60,0.04,6,false),new THREE.MeshStandardMaterial({color:0x3a4250,roughness:0.4,metalness:0.7}));
+    for(let s=0;s<=30;s++){const t=s/30,y=-1.3-t*fl,a=t*Math.PI*7+f*Math.PI,r=dia*0.92;pts.push(new THREE.Vector3(Math.cos(a)*r,y,Math.sin(a)*r));}
+    const tube=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),24,0.04,5,false),new THREE.MeshStandardMaterial({color:0x3a4250,roughness:0.4,metalness:0.7}));
     g.add(tube);
   }
   const tipH=dia*1.2, tip=new THREE.Mesh(new THREE.ConeGeometry(dia,tipH,16),M.hss); tip.position.set(0,-1.3-fl-tipH/2,0); g.add(tip);
@@ -415,8 +420,8 @@ function makeCounterboreDrill(){
   const body=new THREE.Mesh(new THREE.CylinderGeometry(bDia,bDia,fl,20),M.carbide); body.position.set(0,-1.3-fl/2,0); g.add(body);
   for(let f=0;f<3;f++){
     const pts=[];
-    for(let s=0;s<=50;s++){const t=s/50,y=-1.3-t*fl,a=t*Math.PI*4+f*(Math.PI*2/3),r=bDia*0.95;pts.push(new THREE.Vector3(Math.cos(a)*r,y,Math.sin(a)*r));}
-    g.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),50,0.05,6,false),new THREE.MeshStandardMaterial({color:0x2a303a,roughness:0.45,metalness:0.75})));
+    for(let s=0;s<=25;s++){const t=s/25,y=-1.3-t*fl,a=t*Math.PI*4+f*(Math.PI*2/3),r=bDia*0.95;pts.push(new THREE.Vector3(Math.cos(a)*r,y,Math.sin(a)*r));}
+    g.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),20,0.05,5,false),new THREE.MeshStandardMaterial({color:0x2a303a,roughness:0.45,metalness:0.75})));
   }
   const cf=new THREE.Mesh(new THREE.CylinderGeometry(bDia,bDia,0.08,20),M.carbideGold); cf.position.set(0,-1.3-fl+0.04,0); g.add(cf);
   const pilot=new THREE.Mesh(new THREE.CylinderGeometry(pDia,pDia,pLen,14),M.hss); pilot.position.set(0,-1.3-fl-pLen/2,0); g.add(pilot);
@@ -476,8 +481,8 @@ const WP_TOP_WORLD=viseGroup.position.y+WP_TOP_Y;
 
 function innerMat(col,em){return new THREE.MeshStandardMaterial({color:col,roughness:0.4,metalness:0.6,side:THREE.DoubleSide,emissive:em||0,emissiveIntensity:0,transparent:true,opacity:1});}
 const tapHoleMat=innerMat(0x546070,0x1e3a8a);
-const tapHole=new THREE.Mesh(new THREE.CylinderGeometry(TAP_R,TAP_R,0.01,32,1,true),tapHoleMat); tapHole.position.set(0,WP_TOP_Y,0); tapHole.visible=false; viseGroup.add(tapHole);
-const tapHoleBottom=new THREE.Mesh(new THREE.ConeGeometry(TAP_R,TAP_R*1.0,32,1,true),tapHoleMat); tapHoleBottom.rotation.x=Math.PI; tapHoleBottom.position.set(0,WP_TOP_Y-TAP_DEPTH,0); tapHoleBottom.visible=false; viseGroup.add(tapHoleBottom);
+const tapHole=new THREE.Mesh(new THREE.CylinderGeometry(TAP_R,TAP_R,0.01,24,1,true),tapHoleMat); tapHole.position.set(0,WP_TOP_Y,0); tapHole.visible=false; viseGroup.add(tapHole);
+const tapHoleBottom=new THREE.Mesh(new THREE.ConeGeometry(TAP_R,TAP_R*1.0,20,1,true),tapHoleMat); tapHoleBottom.rotation.x=Math.PI; tapHoleBottom.position.set(0,WP_TOP_Y-TAP_DEPTH,0); tapHoleBottom.visible=false; viseGroup.add(tapHoleBottom);
 const cbHoleMat=innerMat(0x546070,0x2563eb);
 const cbHole=new THREE.Mesh(new THREE.CylinderGeometry(CB_R,CB_R,0.01,36,1,true),cbHoleMat); cbHole.position.set(0,WP_TOP_Y,0); cbHole.visible=false; viseGroup.add(cbHole);
 const cbBottomGeo=new THREE.RingGeometry(TAP_R,CB_R,36);
@@ -488,9 +493,9 @@ const cskHole=new THREE.Mesh(new THREE.CylinderGeometry(CSK_R,CB_R,0.01,36,1,tru
 // ── CHIPS + SPARKS ──
 const chipPool=[], sparkPool=[];
 const chipGeo=new THREE.BoxGeometry(0.06,0.02,0.20);
-for(let i=0;i<90;i++){const m=new THREE.MeshStandardMaterial({color:0xff7733,emissive:0xff4400,emissiveIntensity:0.6,roughness:0.4,metalness:0.5,transparent:true,opacity:0});const me=new THREE.Mesh(chipGeo,m);me.visible=false;scene.add(me);chipPool.push({mesh:me,mat:m,vel:new THREE.Vector3(),angVel:new THREE.Vector3(),life:0,maxLife:0,active:false});}
+for(let i=0;i<40;i++){const m=new THREE.MeshStandardMaterial({color:0xff7733,emissive:0xff4400,emissiveIntensity:0.6,roughness:0.4,metalness:0.5,transparent:true,opacity:0});const me=new THREE.Mesh(chipGeo,m);me.visible=false;scene.add(me);chipPool.push({mesh:me,mat:m,vel:new THREE.Vector3(),angVel:new THREE.Vector3(),life:0,maxLife:0,active:false});}
 const sparkGeo=new THREE.SphereGeometry(0.03,6,6);
-for(let i=0;i<50;i++){const m=new THREE.MeshBasicMaterial({color:0xffdd66,transparent:true,opacity:0});const me=new THREE.Mesh(sparkGeo,m);me.visible=false;scene.add(me);sparkPool.push({mesh:me,mat:m,vel:new THREE.Vector3(),life:0,maxLife:0,active:false});}
+for(let i=0;i<20;i++){const m=new THREE.MeshBasicMaterial({color:0xffdd66,transparent:true,opacity:0});const me=new THREE.Mesh(sparkGeo,m);me.visible=false;scene.add(me);sparkPool.push({mesh:me,mat:m,vel:new THREE.Vector3(),life:0,maxLife:0,active:false});}
 
 function spawnChip(wp,hr){for(const c of chipPool){if(!c.active){c.active=true;c.mesh.visible=true;const a=Math.random()*Math.PI*2,r=hr*(0.7+Math.random()*0.4);c.mesh.position.set(wp.x+Math.cos(a)*r,wp.y+0.05,wp.z+Math.sin(a)*r);const os=0.06+Math.random()*0.08,us=0.08+Math.random()*0.06;c.vel.set(Math.cos(a)*os,us,Math.sin(a)*os);c.angVel.set((Math.random()-.5)*.5,(Math.random()-.5)*.5,(Math.random()-.5)*.5);c.mesh.rotation.set(Math.random()*Math.PI,Math.random()*Math.PI,Math.random()*Math.PI);c.life=0;c.maxLife=0.9+Math.random()*0.6;c.mat.opacity=1.0;c.mat.emissiveIntensity=0.7;c.mat.color.setRGB(1.0,0.5,0.2);return;}}}
 function spawnSpark(wp,hr){for(const s of sparkPool){if(!s.active){s.active=true;s.mesh.visible=true;const a=Math.random()*Math.PI*2,r=hr*0.6;s.mesh.position.set(wp.x+Math.cos(a)*r,wp.y+0.02,wp.z+Math.sin(a)*r);const sp=0.12+Math.random()*0.10;s.vel.set(Math.cos(a)*sp,0.06+Math.random()*0.08,Math.sin(a)*sp);s.life=0;s.maxLife=0.35+Math.random()*0.20;s.mat.opacity=1.0;return;}}}
@@ -547,7 +552,7 @@ function updateAnim(t){
       const tt=pt,ya=approachY(tapDrill),ye=cutY(tapDrill,TAP_DEPTH);
       spindleHead.position.y=lerp(ya,ye,easeIn(tt*0.95)+0.05*tt); spindleGroup.rotation.y+=0.45;
       tapHole.visible=tapHoleBottom.visible=true;
-      const cd=Math.max(0.02,tt*TAP_DEPTH); tapHole.geometry.dispose(); tapHole.geometry=new THREE.CylinderGeometry(TAP_R,TAP_R,cd,32,1,true); tapHole.position.y=WP_TOP_Y-cd/2; tapHoleBottom.position.y=WP_TOP_Y-cd;
+      const cd=Math.max(0.02,tt*TAP_DEPTH); tapHole.geometry.dispose(); tapHole.geometry=new THREE.CylinderGeometry(TAP_R,TAP_R,cd,24,1,true); tapHole.position.y=WP_TOP_Y-cd/2; tapHoleBottom.position.y=WP_TOP_Y-cd;
       const wp=new THREE.Vector3(0,WP_TOP_WORLD,0); for(let i=0;i<2;i++){if(Math.random()<0.85)spawnChip(wp,TAP_R);} if(Math.random()<0.5)spawnSpark(wp,TAP_R);
       cutGlow.position.set(0,WP_TOP_WORLD+0.1,0); cutGlow.intensity=1.2+Math.sin(t*14)*0.4; cutGlow.color.setHex(0xff7733);
       const sk=(1-tt)*0.04; camera.position.x+=(Math.random()-.5)*sk; camera.position.y+=(Math.random()-.5)*sk;
@@ -587,7 +592,7 @@ function replayAnimation(){
   animPlaying=true; animStart=clock.getElapsedTime(); lastT=0;
   spindleHead.position.y=Y_REST; spindleGroup.rotation.y=0; cutGlow.intensity=0; M.workpiece.opacity=1.0;
   [tapHole,tapHoleBottom,cbHole,cbBottom,cskHole].forEach(m=>{m.visible=false;});
-  tapHole.geometry=new THREE.CylinderGeometry(TAP_R,TAP_R,0.01,32,1,true);
+  tapHole.geometry=new THREE.CylinderGeometry(TAP_R,TAP_R,0.01,24,1,true);
   cbHole.geometry=new THREE.CylinderGeometry(CB_R,CB_R,0.01,36,1,true);
   cskHole.geometry=new THREE.CylinderGeometry(CSK_R,CB_R,0.01,36,1,true);
   [tapHoleMat,cbHoleMat,cskHoleMat].forEach(m=>m.emissiveIntensity=0);
@@ -607,8 +612,13 @@ function animate(){
 
 window.addEventListener('resize',()=>{camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight);});
 animStart=clock.getElapsedTime();
-setTimeout(()=>document.getElementById('loader').classList.add('hidden'),900);
-animate();
+// Build scene first, then hide loader on next frame
+function startWhenReady(){
+  renderer.render(scene, camera);
+  document.getElementById('loader').classList.add('hidden');
+  animate();
+}
+requestAnimationFrame(startWhenReady);
 </script>
 </body>
 </html>
