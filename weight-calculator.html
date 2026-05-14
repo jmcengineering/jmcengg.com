@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Material Weight Calculator | JMC Engineering</title>
+<meta name="description" content="Free engineering material weight calculator — Round bar, Square bar, Flat bar, Sheet, Hex bar, Pipe. MS, SS, Aluminium, Brass, EN8, EN24. Calculate weight and cost instantly."/>
+<meta name="keywords" content="material weight calculator, steel weight calculator, MS weight calculator, round bar weight, flat bar weight, sheet weight, Chennai engineering, JMC Engineering"/>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --navy:#0d2250;--navy-dark:#07163a;--blue:#2563eb;--blue-light:#60a5fa;
+  --bg:#f0f4f8;--white:#fff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;
+  --green:#16a34a;--amber:#d97706;--card:#fff;--radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);}
+nav{background:var(--navy-dark);padding:13px 5%;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.3);}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-brand img{width:32px;height:32px;border-radius:50%;object-fit:contain;}
+.nav-brand span{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;color:#fff;}
+.nav-brand span em{color:var(--blue-light);font-style:normal;}
+.back-btn{color:rgba(255,255,255,.6);font-size:13px;text-decoration:none;}
+.back-btn:hover{color:#fff;}
+
+.hero{background:linear-gradient(135deg,var(--navy-dark) 0%,var(--navy) 55%,#1a3a8f 100%);padding:48px 5% 44px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle at 80% 50%,rgba(37,99,235,.12) 0%,transparent 60%);pointer-events:none;}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:var(--blue-light);font-size:11px;font-weight:700;padding:5px 14px;border-radius:20px;margin-bottom:16px;letter-spacing:1px;text-transform:uppercase;}
+.hero h1{font-family:'Rajdhani',sans-serif;font-size:clamp(28px,5vw,52px);font-weight:700;color:#fff;line-height:1.1;margin-bottom:12px;}
+.hero h1 span{color:var(--blue-light);}
+.hero p{color:rgba(255,255,255,.6);font-size:14px;line-height:1.7;max-width:560px;}
+
+.main-wrap{max-width:1100px;margin:0 auto;padding:36px 5% 60px;display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:start;}
+@media(max-width:860px){.main-wrap{grid-template-columns:1fr;}}
+
+/* CALCULATOR CARD */
+.calc-card{background:var(--white);border-radius:16px;box-shadow:0 4px 24px rgba(13,34,80,.10);overflow:hidden;}
+.calc-card-header{background:var(--navy);padding:20px 24px;display:flex;align-items:center;gap:12px;}
+.calc-card-header h2{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:#fff;}
+.calc-card-header p{font-size:12px;color:rgba(255,255,255,.5);margin-top:2px;}
+.calc-body{padding:24px;}
+
+.field-group{margin-bottom:20px;}
+.field-label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.field-label span{background:var(--blue);color:#fff;width:18px;height:18px;border-radius:50%;font-size:10px;display:flex;align-items:center;justify-content:center;}
+
+.shape-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.shape-btn{background:#f8fafc;border:1.5px solid var(--border);border-radius:10px;padding:12px 8px;cursor:pointer;text-align:center;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:6px;}
+.shape-btn:hover{border-color:var(--blue);background:#eff6ff;}
+.shape-btn.active{border-color:var(--blue);background:#eff6ff;box-shadow:0 0 0 3px rgba(37,99,235,.1);}
+.shape-icon{font-size:22px;}
+.shape-name{font-size:11px;font-weight:600;color:var(--text);}
+
+.mat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:7px;}
+.mat-btn{background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;padding:9px 10px;cursor:pointer;text-align:center;transition:all .2s;}
+.mat-btn:hover{border-color:var(--blue);}
+.mat-btn.active{border-color:var(--blue);background:#eff6ff;}
+.mat-name{font-size:12px;font-weight:700;color:var(--text);}
+.mat-density{font-size:10px;color:var(--muted);margin-top:2px;font-family:'JetBrains Mono',monospace;}
+
+.dims-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.dim-field{display:flex;flex-direction:column;gap:5px;}
+.dim-field label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+.dim-field input{background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-size:14px;font-family:'JetBrains Mono',monospace;color:var(--text);outline:none;transition:border-color .2s;}
+.dim-field input:focus{border-color:var(--blue);background:#fff;box-shadow:0 0 0 3px rgba(37,99,235,.08);}
+.dim-unit{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.price-row{display:flex;gap:10px;align-items:flex-end;}
+.price-row .dim-field{flex:1;}
+.price-note{font-size:11px;color:var(--muted);background:#fffbeb;border:1px solid #fde68a;border-radius:6px;padding:6px 10px;line-height:1.5;}
+
+.calc-btn{width:100%;background:linear-gradient(135deg,var(--blue),#1d4ed8);color:#fff;font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;padding:14px;border:none;border-radius:10px;cursor:pointer;transition:transform .2s,box-shadow .2s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:20px;letter-spacing:.5px;box-shadow:0 4px 20px rgba(37,99,235,.3);}
+.calc-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(37,99,235,.4);}
+.calc-btn svg{width:18px;height:18px;stroke:#fff;stroke-width:2;fill:none;}
+
+/* RESULTS PANEL */
+.result-card{background:var(--white);border-radius:16px;box-shadow:0 4px 24px rgba(13,34,80,.10);overflow:hidden;transition:all .3s;}
+.result-header{background:linear-gradient(135deg,var(--navy),#1a3a8f);padding:18px 22px;display:flex;align-items:center;gap:10px;}
+.result-header h3{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:#fff;}
+.result-body{padding:22px;}
+
+.big-result{text-align:center;padding:24px 16px;background:linear-gradient(135deg,#eff6ff,#e0e7ff);border-radius:12px;margin-bottom:18px;border:1px solid #bfdbfe;}
+.big-num{font-family:'Rajdhani',sans-serif;font-size:52px;font-weight:700;color:var(--navy);line-height:1;}
+.big-unit{font-size:16px;color:var(--blue);font-weight:600;margin-top:4px;}
+.big-label{font-size:12px;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.5px;}
+
+.result-rows{display:flex;flex-direction:column;gap:10px;}
+.result-row{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;}
+.result-row.highlight{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-color:#bbf7d0;}
+.result-row.cost{background:linear-gradient(135deg,#fffbeb,#fef3c7);border-color:#fde68a;}
+.rr-label{font-size:12px;color:var(--muted);font-weight:600;}
+.rr-value{font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:600;color:var(--text);}
+.rr-value.green{color:var(--green);}
+.rr-value.amber{color:var(--amber);}
+
+.visual-canvas-wrap{background:linear-gradient(135deg,#050e24,#091535);border-radius:12px;height:200px;margin-bottom:18px;overflow:hidden;position:relative;}
+canvas#shapeCanvas{width:100%;height:100%;display:block;}
+
+.empty-result{text-align:center;padding:40px 20px;color:var(--muted);}
+.empty-icon{font-size:40px;opacity:.3;margin-bottom:12px;}
+.empty-text{font-size:13px;line-height:1.6;}
+
+.ref-table{margin-top:24px;}
+.ref-title{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:12px;}
+.ref-grid{display:grid;gap:6px;}
+.ref-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.ref-cell{background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:12px;}
+.ref-cell.head{background:var(--navy);color:#fff;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:12px;letter-spacing:.5px;}
+.ref-cell .dn{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--blue);}
+.ref-cell .dl{color:var(--muted);font-size:10px;}
+
+.page-footer{background:var(--navy-dark);padding:18px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+.page-footer span{color:rgba(255,255,255,.3);font-size:12px;}
+.page-footer a{color:var(--blue-light);font-size:12px;text-decoration:none;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">
+    <img src="logo.png" alt="JMC Engineering"/>
+    <span>JMC <em>Engineering</em></span>
+  </a>
+  <a href="index.html" class="back-btn">← Back to Home</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">Engineering Tools</div>
+  <h1>Material Weight <span>Calculator</span></h1>
+  <p>Calculate weight and material cost for Round Bar, Square Bar, Flat Bar, Sheet, Hex Bar and Pipe. Supports 10+ engineering materials with density data. Enter your price per kg to get instant cost.</p>
+</div>
+
+<div class="main-wrap">
+
+  <!-- CALCULATOR -->
+  <div class="calc-card">
+    <div class="calc-card-header">
+      <div>
+        <h2>Weight & Cost Calculator</h2>
+        <p>Select shape → material → enter dimensions → calculate</p>
+      </div>
+    </div>
+    <div class="calc-body">
+
+      <!-- SHAPE -->
+      <div class="field-group">
+        <div class="field-label"><span>1</span> Select Profile Shape</div>
+        <div class="shape-grid">
+          <div class="shape-btn active" onclick="selectShape('round',this)">
+            <div class="shape-icon">⭕</div><div class="shape-name">Round Bar</div>
+          </div>
+          <div class="shape-btn" onclick="selectShape('square',this)">
+            <div class="shape-icon">⬛</div><div class="shape-name">Square Bar</div>
+          </div>
+          <div class="shape-btn" onclick="selectShape('flat',this)">
+            <div class="shape-icon">▬</div><div class="shape-name">Flat Bar</div>
+          </div>
+          <div class="shape-btn" onclick="selectShape('sheet',this)">
+            <div class="shape-icon">📄</div><div class="shape-name">Sheet / Plate</div>
+          </div>
+          <div class="shape-btn" onclick="selectShape('hex',this)">
+            <div class="shape-icon">⬡</div><div class="shape-name">Hex Bar</div>
+          </div>
+          <div class="shape-btn" onclick="selectShape('pipe',this)">
+            <div class="shape-icon">🔵</div><div class="shape-name">Pipe / Tube</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MATERIAL -->
+      <div class="field-group">
+        <div class="field-label"><span>2</span> Select Material</div>
+        <div class="mat-grid" id="matGrid"></div>
+      </div>
+
+      <!-- DIMENSIONS -->
+      <div class="field-group">
+        <div class="field-label"><span>3</span> Enter Dimensions</div>
+        <div class="dims-grid" id="dimsGrid"></div>
+      </div>
+
+      <!-- PRICE -->
+      <div class="field-group">
+        <div class="field-label"><span>4</span> Price per kg (Optional)</div>
+        <div class="price-row">
+          <div class="dim-field">
+            <label>Price per kg <span class="dim-unit">(₹)</span></label>
+            <input type="number" id="pricePerKg" placeholder="e.g. 85" min="0"/>
+          </div>
+          <div class="dim-field">
+            <label>Quantity <span class="dim-unit">(pieces)</span></label>
+            <input type="number" id="quantity" value="1" min="1"/>
+          </div>
+        </div>
+        <div class="price-note" style="margin-top:8px;">Leave price empty to calculate weight only. Enter current market rate for cost output.</div>
+      </div>
+
+      <button class="calc-btn" onclick="calculate()">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        Calculate Weight & Cost
+      </button>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="result-card">
+    <div class="result-header">
+      <h3>Results</h3>
+    </div>
+    <div class="result-body">
+
+      <div class="visual-canvas-wrap">
+        <canvas id="shapeCanvas"></canvas>
+      </div>
+
+      <div id="resultContent">
+        <div class="empty-result">
+          <div class="empty-icon">⚖️</div>
+          <div class="empty-text">Fill in the dimensions above and click Calculate to see weight and cost results here.</div>
+        </div>
+      </div>
+
+      <!-- MATERIAL REFERENCE -->
+      <div class="ref-table">
+        <div class="ref-title">Material Density Reference</div>
+        <div class="ref-grid">
+          <div class="ref-row">
+            <div class="ref-cell head">Material</div>
+            <div class="ref-cell head">Density</div>
+            <div class="ref-cell head">Grade</div>
+          </div>
+          <div id="refRows"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="page-footer">
+  <span>© 2025 JMC Engineering · info@jmcengg.com · Padi, Chennai</span>
+  <a href="index.html">← Back to Main Site</a>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// MATERIAL DATA
+// ═══════════════════════════════════════════
+const MATERIALS = [
+  {id:'ms',    name:'MS (CRS/HRS)',  density:7850, grade:'IS 2062 / EN8'},
+  {id:'ss304', name:'SS 304',        density:7930, grade:'AISI 304'},
+  {id:'ss316', name:'SS 316',        density:7980, grade:'AISI 316'},
+  {id:'en8',   name:'EN8',           density:7850, grade:'BS 970 EN8'},
+  {id:'en24',  name:'EN24',          density:7850, grade:'BS 970 EN24'},
+  {id:'al',    name:'Aluminium',     density:2700, grade:'6061 / 6082'},
+  {id:'brass', name:'Brass',         density:8500, grade:'CZ121 / CZ108'},
+  {id:'cu',    name:'Copper',        density:8960, grade:'C101 / C110'},
+  {id:'ci',    name:'Cast Iron',     density:7200, grade:'IS 210 / FG200'},
+  {id:'ti',    name:'Titanium',      density:4500, grade:'Grade 2 / 5'},
+];
+
+let selectedShape = 'round';
+let selectedMat = MATERIALS[0];
+
+// ── MATERIAL BUTTONS ──
+function renderMats(){
+  const g = document.getElementById('matGrid');
+  g.innerHTML = '';
+  MATERIALS.forEach(m=>{
+    const d=document.createElement('div');
+    d.className='mat-btn'+(m.id===selectedMat.id?' active':'');
+    d.innerHTML=`<div class="mat-name">${m.name}</div><div class="mat-density">${m.density} kg/m³</div>`;
+    d.onclick=()=>{
+      selectedMat=m;
+      document.querySelectorAll('.mat-btn').forEach(b=>b.classList.remove('active'));
+      d.classList.add('active');
+      drawShapePreview();
+    };
+    g.appendChild(d);
+  });
+}
+
+// ── REFERENCE TABLE ──
+function renderRefTable(){
+  const r=document.getElementById('refRows');
+  r.innerHTML='';
+  MATERIALS.forEach(m=>{
+    const row=document.createElement('div');
+    row.className='ref-row';
+    row.innerHTML=`
+      <div class="ref-cell"><div class="dl">${m.name}</div></div>
+      <div class="ref-cell"><div class="dn">${m.density}</div><div class="dl">kg/m³</div></div>
+      <div class="ref-cell"><div class="dl">${m.grade}</div></div>
+    `;
+    r.appendChild(row);
+  });
+}
+
+// ── SHAPE DIMS ──
+const SHAPE_DIMS = {
+  round: [{id:'dia',label:'Diameter',unit:'mm'},{id:'len',label:'Length',unit:'mm'}],
+  square:[{id:'side',label:'Side Width',unit:'mm'},{id:'len',label:'Length',unit:'mm'}],
+  flat:  [{id:'w',label:'Width',unit:'mm'},{id:'t',label:'Thickness',unit:'mm'},{id:'len',label:'Length',unit:'mm'}],
+  sheet: [{id:'w',label:'Width',unit:'mm'},{id:'l2',label:'Length',unit:'mm'},{id:'t',label:'Thickness',unit:'mm'}],
+  hex:   [{id:'af',label:'Across Flats',unit:'mm'},{id:'len',label:'Length',unit:'mm'}],
+  pipe:  [{id:'od',label:'Outer Dia',unit:'mm'},{id:'wt',label:'Wall Thickness',unit:'mm'},{id:'len',label:'Length',unit:'mm'}],
+};
+
+function selectShape(s, btn){
+  selectedShape=s;
+  document.querySelectorAll('.shape-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderDims();
+  drawShapePreview();
+}
+
+function renderDims(){
+  const g=document.getElementById('dimsGrid');
+  g.innerHTML='';
+  SHAPE_DIMS[selectedShape].forEach(d=>{
+    const div=document.createElement('div');
+    div.className='dim-field';
+    div.innerHTML=`<label>${d.label} <span class="dim-unit">(${d.unit})</span></label>
+    <input type="number" id="dim_${d.id}" placeholder="Enter ${d.label.toLowerCase()}" min="0" step="0.1" oninput="drawShapePreview()"/>`;
+    g.appendChild(div);
+  });
+}
+
+// ── CALCULATE ──
+function calculate(){
+  const dims={};
+  SHAPE_DIMS[selectedShape].forEach(d=>{
+    const el=document.getElementById('dim_'+d.id);
+    dims[d.id]=el?parseFloat(el.value)||0:0;
+  });
+
+  const ρ = selectedMat.density;
+  let vol_cm3=0, formula='';
+
+  if(selectedShape==='round'){
+    if(!dims.dia||!dims.len){return alert('Enter diameter and length.');}
+    vol_cm3 = Math.PI/4 * Math.pow(dims.dia/10,2) * (dims.len/10);
+    formula = `π/4 × ⌀${dims.dia}² × L${dims.len} mm`;
+  }
+  else if(selectedShape==='square'){
+    if(!dims.side||!dims.len){return alert('Enter side width and length.');}
+    vol_cm3 = Math.pow(dims.side/10,2) * (dims.len/10);
+    formula = `${dims.side}² × L${dims.len} mm`;
+  }
+  else if(selectedShape==='flat'){
+    if(!dims.w||!dims.t||!dims.len){return alert('Enter all dimensions.');}
+    vol_cm3 = (dims.w/10)*(dims.t/10)*(dims.len/10);
+    formula = `W${dims.w} × T${dims.t} × L${dims.len} mm`;
+  }
+  else if(selectedShape==='sheet'){
+    if(!dims.w||!dims.l2||!dims.t){return alert('Enter all dimensions.');}
+    vol_cm3 = (dims.w/10)*(dims.l2/10)*(dims.t/10);
+    formula = `W${dims.w} × L${dims.l2} × T${dims.t} mm`;
+  }
+  else if(selectedShape==='hex'){
+    if(!dims.af||!dims.len){return alert('Enter across flats and length.');}
+    vol_cm3 = (2*Math.sqrt(3)/4)*Math.pow(dims.af/10,2)*(dims.len/10);
+    formula = `AF${dims.af} × L${dims.len} mm (Hex)`;
+  }
+  else if(selectedShape==='pipe'){
+    if(!dims.od||!dims.wt||!dims.len){return alert('Enter all dimensions.');}
+    const id=dims.od-2*dims.wt;
+    vol_cm3 = Math.PI/4*(Math.pow(dims.od/10,2)-Math.pow(id/10,2))*(dims.len/10);
+    formula = `OD${dims.od} × WT${dims.wt} × L${dims.len} mm`;
+  }
+
+  const weight_g = vol_cm3 * (ρ/1000);
+  const weight_kg = weight_g/1000;
+  const qty = parseInt(document.getElementById('quantity').value)||1;
+  const pricePerKg = parseFloat(document.getElementById('pricePerKg').value)||0;
+  const totalWeight = weight_kg * qty;
+  const totalCost = pricePerKg>0 ? totalWeight*pricePerKg : null;
+
+  showResults(weight_kg, totalWeight, qty, totalCost, pricePerKg, formula, vol_cm3);
+  drawShapePreview(dims);
+}
+
+function showResults(wkg, totalW, qty, totalCost, ppm, formula, vol){
+  const rc=document.getElementById('resultContent');
+  const wDisplay = totalW>=1 ? totalW.toFixed(3)+' kg' : (totalW*1000).toFixed(1)+' g';
+  const oneDisplay = wkg>=1 ? wkg.toFixed(3)+' kg' : (wkg*1000).toFixed(1)+' g';
+
+  rc.innerHTML = `
+    <div class="big-result">
+      <div class="big-num">${totalW>=1?totalW.toFixed(3):(totalW*1000).toFixed(1)}</div>
+      <div class="big-unit">${totalW>=1?'kg':'grams'} ${qty>1?'(×'+qty+' pcs)':''}</div>
+      <div class="big-label">${selectedMat.name} · ${selectedShape.charAt(0).toUpperCase()+selectedShape.slice(1)} · ${selectedMat.density} kg/m³</div>
+    </div>
+    <div class="result-rows">
+      <div class="result-row">
+        <span class="rr-label">Per piece weight</span>
+        <span class="rr-value">${oneDisplay}</span>
+      </div>
+      <div class="result-row highlight">
+        <span class="rr-label">Total weight (${qty} pc${qty>1?'s':''})</span>
+        <span class="rr-value green">${wDisplay}</span>
+      </div>
+      <div class="result-row">
+        <span class="rr-label">Volume</span>
+        <span class="rr-value">${vol.toFixed(2)} cm³</span>
+      </div>
+      <div class="result-row">
+        <span class="rr-label">Formula used</span>
+        <span class="rr-value" style="font-size:11px;">${formula}</span>
+      </div>
+      ${ppm>0?`
+      <div class="result-row cost">
+        <span class="rr-label">Cost per piece @ ₹${ppm}/kg</span>
+        <span class="rr-value amber">₹ ${(wkg*ppm).toFixed(2)}</span>
+      </div>
+      <div class="result-row cost" style="background:linear-gradient(135deg,#fef9c3,#fef08a);border-color:#fbbf24;">
+        <span class="rr-label" style="color:#713f12;font-size:13px;font-weight:700;">TOTAL COST (${qty} pcs)</span>
+        <span class="rr-value" style="color:#713f12;font-size:18px;font-family:'Rajdhani',sans-serif;font-weight:700;">₹ ${(totalW*ppm).toFixed(2)}</span>
+      </div>`:''}
+    </div>
+  `;
+}
+
+// ── SHAPE CANVAS PREVIEW ──
+const sc = document.getElementById('shapeCanvas');
+const sctx = sc.getContext('2d');
+
+function drawShapePreview(dims){
+  const wrap = sc.parentElement;
+  sc.width = wrap.offsetWidth; sc.height = wrap.offsetHeight;
+  const W=sc.width, H=sc.height;
+
+  const bg=sctx.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0,'#050e24'); bg.addColorStop(1,'#091535');
+  sctx.fillStyle=bg; sctx.fillRect(0,0,W,H);
+
+  // Grid
+  sctx.strokeStyle='rgba(37,99,235,.06)'; sctx.lineWidth=1;
+  for(let x=0;x<W;x+=20){sctx.beginPath();sctx.moveTo(x,0);sctx.lineTo(x,H);sctx.stroke();}
+  for(let y=0;y<H;y+=20){sctx.beginPath();sctx.moveTo(0,y);sctx.lineTo(W,y);sctx.stroke();}
+
+  const cx=W*0.4, cy=H*0.5;
+  const matColors = {
+    ms:['#4b5563','#9ca3af'],ss304:['#6b7280','#d1d5db'],ss316:['#6b7280','#e5e7eb'],
+    en8:['#374151','#9ca3af'],en24:['#1f2937','#6b7280'],
+    al:['#9ca3af','#e5e7eb'],brass:['#92400e','#d97706'],
+    cu:['#7c2d12','#c2410c'],ci:['#374151','#6b7280'],ti:['#1e40af','#60a5fa']
+  };
+  const [c1,c2]=matColors[selectedMat.id]||['#4b5563','#9ca3af'];
+
+  const size=Math.min(W,H)*0.32;
+  sctx.save();
+
+  if(selectedShape==='round'){
+    // 3D cylinder effect
+    const rx=size*0.45, ry=size*0.18;
+    const len=size*1.1;
+    // Shadow
+    sctx.fillStyle='rgba(0,0,0,.3)';
+    sctx.beginPath(); sctx.ellipse(cx+5,cy+ry+5+len,rx,ry,0,0,Math.PI*2); sctx.fill();
+    // Body
+    const lg=sctx.createLinearGradient(cx-rx,0,cx+rx,0);
+    lg.addColorStop(0,'#1f2937'); lg.addColorStop(.35,c2); lg.addColorStop(.65,c2); lg.addColorStop(1,'#1f2937');
+    sctx.fillStyle=lg;
+    sctx.fillRect(cx-rx,cy-ry,rx*2,len);
+    // Top ellipse
+    const eg=sctx.createRadialGradient(cx,cy-ry,0,cx,cy-ry,rx);
+    eg.addColorStop(0,c2); eg.addColorStop(1,c1);
+    sctx.fillStyle=eg;
+    sctx.beginPath(); sctx.ellipse(cx,cy-ry,rx,ry,0,0,Math.PI*2); sctx.fill();
+    // Bottom ellipse
+    sctx.fillStyle=c1;
+    sctx.beginPath(); sctx.ellipse(cx,cy-ry+len,rx,ry,0,0,Math.PI*2); sctx.fill();
+    // Highlight
+    sctx.strokeStyle='rgba(255,255,255,.15)'; sctx.lineWidth=2;
+    sctx.beginPath(); sctx.ellipse(cx,cy-ry,rx,ry,0,0,Math.PI*2); sctx.stroke();
+  }
+  else if(selectedShape==='square'){
+    // 3D box
+    const s=size*0.5, depth=size*0.25, len=size*1.1;
+    const lg=sctx.createLinearGradient(cx-s,0,cx+s,0);
+    lg.addColorStop(0,c1); lg.addColorStop(.5,c2); lg.addColorStop(1,c1);
+    sctx.fillStyle=lg; sctx.fillRect(cx-s,cy-s,s*2,len);
+    // Top face
+    sctx.fillStyle=c2;
+    sctx.beginPath(); sctx.moveTo(cx-s,cy-s); sctx.lineTo(cx+s,cy-s);
+    sctx.lineTo(cx+s+depth,cy-s-depth); sctx.lineTo(cx-s+depth,cy-s-depth); sctx.closePath(); sctx.fill();
+    // Side face
+    sctx.fillStyle=c1;
+    sctx.beginPath(); sctx.moveTo(cx+s,cy-s); sctx.lineTo(cx+s+depth,cy-s-depth);
+    sctx.lineTo(cx+s+depth,cy-s-depth+len); sctx.lineTo(cx+s,cy-s+len); sctx.closePath(); sctx.fill();
+    sctx.strokeStyle='rgba(255,255,255,.1)'; sctx.lineWidth=1;
+    sctx.strokeRect(cx-s,cy-s,s*2,len);
+  }
+  else if(selectedShape==='flat'){
+    const w=size*0.9,t=size*0.18,len=size*1.1;
+    const lg=sctx.createLinearGradient(cx-w/2,0,cx+w/2,0);
+    lg.addColorStop(0,c1); lg.addColorStop(.5,c2); lg.addColorStop(1,c1);
+    sctx.fillStyle=lg; sctx.fillRect(cx-w/2,cy-t/2,w,len);
+    sctx.fillStyle=c2;
+    sctx.fillRect(cx-w/2,cy-t/2,w,t);
+    sctx.strokeStyle='rgba(255,255,255,.1)'; sctx.lineWidth=1;
+    sctx.strokeRect(cx-w/2,cy-t/2,w,len);
+  }
+  else if(selectedShape==='sheet'){
+    const w=size*1.1, l=size*0.85, t=size*0.06;
+    const lg=sctx.createLinearGradient(cx-w/2,0,cx+w/2,0);
+    lg.addColorStop(0,c1); lg.addColorStop(.5,c2); lg.addColorStop(1,c1);
+    sctx.fillStyle=lg; sctx.fillRect(cx-w/2,cy-l/2,w,l);
+    sctx.fillStyle=c2; sctx.fillRect(cx-w/2,cy-l/2,w,t);
+    sctx.strokeStyle='rgba(255,255,255,.15)'; sctx.lineWidth=1;
+    sctx.strokeRect(cx-w/2,cy-l/2,w,l);
+    // Surface lines
+    sctx.strokeStyle='rgba(255,255,255,.05)'; sctx.lineWidth=1;
+    for(let i=1;i<5;i++){sctx.beginPath();sctx.moveTo(cx-w/2,cy-l/2+l*i/5);sctx.lineTo(cx+w/2,cy-l/2+l*i/5);sctx.stroke();}
+  }
+  else if(selectedShape==='hex'){
+    // Hex bar 3D
+    const r=size*0.38, depth=size*0.2, len=size*1.1;
+    for(let face=0;face<3;face++){
+      const a1=(face/3)*Math.PI*2-Math.PI/6;
+      const a2=((face+1)/3)*Math.PI*2-Math.PI/6;
+      const shade=face===0?c2:face===1?c1:'#111827';
+      sctx.fillStyle=shade;
+      sctx.beginPath();
+      sctx.moveTo(cx+r*Math.cos(a1),cy+r*Math.sin(a1));
+      sctx.lineTo(cx+r*Math.cos(a2),cy+r*Math.sin(a2));
+      sctx.lineTo(cx+r*Math.cos(a2),cy+r*Math.sin(a2)+len);
+      sctx.lineTo(cx+r*Math.cos(a1),cy+r*Math.sin(a1)+len);
+      sctx.closePath(); sctx.fill();
+      sctx.strokeStyle='rgba(255,255,255,.08)'; sctx.lineWidth=1; sctx.stroke();
+    }
+    // Top hex
+    sctx.fillStyle=c2;
+    sctx.beginPath();
+    for(let i=0;i<6;i++){const a=(i/6)*Math.PI*2-Math.PI/6; i===0?sctx.moveTo(cx+r*Math.cos(a),cy+r*Math.sin(a)):sctx.lineTo(cx+r*Math.cos(a),cy+r*Math.sin(a));}
+    sctx.closePath(); sctx.fill();
+    sctx.strokeStyle='rgba(255,255,255,.2)'; sctx.lineWidth=1; sctx.stroke();
+  }
+  else if(selectedShape==='pipe'){
+    const ro=size*0.42, ri=size*0.28, len=size*1.1;
+    // Body outer
+    const lg=sctx.createLinearGradient(cx-ro,0,cx+ro,0);
+    lg.addColorStop(0,'#1f2937'); lg.addColorStop(.3,c2); lg.addColorStop(.7,c2); lg.addColorStop(1,'#1f2937');
+    sctx.fillStyle=lg; sctx.fillRect(cx-ro,cy,ro*2,len);
+    // Inner hole (dark)
+    sctx.fillStyle='#060f1e'; sctx.fillRect(cx-ri,cy,ri*2,len+2);
+    // Top ring
+    sctx.fillStyle=c1;
+    sctx.beginPath(); sctx.ellipse(cx,cy,ro,ro*0.35,0,0,Math.PI*2); sctx.fill();
+    sctx.fillStyle='#060f1e';
+    sctx.beginPath(); sctx.ellipse(cx,cy,ri,ri*0.35,0,0,Math.PI*2); sctx.fill();
+    sctx.strokeStyle='rgba(255,255,255,.15)'; sctx.lineWidth=1.5;
+    sctx.beginPath(); sctx.ellipse(cx,cy,ro,ro*0.35,0,0,Math.PI*2); sctx.stroke();
+    // Bottom ring
+    sctx.fillStyle=c1;
+    sctx.beginPath(); sctx.ellipse(cx,cy+len,ro,ro*0.35,0,0,Math.PI); sctx.fill();
+    sctx.fillStyle='#060f1e';
+    sctx.beginPath(); sctx.ellipse(cx,cy+len,ri,ri*0.35,0,0,Math.PI); sctx.fill();
+  }
+
+  // Material label
+  sctx.fillStyle='rgba(255,255,255,0.5)';
+  sctx.font='bold 12px Rajdhani,sans-serif';
+  sctx.textAlign='center'; sctx.textBaseline='middle';
+  sctx.fillText(selectedMat.name.toUpperCase() + ' — ρ=' + selectedMat.density + ' kg/m³', W*0.4, H*0.9);
+
+  sctx.restore();
+}
+
+renderMats();
+renderRefTable();
+renderDims();
+drawShapePreview();
+new ResizeObserver(()=>drawShapePreview()).observe(sc.parentElement);
+</script>
+</body>
+</html>
