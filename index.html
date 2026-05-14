@@ -187,7 +187,9 @@ section{padding:80px 5%;}
 .clients-note{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-muted);background:#f8fafc;border:1px dashed var(--border);border-radius:8px;padding:10px 16px;margin-bottom:24px;max-width:440px;}
 
 /* ── HOW WE WORK ── */
-#process{background:var(--bg);}
+#process{background:var(--bg);position:relative;overflow:hidden;}
+#process-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;}
+#process .sec-head,#process .timeline{position:relative;z-index:1;}
 .timeline{display:flex;flex-direction:column;gap:0;position:relative;max-width:700px;margin:0 auto;}
 .timeline::before{content:'';position:absolute;left:22px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--blue),var(--navy));border-radius:2px;}
 .tl-item{display:flex;gap:28px;padding-bottom:36px;position:relative;}
@@ -696,6 +698,7 @@ footer{background:var(--navy-dark);padding:48px 5% 24px;}
 
 <!-- HOW WE WORK -->
 <section id="process">
+  <canvas id="process-canvas"></canvas>
   <div class="sec-head reveal" style="text-align:center;">
     <div class="sec-label">Our Process</div>
     <h2 class="sec-title">How We Work</h2>
