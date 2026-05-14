@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CNC Drilling Simulation | JMC Engineering</title>
+<meta name="description" content="3D CNC drilling simulation — Tap Drill, Counterbore and Countersink sequence with real machine, chip ejection and transparent cross-section view. JMC Engineering Chennai."/>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --navy:#0d2250;--navy-dark:#07163a;--blue:#2563eb;--blue-light:#60a5fa;
+  --bg:#050a18;--white:#fff;--text:#e2e8f0;--muted:#94a3b8;
+  --green:#4ade80;--amber:#fbbf24;--orange:#fb923c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow:hidden;height:100vh;width:100vw;}
+#canvas-container{position:fixed;inset:0;z-index:0;}
+
+/* TOP BAR */
+.top-bar{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:12px 20px;background:linear-gradient(180deg,rgba(5,10,24,.95) 0%,rgba(5,10,24,0) 100%);pointer-events:none;}
+.top-bar>*{pointer-events:auto;}
+.back-btn{color:rgba(255,255,255,.5);font-size:13px;font-weight:500;text-decoration:none;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);padding:8px 16px;border-radius:8px;transition:all .2s;display:flex;align-items:center;gap:6px;}
+.back-btn:hover{color:#fff;background:rgba(255,255,255,.12);}
+.size-badge{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:28px;color:#fff;display:flex;align-items:center;gap:12px;}
+.size-badge .dot{width:10px;height:10px;background:var(--blue);border-radius:50%;box-shadow:0 0 12px var(--blue);}
+.size-badge .sub{font-size:12px;font-weight:400;color:var(--muted);font-family:'DM Sans',sans-serif;display:block;}
+
+/* PROGRESS BAR */
+.progress-wrap{position:fixed;top:0;left:0;right:0;z-index:110;height:3px;background:rgba(255,255,255,.05);}
+.progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--blue-light));transition:width .15s linear;border-radius:0 2px 2px 0;}
+.phase-label{position:fixed;top:60px;left:50%;transform:translateX(-50%);z-index:110;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;color:var(--blue-light);letter-spacing:1.8px;text-transform:uppercase;background:rgba(5,10,24,.7);border:1px solid rgba(96,165,250,.2);padding:6px 16px;border-radius:20px;backdrop-filter:blur(8px);}
+
+/* TOOL INDICATOR */
+.tool-indicator{position:fixed;top:60px;left:20px;z-index:110;display:flex;flex-direction:column;gap:6px;background:rgba(5,10,24,.85);border:1px solid rgba(37,99,235,.2);padding:10px 14px;border-radius:10px;backdrop-filter:blur(10px);min-width:160px;}
+.tool-indicator .ti-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+.tool-indicator .ti-value{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:#fff;}
+.tool-indicator .ti-dia{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--blue-light);margin-top:2px;}
+
+/* BOTTOM PANEL */
+.bottom-panel{position:fixed;bottom:0;left:0;right:0;z-index:100;padding:0 20px 16px;pointer-events:none;}
+.spec-bar{display:flex;gap:2px;background:rgba(5,14,36,.85);border:1px solid rgba(37,99,235,.15);border-radius:12px;padding:4px;backdrop-filter:blur(12px);pointer-events:auto;max-width:780px;margin:0 auto;}
+.spec-item{flex:1;text-align:center;padding:10px 8px;border-radius:8px;transition:background .25s;}
+.spec-item.active{background:rgba(37,99,235,.18);}
+.spec-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px;}
+.spec-value{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:var(--blue-light);}
+.spec-item.active .spec-value{color:#fff;}
+
+/* DIMENSION OVERLAY */
+.dim-overlay{position:fixed;inset:0;z-index:90;pointer-events:none;opacity:0;transition:opacity .6s;}
+.dim-overlay.visible{opacity:1;}
+.dim-callout{position:absolute;display:flex;flex-direction:column;align-items:flex-start;gap:2px;background:rgba(5,10,24,.92);border:1.5px solid var(--blue);padding:8px 14px;border-radius:8px;backdrop-filter:blur(10px);box-shadow:0 4px 20px rgba(37,99,235,.25);transform:translate(-50%,-50%);}
+.dim-callout.green{border-color:var(--green);box-shadow:0 4px 20px rgba(74,222,128,.25);}
+.dim-callout.amber{border-color:var(--amber);box-shadow:0 4px 20px rgba(251,191,36,.25);}
+.dim-callout.orange{border-color:var(--orange);box-shadow:0 4px 20px rgba(251,146,60,.25);}
+.dim-callout .dim-tag{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:600;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase;}
+.dim-callout .dim-val{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:#fff;}
+.dim-callout.green .dim-val{color:var(--green);}
+.dim-callout.amber .dim-val{color:var(--amber);}
+.dim-callout.orange .dim-val{color:var(--orange);}
+
+/* REPLAY BUTTON */
+.replay-btn{position:fixed;bottom:80px;right:20px;z-index:100;background:rgba(37,99,235,.2);border:1px solid rgba(37,99,235,.3);color:var(--blue-light);font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;padding:10px 20px;border-radius:10px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px;letter-spacing:.5px;}
+.replay-btn:hover{background:rgba(37,99,235,.35);border-color:rgba(37,99,235,.5);transform:translateY(-1px);}
+.replay-btn svg{width:16px;height:16px;}
+
+/* LOADING */
+.loader{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity .6s,visibility .6s;}
+.loader.hidden{opacity:0;visibility:hidden;}
+.loader-logo{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.loader-logo img{width:44px;height:44px;border-radius:50%;object-fit:contain;}
+.loader-logo span{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:#fff;}
+.loader-logo span em{color:var(--blue-light);font-style:normal;}
+.loader-spinner{width:48px;height:48px;border:3px solid rgba(37,99,235,.15);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-text{font-family:'Rajdhani',sans-serif;font-size:15px;color:var(--muted);letter-spacing:1px;}
+.loader-sub{font-size:12px;color:rgba(255,255,255,.3);text-align:center;}
+
+/* WATERMARK */
+.watermark{position:fixed;bottom:16px;left:20px;z-index:100;display:flex;align-items:center;gap:8px;opacity:.35;pointer-events:none;}
+.watermark img{width:20px;height:20px;border-radius:50%;object-fit:contain;}
+.watermark span{font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:600;color:#fff;letter-spacing:1px;}
+
+/* CONTROLS HINT */
+.controls-hint{position:fixed;top:60px;right:20px;z-index:110;background:rgba(5,10,24,.7);border:1px solid rgba(255,255,255,.06);padding:8px 12px;border-radius:8px;font-size:11px;color:rgba(255,255,255,.4);line-height:1.7;backdrop-filter:blur(8px);}
+</style>
+</head>
+<body>
+
+<div class="loader" id="loader">
+  <div class="loader-logo">
+    <img src="logo.png" alt="JMC Engineering"/>
+    <span>JMC <em>Engineering</em></span>
+  </div>
+  <div class="loader-spinner"></div>
+  <div class="loader-text">Initializing CNC Simulation…</div>
+  <div class="loader-sub">Loading Three.js · Building machine geometry</div>
+</div>
+
+<div id="canvas-container"></div>
+
+<div class="progress-wrap"><div class="progress-fill" id="progressFill"></div></div>
+
+<div class="top-bar">
+  <div class="size-badge">
+    <div class="dot"></div>
+    <div><span id="sizeTitle">M10</span><span class="sub" id="sizeSub">Tap Drill Simulation</span></div>
+  </div>
+  <a href="drill-calculator.html" class="back-btn">← Back to Drill Chart</a>
+</div>
+
+<div class="phase-label" id="phaseLabel">Initializing</div>
+
+<div class="tool-indicator">
+  <div class="ti-label">Active Tool</div>
+  <div class="ti-value" id="toolName">— Idle —</div>
+  <div class="ti-dia" id="toolDia">—</div>
+</div>
+
+<div class="controls-hint">
+  🖱 Drag to orbit &nbsp;·&nbsp; Scroll to zoom<br/>
+  Touch: pinch to zoom
+</div>
+
+<div class="bottom-panel">
+  <div class="spec-bar">
+    <div class="spec-item" id="specItemTap"><div class="spec-label">Tap Drill</div><div class="spec-value" id="specTap">⌀ 8.5 mm</div></div>
+    <div class="spec-item" id="specItemCb"><div class="spec-label">Counterbore</div><div class="spec-value" id="specCb">⌀ 16.0 × 10</div></div>
+    <div class="spec-item" id="specItemCsk"><div class="spec-label">Countersink</div><div class="spec-value" id="specCsk">⌀ 18.5</div></div>
+    <div class="spec-item"><div class="spec-label">Pitch / Thread</div><div class="spec-value" id="specPitch">1.5 mm</div></div>
+  </div>
+</div>
+
+<div class="dim-overlay" id="dimOverlay">
+  <div class="dim-callout green" id="dimTapDia" style="left:50%;top:42%;">
+    <span class="dim-tag">Tap Drill Ø</span><span class="dim-val" id="dimTapDiaVal">⌀ 8.5 mm</span>
+  </div>
+  <div class="dim-callout amber" id="dimTapDepth" style="left:72%;top:62%;">
+    <span class="dim-tag">Drill Depth</span><span class="dim-val" id="dimTapDepthVal">12.0 mm</span>
+  </div>
+  <div class="dim-callout" id="dimCbDia" style="left:50%;top:36%;display:none;">
+    <span class="dim-tag">Counterbore Ø</span><span class="dim-val" id="dimCbDiaVal">⌀ 16.0 mm</span>
+  </div>
+  <div class="dim-callout amber" id="dimCbDepth" style="left:75%;top:50%;display:none;">
+    <span class="dim-tag">CB Depth</span><span class="dim-val" id="dimCbDepthVal">10.0 mm</span>
+  </div>
+  <div class="dim-callout orange" id="dimCskDia" style="left:50%;top:32%;display:none;">
+    <span class="dim-tag">CSK Ø</span><span class="dim-val" id="dimCskDiaVal">⌀ 18.5 mm</span>
+  </div>
+  <div class="dim-callout" id="dimCskAngle" style="left:72%;top:42%;display:none;">
+    <span class="dim-tag">Included Angle</span><span class="dim-val">90°</span>
+  </div>
+</div>
+
+<button class="replay-btn" id="replayBtn" onclick="replayAnimation()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+  Replay
+</button>
+
+<div class="watermark">
+  <img src="logo.png" alt="JMC"/>
+  <span>JMC ENGINEERING · PADI, CHENNAI</span>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ═══════════════════════════════════════════════════
+// INLINE OrbitControls for r128
+// ═══════════════════════════════════════════════════
+(function(){
+THREE.OrbitControls=function(object,domElement){
+  this.object=object;this.domElement=domElement;this.enabled=true;
+  this.target=new THREE.Vector3();this.minDistance=0;this.maxDistance=Infinity;
+  this.minPolarAngle=0;this.maxPolarAngle=Math.PI;
+  this.enableDamping=false;this.dampingFactor=.05;
+  this.enableZoom=true;this.enableRotate=true;this.enablePan=true;
+  this.autoRotate=false;this.autoRotateSpeed=2.0;
+  var scope=this,STATE={NONE:-1,ROTATE:0,DOLLY:1,PAN:2};
+  var state=STATE.NONE,spherical=new THREE.Spherical(),sphericalDelta=new THREE.Spherical();
+  var scale=1,panOffset=new THREE.Vector3(),zoomChanged=false;
+  var rotateStart=new THREE.Vector2(),rotateEnd=new THREE.Vector2(),rotateDelta=new THREE.Vector2();
+  var panStart=new THREE.Vector2(),panEnd=new THREE.Vector2(),panDelta=new THREE.Vector2();
+  var dollyStart=new THREE.Vector2(),dollyEnd=new THREE.Vector2(),dollyDelta=new THREE.Vector2();
+  var offset=new THREE.Vector3(),quat=new THREE.Quaternion().setFromUnitVectors(object.up,new THREE.Vector3(0,1,0));
+  var quatInverse=quat.clone().invert(),lastPosition=new THREE.Vector3(),lastQuaternion=new THREE.Quaternion();
+  var EPS=0.000001;
+  function getZoomScale(){return Math.pow(.95,1);}
+  function rotateLeft(angle){sphericalDelta.theta-=angle;}
+  function rotateUp(angle){sphericalDelta.phi-=angle;}
+  function panLeft(distance,objectMatrix){var v=new THREE.Vector3();v.setFromMatrixColumn(objectMatrix,0);v.multiplyScalar(-distance);panOffset.add(v);}
+  function panRight(distance,objectMatrix){var v=new THREE.Vector3();v.setFromMatrixColumn(objectMatrix,1);v.multiplyScalar(distance);panOffset.add(v);}
+  function pan(deltaX,deltaY){var element=scope.domElement;if(scope.object.isPerspectiveCamera){var position=scope.object.position;var o=position.clone().sub(scope.target);var targetDistance=o.length();targetDistance*=Math.tan((scope.object.fov/2)*Math.PI/180.0);panLeft(2*deltaX*targetDistance/element.clientHeight,scope.object.matrix);panRight(2*deltaY*targetDistance/element.clientHeight,scope.object.matrix);}}
+  function dollyIn(dollyScale){scale/=dollyScale;zoomChanged=true;}
+  function dollyOut(dollyScale){scale*=dollyScale;zoomChanged=true;}
+  this.update=function(){
+    offset.copy(scope.object.position).sub(scope.target);
+    offset.applyQuaternion(quat);
+    spherical.setFromVector3(offset);
+    if(scope.enableDamping){spherical.theta+=sphericalDelta.theta*scope.dampingFactor;spherical.phi+=sphericalDelta.phi*scope.dampingFactor;}
+    else{spherical.theta+=sphericalDelta.theta;spherical.phi+=sphericalDelta.phi;}
+    spherical.phi=Math.max(scope.minPolarAngle,Math.min(scope.maxPolarAngle,spherical.phi));
+    spherical.makeSafe();spherical.radius*=scale;
+    spherical.radius=Math.max(scope.minDistance,Math.min(scope.maxDistance,spherical.radius));
+    scope.target.add(panOffset);
+    offset.setFromSpherical(spherical);offset.applyQuaternion(quatInverse);
+    scope.object.position.copy(scope.target).add(offset);
+    scope.object.lookAt(scope.target);
+    if(scope.enableDamping){sphericalDelta.theta*=(1-scope.dampingFactor);sphericalDelta.phi*=(1-scope.dampingFactor);panOffset.multiplyScalar(1-scope.dampingFactor);}
+    else{sphericalDelta.set(0,0,0);panOffset.set(0,0,0);}
+    scale=1;
+    if(zoomChanged||lastPosition.distanceToSquared(scope.object.position)>EPS||8*(1-lastQuaternion.dot(scope.object.quaternion))>EPS){lastPosition.copy(scope.object.position);lastQuaternion.copy(scope.object.quaternion);zoomChanged=false;return true;}
+    return false;
+  };
+  function onPointerDown(e){if(!scope.enabled)return;if(e.pointerType==='mouse'||e.pointerType===undefined)onMouseDown(e);}
+  function onPointerMove(e){if(!scope.enabled)return;if(e.pointerType==='mouse'||e.pointerType===undefined)onMouseMove(e);}
+  function onPointerUp(){state=STATE.NONE;}
+  function onMouseDown(e){e.preventDefault();
+    if(e.button===0)state=STATE.ROTATE;else if(e.button===1)state=STATE.DOLLY;else if(e.button===2)state=STATE.PAN;
+    if(state===STATE.ROTATE)rotateStart.set(e.clientX,e.clientY);
+    else if(state===STATE.DOLLY)dollyStart.set(e.clientX,e.clientY);
+    else if(state===STATE.PAN)panStart.set(e.clientX,e.clientY);
+  }
+  function onMouseMove(e){if(!scope.enabled||state===STATE.NONE)return;e.preventDefault();
+    if(state===STATE.ROTATE){rotateEnd.set(e.clientX,e.clientY);rotateDelta.subVectors(rotateEnd,rotateStart).multiplyScalar(2*Math.PI/domElement.clientHeight);rotateLeft(rotateDelta.x);rotateUp(rotateDelta.y);rotateStart.copy(rotateEnd);}
+    else if(state===STATE.DOLLY){dollyEnd.set(e.clientX,e.clientY);dollyDelta.subVectors(dollyEnd,dollyStart);if(dollyDelta.y>0)dollyOut(getZoomScale());else if(dollyDelta.y<0)dollyIn(getZoomScale());dollyStart.copy(dollyEnd);}
+    else if(state===STATE.PAN){panEnd.set(e.clientX,e.clientY);panDelta.subVectors(panEnd,panStart).multiplyScalar(1);pan(panDelta.x,panDelta.y);panStart.copy(panEnd);}
+  }
+  function onMouseWheel(e){if(!scope.enabled||!scope.enableZoom)return;e.preventDefault();e.stopPropagation();if(e.deltaY<0)dollyIn(getZoomScale());else if(e.deltaY>0)dollyOut(getZoomScale());}
+  function onContextMenu(e){if(!scope.enabled)return;e.preventDefault();}
+  domElement.addEventListener('contextmenu',onContextMenu);
+  domElement.addEventListener('pointerdown',onPointerDown);
+  domElement.addEventListener('pointermove',onPointerMove);
+  domElement.addEventListener('pointerup',onPointerUp);
+  domElement.addEventListener('wheel',onMouseWheel,{passive:false});
+  this.update();
+};
+})();
+
+// ═══════════════════════════════════════════════════
+// URL PARAMS
+// ═══════════════════════════════════════════════════
+const urlParams = new URLSearchParams(window.location.search);
+const PARAMS = {
+  size: urlParams.get('size') || 'M10',
+  tap:  parseFloat(urlParams.get('tap'))   || 8.5,
+  pitch:parseFloat(urlParams.get('pitch')) || 1.5,
+  cl:   parseFloat(urlParams.get('cl'))    || 10.5,
+  h7:   urlParams.get('h7')               || '+0/+18',
+  cb:   parseFloat(urlParams.get('cb'))    || 16.0,
+  cbd:  parseFloat(urlParams.get('cbd'))   || 10.0,
+  csk:  parseFloat(urlParams.get('csk'))   || 18.5,
+};
+
+// Populate UI
+document.getElementById('sizeTitle').textContent  = PARAMS.size;
+document.getElementById('sizeSub').textContent    = `${PARAMS.size}×${PARAMS.pitch} · Tap → CB → CSK Sequence`;
+document.getElementById('specTap').textContent    = `⌀ ${PARAMS.tap} mm`;
+document.getElementById('specCb').textContent     = `⌀ ${PARAMS.cb} × ${PARAMS.cbd}`;
+document.getElementById('specCsk').textContent    = `⌀ ${PARAMS.csk} mm`;
+document.getElementById('specPitch').textContent  = `${PARAMS.pitch} mm`;
+document.getElementById('dimTapDiaVal').textContent = `⌀ ${PARAMS.tap} mm`;
+document.getElementById('dimCbDiaVal').textContent  = `⌀ ${PARAMS.cb} mm`;
+document.getElementById('dimCbDepthVal').textContent= `${PARAMS.cbd} mm`;
+document.getElementById('dimCskDiaVal').textContent = `⌀ ${PARAMS.csk} mm`;
+document.getElementById('dimTapDepthVal').textContent = `${(PARAMS.tap * 1.5).toFixed(1)} mm`;
+
+// ═══════════════════════════════════════════════════
+// THREE.JS SCENE
+// ═══════════════════════════════════════════════════
+const container = document.getElementById('canvas-container');
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x050a18);
+scene.fog = new THREE.FogExp2(0x050a18, 0.010);
+
+const camera = new THREE.PerspectiveCamera(42, window.innerWidth/window.innerHeight, 0.1, 200);
+camera.position.set(13, 9, 13);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.15;
+container.appendChild(renderer.domElement);
+
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 2.5, 0);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.minDistance = 4;
+controls.maxDistance = 35;
+controls.maxPolarAngle = Math.PI * 0.49;
+controls.update();
+
+// ── LIGHTING ──
+scene.add(new THREE.AmbientLight(0x1a2744, 0.65));
+const dirLight = new THREE.DirectionalLight(0xc4d4f0, 1.25);
+dirLight.position.set(8, 18, 10);
+dirLight.castShadow = true;
+dirLight.shadow.mapSize.set(2048, 2048);
+dirLight.shadow.camera.near = 0.5; dirLight.shadow.camera.far = 50;
+dirLight.shadow.camera.left = -15; dirLight.shadow.camera.right = 15;
+dirLight.shadow.camera.top = 15; dirLight.shadow.camera.bottom = -15;
+dirLight.shadow.bias = -0.0003;
+scene.add(dirLight);
+scene.add(new THREE.DirectionalLight(0x3b6fd4, 0.45).position.set(-6,8,-4) && new THREE.DirectionalLight(0x3b6fd4, 0.45));
+const fillLight = new THREE.DirectionalLight(0x3b6fd4, 0.45);
+fillLight.position.set(-6,8,-4);
+scene.add(fillLight);
+const rimLight = new THREE.PointLight(0x2563eb, 0.7, 30);
+rimLight.position.set(-3, 12, -8);
+scene.add(rimLight);
+const spotLight = new THREE.SpotLight(0xffeedd, 0.9, 25, Math.PI*0.16, 0.4);
+spotLight.position.set(0, 14, 1);
+spotLight.castShadow = true;
+scene.add(spotLight);
+const cutGlow = new THREE.PointLight(0xff7733, 0, 6);
+cutGlow.position.set(0, 3, 0);
+scene.add(cutGlow);
+
+// ── MATERIALS ──
+const M = {
+  floor:       new THREE.MeshStandardMaterial({color:0x0a1628,roughness:0.7,metalness:0.3}),
+  castIron:    new THREE.MeshStandardMaterial({color:0x3a3f47,roughness:0.65,metalness:0.4}),
+  painted:     new THREE.MeshStandardMaterial({color:0x4a5568,roughness:0.5,metalness:0.3}),
+  chrome:      new THREE.MeshStandardMaterial({color:0xb0b8c8,roughness:0.15,metalness:0.9}),
+  hss:         new THREE.MeshStandardMaterial({color:0x8090a0,roughness:0.3,metalness:0.85}),
+  workpiece:   new THREE.MeshStandardMaterial({color:0x7a8a9d,roughness:0.35,metalness:0.7,transparent:true,opacity:1.0}),
+  navy:        new THREE.MeshStandardMaterial({color:0x0d2250,roughness:0.4,metalness:0.3}),
+  blueAccent:  new THREE.MeshStandardMaterial({color:0x2563eb,roughness:0.3,metalness:0.5,emissive:0x2563eb,emissiveIntensity:0.15}),
+  darkSteel:   new THREE.MeshStandardMaterial({color:0x2d3540,roughness:0.55,metalness:0.5}),
+  jawInsert:   new THREE.MeshStandardMaterial({color:0x555d68,roughness:0.25,metalness:0.8}),
+  carbide:     new THREE.MeshStandardMaterial({color:0x4a505c,roughness:0.25,metalness:0.9}),
+  carbideGold: new THREE.MeshStandardMaterial({color:0xb8985a,roughness:0.35,metalness:0.85}),
+};
+
+// ── FLOOR ──
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(60,60), M.floor);
+floor.rotation.x = -Math.PI/2; floor.position.y = -0.5;
+floor.receiveShadow = true; scene.add(floor);
+const grid = new THREE.GridHelper(40,40,0x0d2250,0x0a1020);
+grid.position.y = -0.49; scene.add(grid);
+
+// ── MACHINE ──
+const machineGroup = new THREE.Group(); scene.add(machineGroup);
+const base = new THREE.Mesh(new THREE.BoxGeometry(8,0.6,5), M.castIron);
+base.position.set(0,0,0); base.castShadow=true; base.receiveShadow=true; machineGroup.add(base);
+for(let i=-1;i<=1;i++){
+  const s=new THREE.Mesh(new THREE.BoxGeometry(7.5,0.08,0.15),M.darkSteel);
+  s.position.set(0,0.31,i*1.5); machineGroup.add(s);
+}
+const col=new THREE.Mesh(new THREE.BoxGeometry(2,14,2.5),M.painted);
+col.position.set(-3.2,7,0); col.castShadow=true; machineGroup.add(col);
+[-1,1].forEach(z=>{
+  const e=new THREE.Mesh(new THREE.BoxGeometry(0.05,14,0.05),M.blueAccent);
+  e.position.set(-2.2,7,z*1.24); machineGroup.add(e);
+});
+
+// JMC Label on column
+const lc=document.createElement('canvas'); lc.width=256; lc.height=128;
+const lctx=lc.getContext('2d');
+lctx.fillStyle='#4a5568'; lctx.fillRect(0,0,256,128);
+lctx.fillStyle='#fff'; lctx.font='bold 30px sans-serif'; lctx.textAlign='center';
+lctx.fillText('JMC',128,44);
+lctx.fillStyle='#60a5fa'; lctx.font='bold 18px sans-serif';
+lctx.fillText('ENGINEERING',128,72);
+lctx.fillStyle='#94a3b8'; lctx.font='12px sans-serif';
+lctx.fillText('PADI · CHENNAI',128,100);
+const lm=new THREE.Mesh(new THREE.PlaneGeometry(1.8,0.9),new THREE.MeshStandardMaterial({map:new THREE.CanvasTexture(lc),roughness:0.4}));
+lm.position.set(-2.19,10,0); lm.rotation.y=Math.PI/2; machineGroup.add(lm);
+
+// ── SPINDLE HEAD ──
+const spindleHead = new THREE.Group();
+spindleHead.position.set(0, 12, 0);
+machineGroup.add(spindleHead);
+const head=new THREE.Mesh(new THREE.BoxGeometry(2.2,2.2,2.8),M.navy); head.castShadow=true; spindleHead.add(head);
+const arm=new THREE.Mesh(new THREE.BoxGeometry(2.2,0.5,1.4),M.painted); arm.position.set(-1.7,0.3,0); spindleHead.add(arm);
+const stripe=new THREE.Mesh(new THREE.BoxGeometry(2.22,0.15,2.82),M.blueAccent); stripe.position.set(0,0.6,0); spindleHead.add(stripe);
+[-.5,0,.5].forEach((x,i)=>{
+  const lm2=new THREE.MeshStandardMaterial({color:i===1?0x16a34a:0x2563eb,emissive:i===1?0x16a34a:0x2563eb,emissiveIntensity:0.8,roughness:0.2,metalness:0.5});
+  const lb=new THREE.Mesh(new THREE.SphereGeometry(0.06,12,12),lm2); lb.position.set(x,0.3,1.41); spindleHead.add(lb);
+});
+
+// Spindle group (spins on Y)
+const spindleGroup = new THREE.Group(); spindleHead.add(spindleGroup);
+const shaft=new THREE.Mesh(new THREE.CylinderGeometry(0.32,0.32,2.5,24),M.chrome); shaft.position.set(0,-2.35,0); spindleGroup.add(shaft);
+const chuck=new THREE.Mesh(new THREE.CylinderGeometry(0.5,0.35,0.8,24),M.chrome); chuck.position.set(0,-3.95,0); spindleGroup.add(chuck);
+for(let i=0;i<3;i++){
+  const a=(i/3)*Math.PI*2;
+  const j=new THREE.Mesh(new THREE.BoxGeometry(0.06,0.8,0.52),M.darkSteel);
+  j.position.set(Math.cos(a)*0.38,-3.95,Math.sin(a)*0.38); j.rotation.y=a; spindleGroup.add(j);
+}
+
+// ── DRILL TOOLS ──
+function makeTapDrill(){
+  const g=new THREE.Group(), dia=0.32, fl=3.2;
+  g.add(Object.assign(new THREE.Mesh(new THREE.CylinderGeometry(0.18,0.18,1.0,16),M.hss),{position:new THREE.Vector3(0,-0.5,0)}));
+  g.add(Object.assign(new THREE.Mesh(new THREE.CylinderGeometry(0.18,dia,0.3,16),M.hss),{position:new THREE.Vector3(0,-1.15,0)}));
+  const body=new THREE.Mesh(new THREE.CylinderGeometry(dia,dia,fl,16),M.hss); body.position.set(0,-1.3-fl/2,0); g.add(body);
+  for(let f=0;f<2;f++){
+    const pts=[];
+    for(let s=0;s<=60;s++){const t=s/60,y=-1.3-t*fl,a=t*Math.PI*7+f*Math.PI,r=dia*0.92;pts.push(new THREE.Vector3(Math.cos(a)*r,y,Math.sin(a)*r));}
+    const tube=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),60,0.04,6,false),new THREE.MeshStandardMaterial({color:0x3a4250,roughness:0.4,metalness:0.7}));
+    g.add(tube);
+  }
+  const tipH=dia*1.2, tip=new THREE.Mesh(new THREE.ConeGeometry(dia,tipH,16),M.hss); tip.position.set(0,-1.3-fl-tipH/2,0); g.add(tip);
+  g.userData={bodyEndY:-1.3-fl,tipBottomY:-1.3-fl-tipH,dia};
+  return g;
+}
+
+function makeCounterboreDrill(){
+  const g=new THREE.Group(), pDia=0.30, bDia=0.62, fl=2.4, pLen=0.8;
+  g.add(Object.assign(new THREE.Mesh(new THREE.CylinderGeometry(0.22,0.22,1.0,16),M.carbide),{position:new THREE.Vector3(0,-0.5,0)}));
+  g.add(Object.assign(new THREE.Mesh(new THREE.CylinderGeometry(0.22,bDia,0.3,16),M.carbide),{position:new THREE.Vector3(0,-1.15,0)}));
+  const body=new THREE.Mesh(new THREE.CylinderGeometry(bDia,bDia,fl,20),M.carbide); body.position.set(0,-1.3-fl/2,0); g.add(body);
+  for(let f=0;f<3;f++){
+    const pts=[];
+    for(let s=0;s<=50;s++){const t=s/50,y=-1.3-t*fl,a=t*Math.PI*4+f*(Math.PI*2/3),r=bDia*0.95;pts.push(new THREE.Vector3(Math.cos(a)*r,y,Math.sin(a)*r));}
+    g.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),50,0.05,6,false),new THREE.MeshStandardMaterial({color:0x2a303a,roughness:0.45,metalness:0.75})));
+  }
+  const cf=new THREE.Mesh(new THREE.CylinderGeometry(bDia,bDia,0.08,20),M.carbideGold); cf.position.set(0,-1.3-fl+0.04,0); g.add(cf);
+  const pilot=new THREE.Mesh(new THREE.CylinderGeometry(pDia,pDia,pLen,14),M.hss); pilot.position.set(0,-1.3-fl-pLen/2,0); g.add(pilot);
+  const pt=new THREE.Mesh(new THREE.ConeGeometry(pDia,pDia*0.8,14),M.hss); pt.position.set(0,-1.3-fl-pLen-pDia*0.4,0); g.add(pt);
+  g.userData={bodyEndY:-1.3-fl,pilotBottomY:-1.3-fl-pLen-pDia*0.8,dia:bDia};
+  return g;
+}
+
+function makeCSKDrill(){
+  const g=new THREE.Group(), bDia=0.78, tipDia=0.04, coneH=bDia-tipDia;
+  g.add(Object.assign(new THREE.Mesh(new THREE.CylinderGeometry(0.22,0.22,1.2,16),M.carbide),{position:new THREE.Vector3(0,-0.6,0)}));
+  g.add(Object.assign(new THREE.Mesh(new THREE.CylinderGeometry(0.22,bDia*0.55,0.3,16),M.carbide),{position:new THREE.Vector3(0,-1.35,0)}));
+  g.add(Object.assign(new THREE.Mesh(new THREE.CylinderGeometry(bDia*0.55,bDia,1.4,20),M.carbide),{position:new THREE.Vector3(0,-2.2,0)}));
+  const cskY=-2.9-coneH/2;
+  const csk=new THREE.Mesh(new THREE.ConeGeometry(bDia,coneH,24),M.carbideGold); csk.position.set(0,cskY,0); g.add(csk);
+  for(let f=0;f<4;f++){
+    const fl=new THREE.Mesh(new THREE.BoxGeometry(0.025,coneH*0.92,bDia*1.25),new THREE.MeshStandardMaterial({color:0x1f242c,roughness:0.4,metalness:0.8}));
+    fl.position.set(0,cskY,0); fl.rotation.y=(f/4)*Math.PI*2; g.add(fl);
+  }
+  g.add(Object.assign(new THREE.Mesh(new THREE.ConeGeometry(tipDia,0.1,12),M.hss),{position:new THREE.Vector3(0,-2.9-coneH-0.05,0)}));
+  g.userData={coneTopY:-2.9,coneTipY:-2.9-coneH,bottomY:-2.9-coneH-0.1,dia:bDia};
+  return g;
+}
+
+const tapDrill=makeTapDrill(), cbDrill=makeCounterboreDrill(), cskDrill=makeCSKDrill();
+[tapDrill,cbDrill,cskDrill].forEach(t=>{t.position.set(0,-4.35,0);t.visible=false;spindleGroup.add(t);});
+let activeTool=null;
+
+function setActiveTool(which){
+  tapDrill.visible=cbDrill.visible=cskDrill.visible=false;
+  if(which==='tap'){tapDrill.visible=true;activeTool=tapDrill;document.getElementById('toolName').textContent='TAP DRILL';document.getElementById('toolDia').textContent=`⌀ ${PARAMS.tap} mm HSS`;}
+  else if(which==='cb'){cbDrill.visible=true;activeTool=cbDrill;document.getElementById('toolName').textContent='COUNTERBORE';document.getElementById('toolDia').textContent=`⌀ ${PARAMS.cb} mm Carbide`;}
+  else if(which==='csk'){cskDrill.visible=true;activeTool=cskDrill;document.getElementById('toolName').textContent='COUNTERSINK';document.getElementById('toolDia').textContent=`⌀ ${PARAMS.csk} × 90°`;}
+  else{activeTool=null;document.getElementById('toolName').textContent='— Idle —';document.getElementById('toolDia').textContent='—';}
+}
+
+// ── VISE + WORKPIECE ──
+const viseGroup=new THREE.Group(); viseGroup.position.set(0,0.3,0); machineGroup.add(viseGroup);
+const vBase=new THREE.Mesh(new THREE.BoxGeometry(3.5,0.5,2.5),M.castIron); vBase.position.set(0,0.25,0); vBase.castShadow=true; vBase.receiveShadow=true; viseGroup.add(vBase);
+const fJaw=new THREE.Mesh(new THREE.BoxGeometry(3.5,1.8,0.5),M.castIron); fJaw.position.set(0,1.4,-1.0); fJaw.castShadow=true; viseGroup.add(fJaw);
+viseGroup.add(Object.assign(new THREE.Mesh(new THREE.BoxGeometry(3.2,1.4,0.12),M.jawInsert),{position:new THREE.Vector3(0,1.2,-0.69)}));
+const mJaw=new THREE.Mesh(new THREE.BoxGeometry(3.5,1.8,0.5),M.castIron); mJaw.position.set(0,1.4,1.0); mJaw.castShadow=true; viseGroup.add(mJaw);
+viseGroup.add(Object.assign(new THREE.Mesh(new THREE.BoxGeometry(3.2,1.4,0.12),M.jawInsert),{position:new THREE.Vector3(0,1.2,0.69)}));
+const ls=new THREE.Mesh(new THREE.CylinderGeometry(0.04,0.04,1.6,8),M.chrome); ls.rotation.x=Math.PI/2; ls.position.set(0,1.4,1.6); viseGroup.add(ls);
+viseGroup.add(Object.assign(new THREE.Mesh(new THREE.SphereGeometry(0.1,12,12),M.darkSteel),{position:new THREE.Vector3(0,1.4,2.4)}));
+
+const WP_W=2.4,WP_H=1.6,WP_D=1.2;
+const WP_TOP_Y=1.3+WP_H, WP_BOT_Y=1.3;
+const workpiece=new THREE.Mesh(new THREE.BoxGeometry(WP_W,WP_H,WP_D),M.workpiece);
+workpiece.position.set(0,1.3+WP_H/2,0); workpiece.castShadow=true; workpiece.receiveShadow=true; viseGroup.add(workpiece);
+const wpEdge=new THREE.LineSegments(new THREE.EdgesGeometry(workpiece.geometry),new THREE.LineBasicMaterial({color:0x4a5568}));
+wpEdge.position.copy(workpiece.position); viseGroup.add(wpEdge);
+
+const TAP_R=tapDrill.userData.dia, CB_R=cbDrill.userData.dia, CSK_R=cskDrill.userData.dia;
+const TAP_DEPTH=WP_H*0.95, CB_DEPTH=WP_H*0.42, CSK_DEPTH=0.40;
+const WP_TOP_WORLD=viseGroup.position.y+WP_TOP_Y;
+
+function innerMat(col,em){return new THREE.MeshStandardMaterial({color:col,roughness:0.4,metalness:0.6,side:THREE.DoubleSide,emissive:em||0,emissiveIntensity:0,transparent:true,opacity:1});}
+const tapHoleMat=innerMat(0x546070,0x1e3a8a);
+const tapHole=new THREE.Mesh(new THREE.CylinderGeometry(TAP_R,TAP_R,0.01,32,1,true),tapHoleMat); tapHole.position.set(0,WP_TOP_Y,0); tapHole.visible=false; viseGroup.add(tapHole);
+const tapHoleBottom=new THREE.Mesh(new THREE.ConeGeometry(TAP_R,TAP_R*1.0,32,1,true),tapHoleMat); tapHoleBottom.rotation.x=Math.PI; tapHoleBottom.position.set(0,WP_TOP_Y-TAP_DEPTH,0); tapHoleBottom.visible=false; viseGroup.add(tapHoleBottom);
+const cbHoleMat=innerMat(0x546070,0x2563eb);
+const cbHole=new THREE.Mesh(new THREE.CylinderGeometry(CB_R,CB_R,0.01,36,1,true),cbHoleMat); cbHole.position.set(0,WP_TOP_Y,0); cbHole.visible=false; viseGroup.add(cbHole);
+const cbBottomGeo=new THREE.RingGeometry(TAP_R,CB_R,36);
+const cbBottom=new THREE.Mesh(cbBottomGeo,cbHoleMat); cbBottom.rotation.x=Math.PI/2; cbBottom.position.set(0,WP_TOP_Y-CB_DEPTH,0); cbBottom.visible=false; viseGroup.add(cbBottom);
+const cskHoleMat=innerMat(0x546070,0xfb923c);
+const cskHole=new THREE.Mesh(new THREE.CylinderGeometry(CSK_R,CB_R,0.01,36,1,true),cskHoleMat); cskHole.position.set(0,WP_TOP_Y,0); cskHole.visible=false; viseGroup.add(cskHole);
+
+// ── CHIPS + SPARKS ──
+const chipPool=[], sparkPool=[];
+const chipGeo=new THREE.BoxGeometry(0.06,0.02,0.20);
+for(let i=0;i<90;i++){const m=new THREE.MeshStandardMaterial({color:0xff7733,emissive:0xff4400,emissiveIntensity:0.6,roughness:0.4,metalness:0.5,transparent:true,opacity:0});const me=new THREE.Mesh(chipGeo,m);me.visible=false;scene.add(me);chipPool.push({mesh:me,mat:m,vel:new THREE.Vector3(),angVel:new THREE.Vector3(),life:0,maxLife:0,active:false});}
+const sparkGeo=new THREE.SphereGeometry(0.03,6,6);
+for(let i=0;i<50;i++){const m=new THREE.MeshBasicMaterial({color:0xffdd66,transparent:true,opacity:0});const me=new THREE.Mesh(sparkGeo,m);me.visible=false;scene.add(me);sparkPool.push({mesh:me,mat:m,vel:new THREE.Vector3(),life:0,maxLife:0,active:false});}
+
+function spawnChip(wp,hr){for(const c of chipPool){if(!c.active){c.active=true;c.mesh.visible=true;const a=Math.random()*Math.PI*2,r=hr*(0.7+Math.random()*0.4);c.mesh.position.set(wp.x+Math.cos(a)*r,wp.y+0.05,wp.z+Math.sin(a)*r);const os=0.06+Math.random()*0.08,us=0.08+Math.random()*0.06;c.vel.set(Math.cos(a)*os,us,Math.sin(a)*os);c.angVel.set((Math.random()-.5)*.5,(Math.random()-.5)*.5,(Math.random()-.5)*.5);c.mesh.rotation.set(Math.random()*Math.PI,Math.random()*Math.PI,Math.random()*Math.PI);c.life=0;c.maxLife=0.9+Math.random()*0.6;c.mat.opacity=1.0;c.mat.emissiveIntensity=0.7;c.mat.color.setRGB(1.0,0.5,0.2);return;}}}
+function spawnSpark(wp,hr){for(const s of sparkPool){if(!s.active){s.active=true;s.mesh.visible=true;const a=Math.random()*Math.PI*2,r=hr*0.6;s.mesh.position.set(wp.x+Math.cos(a)*r,wp.y+0.02,wp.z+Math.sin(a)*r);const sp=0.12+Math.random()*0.10;s.vel.set(Math.cos(a)*sp,0.06+Math.random()*0.08,Math.sin(a)*sp);s.life=0;s.maxLife=0.35+Math.random()*0.20;s.mat.opacity=1.0;return;}}}
+function updateParticles(dt){
+  for(const c of chipPool){if(!c.active)continue;c.life+=dt;if(c.life>=c.maxLife){c.active=false;c.mesh.visible=false;continue;}c.vel.y-=0.012;c.vel.multiplyScalar(0.99);c.mesh.position.add(c.vel);c.mesh.rotation.x+=c.angVel.x;c.mesh.rotation.y+=c.angVel.y;c.mesh.rotation.z+=c.angVel.z;const t=c.life/c.maxLife;c.mat.opacity=1.0-t*t;const cl=1-t;c.mat.color.setRGB(0.3+cl*0.7,0.3+cl*0.2,0.3);c.mat.emissiveIntensity=cl*0.7;if(c.mesh.position.y<-0.4){c.vel.y*=-0.3;c.vel.x*=0.5;c.vel.z*=0.5;c.mesh.position.y=-0.4;}}
+  for(const s of sparkPool){if(!s.active)continue;s.life+=dt;if(s.life>=s.maxLife){s.active=false;s.mesh.visible=false;continue;}s.vel.y-=0.008;s.mesh.position.add(s.vel);s.mat.opacity=1.0-s.life/s.maxLife;}
+}
+
+// ── ANIMATION TIMELINE ──
+const TOTAL=34;
+const PH={ORBIT:{s:0,e:3,n:'Establishing Shot'},TAP_TOOL:{s:3,e:4,n:'Loading Tap Drill'},TAP_APPROACH:{s:4,e:5.5,n:'Tap Drill · Rapid Approach'},TAP_CUT:{s:5.5,e:10,n:'Tap Drill · Cutting'},TAP_RETRACT:{s:10,e:11,n:'Tap Drill · Retracting'},TAP_INSPECT:{s:11,e:15,n:'Inspection · Tap Drill Hole'},CB_TOOL:{s:15,e:16,n:'Tool Change · Counterbore'},CB_APPROACH:{s:16,e:17,n:'Counterbore · Approach'},CB_CUT:{s:17,e:20,n:'Counterbore · Cutting'},CB_RETRACT:{s:20,e:21,n:'Counterbore · Retracting'},CB_INSPECT:{s:21,e:25,n:'Inspection · Counterbore'},CSK_TOOL:{s:25,e:26,n:'Tool Change · Countersink'},CSK_APPROACH:{s:26,e:26.8,n:'Countersink · Approach'},CSK_CUT:{s:26.8,e:28.5,n:'Countersink · Cutting'},CSK_RETRACT:{s:28.5,e:29.5,n:'Countersink · Retracting'},CSK_INSPECT:{s:29.5,e:34,n:'Inspection · Countersink'}};
+const PHASES=Object.entries(PH).map(([k,v])=>({...v,key:k}));
+function getPhase(t){for(let i=PHASES.length-1;i>=0;i--)if(t>=PHASES[i].s)return PHASES[i];return PHASES[0];}
+function easeInOut(t){return t<0.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;}
+function easeOut(t){return 1-Math.pow(1-t,3);}
+function easeIn(t){return t*t;}
+function lerp(a,b,t){return a+(b-a)*t;}
+const CAM={orbit:new THREE.Vector3(13,9,13),drilling:new THREE.Vector3(7,7.5,7),near:new THREE.Vector3(4,5.5,5),inspect:new THREE.Vector3(3.5,4.5,3.5),inspCB:new THREE.Vector3(3,4.8,3),inspCSK:new THREE.Vector3(2.8,5.2,2.8)};
+const CAM_T={orbit:new THREE.Vector3(0,2.5,0),drill:new THREE.Vector3(0,3,0),insp:new THREE.Vector3(0,2.4,0)};
+const Y_REST=13.5;
+
+function approachY(tool){let lv;if(tool===tapDrill)lv=tool.userData.tipBottomY;else if(tool===cbDrill)lv=tool.userData.pilotBottomY;else lv=tool.userData.bottomY;return(WP_TOP_WORLD+0.05)-tool.position.y-lv;}
+function cutY(tool,depth){let cv;if(tool===tapDrill)cv=tool.userData.bodyEndY;else if(tool===cbDrill)cv=tool.userData.bodyEndY;else cv=tool.userData.coneTopY;return(WP_TOP_WORLD-depth)-tool.position.y-cv;}
+
+const dimOverlay=document.getElementById('dimOverlay');
+function showDims(w){['dimTapDia','dimTapDepth','dimCbDia','dimCbDepth','dimCskDia','dimCskAngle'].forEach(id=>document.getElementById(id).style.display='none');if(w==='tap'){document.getElementById('dimTapDia').style.display='flex';document.getElementById('dimTapDepth').style.display='flex';}else if(w==='cb'){document.getElementById('dimTapDia').style.display='flex';document.getElementById('dimCbDia').style.display='flex';document.getElementById('dimCbDepth').style.display='flex';}else if(w==='csk'){document.getElementById('dimCbDia').style.display='flex';document.getElementById('dimCskDia').style.display='flex';document.getElementById('dimCskAngle').style.display='flex';}}
+function hilightSpec(w){['specItemTap','specItemCb','specItemCsk'].forEach(id=>document.getElementById(id).classList.remove('active'));if(w)document.getElementById('specItem'+w).classList.add('active');}
+
+let animPlaying=true,animStart=0,lastT=0;
+const clock=new THREE.Clock();
+
+function updateAnim(t){
+  if(!animPlaying)return;
+  const dt=Math.max(0.001,t-lastT); lastT=t;
+  if(t>=TOTAL){animPlaying=false;}
+  const ph=getPhase(Math.min(t,TOTAL));
+  const pt=(t-ph.s)/Math.max(0.01,ph.e-ph.s);
+  document.getElementById('progressFill').style.width=(Math.min(t,TOTAL)/TOTAL*100)+'%';
+  document.getElementById('phaseLabel').textContent=ph.n;
+  if(!ph.key.includes('INSPECT'))dimOverlay.classList.remove('visible');
+
+  switch(ph.key){
+    case 'ORBIT':{
+      const a=lerp(0,Math.PI*0.75,easeInOut(pt));
+      camera.position.set(Math.cos(a)*17,9,Math.sin(a)*17);
+      controls.target.set(0,2.5,0);
+      spindleHead.position.y=Y_REST; setActiveTool(null);
+      M.workpiece.opacity=1.0;
+      tapHole.visible=tapHoleBottom.visible=cbHole.visible=cbBottom.visible=cskHole.visible=false;
+      break;}
+    case 'TAP_TOOL':{setActiveTool('tap');hilightSpec('Tap');camera.position.lerp(CAM.drilling,.05);controls.target.lerp(CAM_T.drill,.05);spindleHead.position.y=Y_REST;break;}
+    case 'TAP_APPROACH':{const tt=easeInOut(pt),ya=approachY(tapDrill);spindleHead.position.y=lerp(Y_REST,ya,tt);spindleGroup.rotation.y+=0.08*tt;camera.position.lerp(CAM.near,.04);controls.target.lerp(CAM_T.drill,.04);break;}
+    case 'TAP_CUT':{
+      const tt=pt,ya=approachY(tapDrill),ye=cutY(tapDrill,TAP_DEPTH);
+      spindleHead.position.y=lerp(ya,ye,easeIn(tt*0.95)+0.05*tt); spindleGroup.rotation.y+=0.45;
+      tapHole.visible=tapHoleBottom.visible=true;
+      const cd=Math.max(0.02,tt*TAP_DEPTH); tapHole.geometry.dispose(); tapHole.geometry=new THREE.CylinderGeometry(TAP_R,TAP_R,cd,32,1,true); tapHole.position.y=WP_TOP_Y-cd/2; tapHoleBottom.position.y=WP_TOP_Y-cd;
+      const wp=new THREE.Vector3(0,WP_TOP_WORLD,0); for(let i=0;i<2;i++){if(Math.random()<0.85)spawnChip(wp,TAP_R);} if(Math.random()<0.5)spawnSpark(wp,TAP_R);
+      cutGlow.position.set(0,WP_TOP_WORLD+0.1,0); cutGlow.intensity=1.2+Math.sin(t*14)*0.4; cutGlow.color.setHex(0xff7733);
+      const sk=(1-tt)*0.04; camera.position.x+=(Math.random()-.5)*sk; camera.position.y+=(Math.random()-.5)*sk;
+      camera.position.lerp(CAM.near,.015); controls.target.lerp(new THREE.Vector3(0,3,0),.02); break;}
+    case 'TAP_RETRACT':{const tt=easeOut(pt),ye=cutY(tapDrill,TAP_DEPTH);spindleHead.position.y=lerp(ye,Y_REST,tt);spindleGroup.rotation.y+=0.15*(1-tt);cutGlow.intensity=lerp(1.5,0,tt);break;}
+    case 'TAP_INSPECT':{camera.position.lerp(CAM.inspect,.04);controls.target.lerp(CAM_T.insp,.04);const ft=easeOut(Math.min(1,pt*1.8));M.workpiece.opacity=lerp(1.0,0.22,ft);tapHoleMat.emissiveIntensity=lerp(0,0.35,ft);if(pt>0.25){dimOverlay.classList.add('visible');showDims('tap');}cutGlow.intensity=0;break;}
+    case 'CB_TOOL':{M.workpiece.opacity=lerp(0.22,1.0,easeIn(pt));tapHoleMat.emissiveIntensity=lerp(0.35,0,easeIn(pt));dimOverlay.classList.remove('visible');camera.position.lerp(CAM.drilling,.05);controls.target.lerp(CAM_T.drill,.05);if(pt<0.5){spindleHead.position.y=Y_REST;setActiveTool(null);}else{setActiveTool('cb');hilightSpec('Cb');}break;}
+    case 'CB_APPROACH':{const tt=easeInOut(pt),ya=approachY(cbDrill);spindleHead.position.y=lerp(Y_REST,ya,tt);spindleGroup.rotation.y+=0.08*tt;camera.position.lerp(CAM.near,.05);controls.target.lerp(CAM_T.drill,.05);break;}
+    case 'CB_CUT':{
+      const tt=pt,ya=approachY(cbDrill),ye=cutY(cbDrill,CB_DEPTH);
+      spindleHead.position.y=lerp(ya,ye,easeIn(tt*0.9)+0.1*tt); spindleGroup.rotation.y+=0.35;
+      cbHole.visible=cbBottom.visible=true;
+      const cd=Math.max(0.02,tt*CB_DEPTH); cbHole.geometry.dispose(); cbHole.geometry=new THREE.CylinderGeometry(CB_R,CB_R,cd,36,1,true); cbHole.position.y=WP_TOP_Y-cd/2; cbBottom.position.y=WP_TOP_Y-cd;
+      const wp=new THREE.Vector3(0,WP_TOP_WORLD,0); for(let i=0;i<3;i++){if(Math.random()<0.9)spawnChip(wp,CB_R);} if(Math.random()<0.6)spawnSpark(wp,CB_R);
+      cutGlow.position.set(0,WP_TOP_WORLD+0.1,0); cutGlow.intensity=1.5+Math.sin(t*14)*0.5; cutGlow.color.setHex(0xff8844);
+      const sk=(1-tt)*0.05; camera.position.x+=(Math.random()-.5)*sk; camera.position.y+=(Math.random()-.5)*sk;
+      controls.target.lerp(new THREE.Vector3(0,3.0,0),.02); break;}
+    case 'CB_RETRACT':{const tt=easeOut(pt),ye=cutY(cbDrill,CB_DEPTH);spindleHead.position.y=lerp(ye,Y_REST,tt);spindleGroup.rotation.y+=0.12*(1-tt);cutGlow.intensity=lerp(2.0,0,tt);break;}
+    case 'CB_INSPECT':{camera.position.lerp(CAM.inspCB,.04);controls.target.lerp(CAM_T.insp,.04);const ft=easeOut(Math.min(1,pt*1.8));M.workpiece.opacity=lerp(1.0,0.22,ft);tapHoleMat.emissiveIntensity=lerp(0,0.20,ft);cbHoleMat.emissiveIntensity=lerp(0,0.40,ft);if(pt>0.25){dimOverlay.classList.add('visible');showDims('cb');}cutGlow.intensity=0;break;}
+    case 'CSK_TOOL':{M.workpiece.opacity=lerp(0.22,1.0,easeIn(pt));tapHoleMat.emissiveIntensity=lerp(0.20,0,easeIn(pt));cbHoleMat.emissiveIntensity=lerp(0.40,0,easeIn(pt));dimOverlay.classList.remove('visible');camera.position.lerp(CAM.drilling,.05);controls.target.lerp(CAM_T.drill,.05);if(pt<0.5){spindleHead.position.y=Y_REST;setActiveTool(null);}else{setActiveTool('csk');hilightSpec('Csk');}break;}
+    case 'CSK_APPROACH':{const tt=easeInOut(pt),ya=approachY(cskDrill);spindleHead.position.y=lerp(Y_REST,ya,tt);spindleGroup.rotation.y+=0.07*tt;camera.position.lerp(CAM.near,.06);controls.target.lerp(CAM_T.drill,.06);break;}
+    case 'CSK_CUT':{
+      const tt=pt,ya=approachY(cskDrill),ye=cutY(cskDrill,CSK_DEPTH);
+      spindleHead.position.y=lerp(ya,ye,easeIn(tt*0.9)+0.1*tt); spindleGroup.rotation.y+=0.30;
+      cskHole.visible=true;
+      const cd=Math.max(0.005,tt*CSK_DEPTH),botR=Math.max(CB_R,CSK_R-cd);
+      cskHole.geometry.dispose(); cskHole.geometry=new THREE.CylinderGeometry(CSK_R,botR,cd,36,1,true); cskHole.position.y=WP_TOP_Y-cd/2;
+      const wp=new THREE.Vector3(0,WP_TOP_WORLD,0); for(let i=0;i<2;i++){if(Math.random()<0.7)spawnChip(wp,CSK_R);} if(Math.random()<0.5)spawnSpark(wp,CSK_R);
+      cutGlow.position.set(0,WP_TOP_WORLD+0.1,0); cutGlow.intensity=1.0+Math.sin(t*14)*0.4; cutGlow.color.setHex(0xffaa55); break;}
+    case 'CSK_RETRACT':{const tt=easeOut(pt),ye=cutY(cskDrill,CSK_DEPTH);spindleHead.position.y=lerp(ye,Y_REST,tt);spindleGroup.rotation.y+=0.10*(1-tt);cutGlow.intensity=lerp(1.5,0,tt);break;}
+    case 'CSK_INSPECT':{camera.position.lerp(CAM.inspCSK,.04);controls.target.lerp(CAM_T.insp,.04);const ft=easeOut(Math.min(1,pt*1.6));M.workpiece.opacity=lerp(1.0,0.18,ft);tapHoleMat.emissiveIntensity=lerp(0,0.15,ft);cbHoleMat.emissiveIntensity=lerp(0,0.25,ft);cskHoleMat.emissiveIntensity=lerp(0,0.55,ft);if(pt>0.2){dimOverlay.classList.add('visible');showDims('csk');}cutGlow.intensity=0;break;}
+  }
+  updateParticles(dt); controls.update();
+}
+
+function replayAnimation(){
+  animPlaying=true; animStart=clock.getElapsedTime(); lastT=0;
+  spindleHead.position.y=Y_REST; spindleGroup.rotation.y=0; cutGlow.intensity=0; M.workpiece.opacity=1.0;
+  [tapHole,tapHoleBottom,cbHole,cbBottom,cskHole].forEach(m=>{m.visible=false;});
+  tapHole.geometry=new THREE.CylinderGeometry(TAP_R,TAP_R,0.01,32,1,true);
+  cbHole.geometry=new THREE.CylinderGeometry(CB_R,CB_R,0.01,36,1,true);
+  cskHole.geometry=new THREE.CylinderGeometry(CSK_R,CB_R,0.01,36,1,true);
+  [tapHoleMat,cbHoleMat,cskHoleMat].forEach(m=>m.emissiveIntensity=0);
+  setActiveTool(null); hilightSpec(null); dimOverlay.classList.remove('visible');
+  for(const c of chipPool){c.active=false;c.mesh.visible=false;}
+  for(const s of sparkPool){s.active=false;s.mesh.visible=false;}
+  camera.position.set(17,9,0); controls.target.set(0,2.5,0); controls.update();
+}
+
+function animate(){
+  requestAnimationFrame(animate);
+  const el=clock.getElapsedTime();
+  if(animPlaying)updateAnim(el-animStart);
+  else{controls.update();spindleGroup.rotation.y+=0.003;updateParticles(0.016);}
+  renderer.render(scene,camera);
+}
+
+window.addEventListener('resize',()=>{camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight);});
+animStart=clock.getElapsedTime();
+setTimeout(()=>document.getElementById('loader').classList.add('hidden'),900);
+animate();
+</script>
+</body>
+</html>

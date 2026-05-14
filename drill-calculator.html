@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Drill & Tolerance Calculator | JMC Engineering</title>
+<meta name="description" content="Interactive metric drill size chart with tap drill, clearance, counterbore and countersink data. Click any size to see a 3D drilling animation. By JMC Engineering, Chennai."/>
+<meta name="keywords" content="drill size chart, metric tap drill, tolerance chart, H7 tolerance, counterbore dimensions, JMC Engineering Chennai"/>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --navy:#0d2250;--navy-dark:#07163a;--blue:#2563eb;--blue-light:#60a5fa;
+  --bg:#f0f4f8;--white:#fff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;
+  --green:#16a34a;--amber:#d97706;--red:#dc2626;--steel:#94a3b8;
+  --card:#fff;--radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* NAV */
+nav{background:var(--navy-dark);padding:13px 5%;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.3);}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-brand img{width:32px;height:32px;border-radius:50%;object-fit:contain;}
+.nav-brand span{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;color:#fff;}
+.nav-brand span em{color:var(--blue-light);font-style:normal;}
+.back-btn{color:rgba(255,255,255,.6);font-size:13px;text-decoration:none;transition:color .2s;}
+.back-btn:hover{color:#fff;}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--navy-dark) 0%,var(--navy) 55%,#1a3a8f 100%);padding:48px 5% 44px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%232563eb' fill-opacity='0.05'%3E%3Cpath d='M20 20h1v1h-1z'/%3E%3C/g%3E%3C/svg%3E");pointer-events:none;}
+.hero-inner{position:relative;max-width:900px;}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:var(--blue-light);font-size:11px;font-weight:700;padding:5px 14px;border-radius:20px;margin-bottom:16px;letter-spacing:1px;text-transform:uppercase;}
+.hero h1{font-family:'Rajdhani',sans-serif;font-size:clamp(28px,5vw,52px);font-weight:700;color:#fff;line-height:1.1;margin-bottom:12px;}
+.hero h1 span{color:var(--blue-light);}
+.hero p{color:rgba(255,255,255,.6);font-size:14px;line-height:1.7;max-width:560px;}
+
+/* INSTRUCTION BAR */
+.instruction-bar{background:var(--navy);border-bottom:1px solid rgba(255,255,255,.08);padding:12px 5%;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.inst-step{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.6);font-size:12px;}
+.inst-num{width:22px;height:22px;background:var(--blue);color:#fff;border-radius:50%;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.inst-arrow{color:rgba(255,255,255,.25);font-size:16px;}
+
+/* MAIN LAYOUT */
+.main{display:grid;grid-template-columns:1fr 420px;gap:0;min-height:calc(100vh - 200px);}
+@media(max-width:900px){.main{grid-template-columns:1fr;}}
+
+/* LEFT — TABLE */
+.table-panel{padding:28px 5% 40px;overflow-x:auto;}
+.filter-bar{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;align-items:center;}
+.filter-bar label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+.type-btn{background:var(--white);border:1.5px solid var(--border);color:var(--muted);font-size:12px;font-weight:600;padding:6px 14px;border-radius:8px;cursor:pointer;transition:all .2s;}
+.type-btn.active,.type-btn:hover{background:var(--blue);border-color:var(--blue);color:#fff;}
+.search-box{flex:1;min-width:140px;background:var(--white);border:1.5px solid var(--border);border-radius:8px;padding:7px 12px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;color:var(--text);}
+.search-box:focus{border-color:var(--blue);}
+
+table{width:100%;border-collapse:collapse;background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:0 2px 16px rgba(13,34,80,.08);min-width:660px;}
+thead tr{background:var(--navy);color:#fff;}
+thead th{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px;padding:13px 12px;text-align:center;white-space:nowrap;border-right:1px solid rgba(255,255,255,.1);}
+thead th:last-child{border-right:none;}
+thead th:first-child{text-align:left;}
+tbody tr{border-bottom:1px solid var(--border);cursor:pointer;transition:background .18s,transform .18s;}
+tbody tr:hover{background:#eff6ff;}
+tbody tr.active-row{background:linear-gradient(135deg,#dbeafe,#eff6ff);border-left:3px solid var(--blue);}
+tbody tr:last-child{border-bottom:none;}
+td{padding:11px 12px;font-size:13px;text-align:center;color:var(--text);}
+td:first-child{text-align:left;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:var(--navy);}
+.td-mono{font-family:'JetBrains Mono',monospace;font-size:12px;}
+.td-green{color:var(--green);font-weight:600;}
+.td-blue{color:var(--blue);font-weight:600;}
+.td-amber{color:var(--amber);font-weight:600;}
+.tag-type{display:inline-block;font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:.5px;margin-left:6px;}
+.tag-through{background:#dcfce7;color:#166534;}
+.tag-blind{background:#fef3c7;color:#713f12;}
+.tag-cb{background:#ede9fe;color:#4c1d95;}
+.tag-csk{background:#fee2e2;color:#7f1d1d;}
+
+.click-hint{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);margin-top:12px;}
+.click-dot{width:6px;height:6px;background:var(--blue);border-radius:50%;animation:blink-dot 1.2s infinite;}
+@keyframes blink-dot{0%,100%{opacity:1;}50%{opacity:.2;}}
+
+/* RIGHT — ANIMATION PANEL */
+.anim-panel{background:linear-gradient(160deg,#050e24 0%,#091535 100%);border-left:1px solid rgba(255,255,255,.05);display:flex;flex-direction:column;position:sticky;top:56px;height:calc(100vh - 56px);}
+.anim-header{padding:18px 20px 14px;border-bottom:1px solid rgba(255,255,255,.07);}
+.anim-title{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;color:#fff;margin-bottom:4px;}
+.anim-subtitle{font-size:11px;color:rgba(255,255,255,.4);}
+#selected-info{padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.07);}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.info-item{background:rgba(255,255,255,.05);border-radius:8px;padding:10px 12px;}
+.info-label{font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+.info-value{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:var(--blue-light);}
+#canvas-wrap{flex:1;position:relative;overflow:hidden;}
+#drill-canvas{width:100%;height:100%;display:block;}
+.canvas-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;pointer-events:none;}
+.ph-icon{font-size:48px;opacity:.15;}
+.ph-text{color:rgba(255,255,255,.25);font-size:13px;text-align:center;line-height:1.6;max-width:200px;}
+.anim-controls{padding:14px 20px;border-top:1px solid rgba(255,255,255,.07);display:flex;gap:8px;align-items:center;}
+.btn-play{flex:1;background:var(--blue);color:#fff;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;padding:10px;border:none;border-radius:8px;cursor:pointer;transition:background .2s;display:flex;align-items:center;justify-content:center;gap:6px;}
+.btn-play:hover{background:#1d4ed8;}
+.btn-play:disabled{background:rgba(255,255,255,.1);color:rgba(255,255,255,.3);cursor:not-allowed;}
+.btn-reset{background:rgba(255,255,255,.08);color:rgba(255,255,255,.6);font-size:13px;font-weight:600;padding:10px 16px;border:none;border-radius:8px;cursor:pointer;transition:background .2s;}
+.btn-reset:hover{background:rgba(255,255,255,.15);}
+.progress-bar{height:3px;background:rgba(255,255,255,.08);border-radius:2px;margin:0 20px 14px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--blue);border-radius:2px;width:0%;transition:width .1s linear;}
+
+/* FOOTER */
+.page-footer{background:var(--navy-dark);padding:18px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+.page-footer span{color:rgba(255,255,255,.3);font-size:12px;}
+.page-footer a{color:var(--blue-light);font-size:12px;text-decoration:none;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">
+    <img src="logo.png" alt="JMC Engineering"/>
+    <span>JMC <em>Engineering</em></span>
+  </a>
+  <a href="index.html" class="back-btn">← Back to Home</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">Engineering Tools</div>
+    <h1>Drill & Tolerance <span>Calculator</span></h1>
+    <p>Click any row to see a live drilling animation — machine, drill bit, chip ejection, and the finished hole cross-section with thread profile and tolerance callouts.</p>
+  </div>
+</div>
+
+<div class="instruction-bar">
+  <div class="inst-step"><div class="inst-num">1</div> Filter by hole type</div>
+  <div class="inst-arrow">→</div>
+  <div class="inst-step"><div class="inst-num">2</div> Click any row in the table</div>
+  <div class="inst-arrow">→</div>
+  <div class="inst-step"><div class="inst-num">3</div> Watch the drilling animation</div>
+  <div class="inst-arrow">→</div>
+  <div class="inst-step"><div class="inst-num">4</div> See transparent cross-section with specs</div>
+</div>
+
+<div class="main">
+  <!-- TABLE PANEL -->
+  <div class="table-panel">
+    <div class="filter-bar">
+      <label>Filter:</label>
+      <button class="type-btn active" onclick="setFilter('all')">All Types</button>
+      <button class="type-btn" onclick="setFilter('through')">Through Hole</button>
+      <button class="type-btn" onclick="setFilter('tap')">Tapped</button>
+      <button class="type-btn" onclick="setFilter('cb')">Counterbore</button>
+      <button class="type-btn" onclick="setFilter('csk')">Countersink</button>
+      <input type="text" class="search-box" placeholder="Search M6, M10..." oninput="filterSearch(this.value)" id="searchBox"/>
+    </div>
+
+    <table id="drillTable">
+      <thead>
+        <tr>
+          <th>Size</th>
+          <th>Pitch (mm)</th>
+          <th>Tap Drill ⌀</th>
+          <th>Close Fit ⌀</th>
+          <th>Free Fit ⌀</th>
+          <th>H7 Tol. (µm)</th>
+          <th>CB ⌀ × Depth</th>
+          <th>CSK ⌀</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+    <div class="click-hint"><div class="click-dot"></div> Click any row to open the full 3D CNC drilling simulation</div>
+  </div>
+
+  <!-- SIMULATION PREVIEW PANEL -->
+  <div class="anim-panel" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:32px 20px;">
+    <div style="text-align:center;">
+      <div style="font-size:52px;margin-bottom:12px;">🎬</div>
+      <div style="font-family:Rajdhani,sans-serif;font-size:22px;font-weight:700;color:#fff;margin-bottom:8px;">3D CNC Simulation</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.5);line-height:1.7;max-width:240px;">Click any row in the table to open a full WebGL drilling simulation with real machine, chips, and cross-section view.</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;width:100%;">
+      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 16px;">
+        <div style="font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px;">What you will see</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.7);line-height:1.8;">
+          ✦ CNC machine with vise & workpiece<br/>
+          ✦ Tap drill → Counterbore → CSK sequence<br/>
+          ✦ Real chip & spark ejection<br/>
+          ✦ Transparent cross-section with dimensions<br/>
+          ✦ 34-second full animation + replay
+        </div>
+      </div>
+      <div style="background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.25);border-radius:10px;padding:12px 16px;text-align:center;">
+        <div style="font-size:11px;color:var(--blue-light);font-weight:600;letter-spacing:.5px;">← SELECT ANY ROW TO LAUNCH</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page-footer">
+  <span>© 2025 JMC Engineering · info@jmcengg.com · Padi, Chennai</span>
+  <a href="index.html">← Back to Main Site</a>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// DRILL DATA: [size, pitch, tapDrill, closeFit, freeFit, h7min, h7max, cbDia, cbDepth, cskDia, type]
+// ═══════════════════════════════════════════
+const DRILLS = [
+  {s:'M2',  p:0.4,  tap:1.6,  cl:2.2,  fr:2.4,  h7p:'+0/+10', cb:3.8,  cbd:2.0,  csk:4.4,  type:'tap'},
+  {s:'M2.5',p:0.45, tap:2.05, cl:2.7,  fr:2.9,  h7p:'+0/+12', cb:4.5,  cbd:2.5,  csk:5.0,  type:'tap'},
+  {s:'M3',  p:0.5,  tap:2.5,  cl:3.2,  fr:3.4,  h7p:'+0/+12', cb:5.5,  cbd:3.0,  csk:6.3,  type:'tap'},
+  {s:'M4',  p:0.7,  tap:3.3,  cl:4.3,  fr:4.5,  h7p:'+0/+12', cb:7.0,  cbd:4.0,  csk:8.4,  type:'tap'},
+  {s:'M5',  p:0.8,  tap:4.2,  cl:5.3,  fr:5.5,  h7p:'+0/+15', cb:8.5,  cbd:5.0,  csk:10.0, type:'tap'},
+  {s:'M6',  p:1.0,  tap:5.0,  cl:6.4,  fr:6.6,  h7p:'+0/+15', cb:10.0, cbd:6.0,  csk:11.5, type:'tap'},
+  {s:'M8',  p:1.25, tap:6.75, cl:8.4,  fr:9.0,  h7p:'+0/+18', cb:13.0, cbd:8.0,  csk:15.0, type:'tap'},
+  {s:'M10', p:1.5,  tap:8.5,  cl:10.5, fr:11.0, h7p:'+0/+18', cb:16.0, cbd:10.0, csk:18.5, type:'tap'},
+  {s:'M12', p:1.75, tap:10.2, cl:13.0, fr:13.5, h7p:'+0/+18', cb:18.0, cbd:12.0, csk:22.0, type:'tap'},
+  {s:'M14', p:2.0,  tap:12.0, cl:15.0, fr:15.5, h7p:'+0/+21', cb:21.0, cbd:14.0, csk:26.0, type:'tap'},
+  {s:'M16', p:2.0,  tap:14.0, cl:17.0, fr:17.5, h7p:'+0/+21', cb:24.0, cbd:16.0, csk:29.5, type:'tap'},
+  {s:'M18', p:2.5,  tap:15.5, cl:19.0, fr:20.0, h7p:'+0/+21', cb:27.0, cbd:18.0, csk:33.0, type:'tap'},
+  {s:'M20', p:2.5,  tap:17.5, cl:21.0, fr:22.0, h7p:'+0/+21', cb:30.0, cbd:20.0, csk:37.0, type:'tap'},
+  {s:'M22', p:2.5,  tap:19.5, cl:23.0, fr:24.0, h7p:'+0/+25', cb:33.0, cbd:22.0, csk:40.0, type:'tap'},
+  {s:'M24', p:3.0,  tap:21.0, cl:25.0, fr:26.0, h7p:'+0/+25', cb:36.0, cbd:24.0, csk:44.0, type:'tap'},
+  {s:'M27', p:3.0,  tap:24.0, cl:28.0, fr:30.0, h7p:'+0/+25', cb:40.0, cbd:27.0, csk:50.0, type:'tap'},
+  {s:'M30', p:3.5,  tap:26.5, cl:31.0, fr:33.0, h7p:'+0/+25', cb:45.0, cbd:30.0, csk:56.0, type:'tap'},
+];
+
+let currentFilter = 'all';
+let currentSearch = '';
+let selectedRow = null;
+let animState = null;
+let rafId = null;
+
+// ── TABLE RENDER ──
+function renderTable(){
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+  const q = currentSearch.toLowerCase();
+  DRILLS.filter(d=>{
+    if(currentFilter!=='all' && currentFilter!==d.type && !(currentFilter==='through'&&d.type==='tap') && !(currentFilter==='cb') && !(currentFilter==='csk')) return true;
+    if(q && !d.s.toLowerCase().includes(q)) return false;
+    return true;
+  }).forEach((d,i)=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><strong>${d.s}</strong><span class="tag-type tag-through">Through</span><span class="tag-type tag-cb">CB</span></td>
+      <td class="td-mono">${d.p}</td>
+      <td class="td-mono td-green">${d.tap} mm</td>
+      <td class="td-mono td-blue">${d.cl} mm</td>
+      <td class="td-mono">${d.fr} mm</td>
+      <td class="td-mono td-amber">${d.h7p} µm</td>
+      <td class="td-mono">${d.cb}×${d.cbd}</td>
+      <td class="td-mono">${d.csk} mm</td>
+    `;
+    tr.onclick = ()=>selectRow(d, tr);
+    tbody.appendChild(tr);
+  });
+}
+
+function setFilter(f){
+  currentFilter = f;
+  document.querySelectorAll('.type-btn').forEach((b,i)=>{
+    b.classList.toggle('active', ['all','through','tap','cb','csk'][i]===f);
+  });
+  renderTable();
+}
+
+function filterSearch(v){
+  currentSearch = v;
+  renderTable();
+}
+
+// ── ROW SELECTION ──
+function selectRow(data, tr){
+  // Redirect to full 3D simulation page
+  const params = new URLSearchParams({
+    size: data.s,
+    tap: data.tap,
+    pitch: data.p,
+    cl: data.cl,
+    h7: data.h7p,
+    cb: data.cb,
+    cbd: data.cbd,
+    csk: data.csk
+  });
+  window.location.href = 'drill-simulation.html?' + params.toString();
+}
+
+// ═══════════════════════════════════════════
+// DRILLING ANIMATION ENGINE
+// ═══════════════════════════════════════════
+const canvas = document.getElementById('drill-canvas');
+const ctx = canvas.getContext('2d');
+let W,H;
+
+function resizeCanvas(){
+  const wrap = document.getElementById('canvas-wrap');
+  W = canvas.width = wrap.offsetWidth;
+  H = canvas.height = wrap.offsetHeight;
+}
+resizeCanvas();
+new ResizeObserver(resizeCanvas).observe(document.getElementById('canvas-wrap'));
+
+// Animation state machine
+// Phases: 0=idle, 1=machine-descend, 2=drilling, 3=retract, 4=coolant-clear, 5=result
+let phase=0, phaseT=0;
+let drillY=0, drillDepth=0, targetDepth=0;
+let chips=[], coolantDrops=[];
+let resultAlpha=0;
+let isPlaying=false;
+let spindleRot=0;
+let torchFlash=0;
+
+function resetAnimation(){
+  cancelAnimationFrame(rafId);
+  phase=0; phaseT=0; drillY=0; drillDepth=0; chips=[]; coolantDrops=[];
+  resultAlpha=0; isPlaying=false; torchFlash=0;
+  document.getElementById('progFill').style.width='0%';
+  document.getElementById('playBtn').innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l14 9-14 9z"/></svg> Play Drilling Animation';
+  drawIdle();
+}
+
+function playAnimation(){
+  if(!selectedRow) return;
+  isPlaying=true;
+  document.getElementById('playBtn').disabled=true;
+  document.getElementById('playBtn').innerHTML='⚙ Simulating...';
+  phase=1; phaseT=0;
+  spawnCoolant();
+  animate();
+}
+
+function spawnCoolant(){
+  coolantDrops=[];
+  for(let i=0;i<20;i++){
+    coolantDrops.push({x:0,y:0,vx:(Math.random()-.5)*3,vy:Math.random()*2+1,life:1,r:Math.random()*2+1});
+  }
+}
+
+function spawnChip(cx,cy){
+  const angle=(Math.random()-.5)*Math.PI;
+  chips.push({
+    x:cx, y:cy,
+    vx:Math.cos(angle)*(Math.random()*4+2)*(Math.random()<.5?1:-1),
+    vy:-Math.random()*5-2,
+    rot:Math.random()*Math.PI,
+    vrot:(Math.random()-.5)*0.3,
+    life:1, size:Math.random()*5+2,
+    col:`hsl(${200+Math.random()*20},${40+Math.random()*20}%,${40+Math.random()*20}%)`
+  });
+}
+
+function animate(){
+  if(!isPlaying) return;
+  resizeCanvas();
+  ctx.clearRect(0,0,W,H);
+
+  const mat_top = H*0.38;
+  const mat_h   = H*0.42;
+  const drill_cx = W*0.5;
+
+  // Phase durations (frames at 60fps)
+  const PH = [0, 60, 120, 50, 30, 180]; // idle, descend, drill, retract, clear, result
+
+  phaseT++;
+  const totalFrames = PH.slice(1).reduce((a,b)=>a+b,0);
+  let elapsed=0;
+  for(let i=1;i<phase;i++) elapsed+=PH[i];
+  elapsed+=phaseT;
+  document.getElementById('progFill').style.width=(elapsed/totalFrames*100)+'%';
+
+  if(phaseT>=PH[phase]){
+    phaseT=0;
+    phase++;
+    if(phase>5){ phase=5; isPlaying=false;
+      document.getElementById('playBtn').disabled=false;
+      document.getElementById('playBtn').innerHTML='↺ Replay';
+    }
+  }
+
+  const t = phaseT/PH[phase];
+
+  // ── DRAW BACKGROUND ──
+  const bg=ctx.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0,'#050e24'); bg.addColorStop(1,'#091535');
+  ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+
+  // Grid
+  ctx.strokeStyle='rgba(37,99,235,.05)'; ctx.lineWidth=1;
+  for(let x=0;x<W;x+=30){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=30){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+
+  // ── MACHINE BODY ──
+  drawMachine(drill_cx, mat_top, phase, t);
+
+  // ── MATERIAL BLOCK ──
+  drawMaterial(drill_cx, mat_top, mat_h, phase, t, phaseT);
+
+  // ── DRILL BIT ──
+  if(phase>=1 && phase<=3){
+    let dy=0;
+    if(phase===1) dy = easeOut(t) * (mat_top - H*0.04);
+    if(phase===2) dy = (mat_top - H*0.04);
+    if(phase===3) dy = (mat_top - H*0.04) * (1-easeOut(t));
+
+    const drill_tip_y = H*0.04 + dy;
+    if(phase===2){
+      drillDepth = easeInOut(t) * mat_h * 0.72;
+      if(Math.random()<0.4) spawnChip(drill_cx + (Math.random()-.5)*20, mat_top+drillDepth);
+      spindleRot += 0.4;
+      torchFlash = Math.random()*0.5;
+    } else {
+      spindleRot += 0.1;
+    }
+    drawDrillBit(drill_cx, drill_tip_y, drillDepth, spindleRot);
+  }
+
+  // ── CHIPS ──
+  chips = chips.filter(c=>{
+    c.x+=c.vx; c.y+=c.vy; c.vy+=0.3; c.rot+=c.vrot; c.life-=0.025;
+    if(c.life<=0) return false;
+    ctx.save();
+    ctx.translate(c.x,c.y); ctx.rotate(c.rot);
+    ctx.fillStyle=c.col.replace(')',`,${c.life})`).replace('hsl','hsla');
+    ctx.fillRect(-c.size/2,-c.size/4,c.size,c.size/2);
+    ctx.restore();
+    return true;
+  });
+
+  // ── COOLANT MIST ──
+  if(phase===2){
+    coolantDrops.forEach(cd=>{
+      const cx = drill_cx + cd.vx*phaseT*0.3;
+      const cy = mat_top + drillDepth - cd.vy*phaseT*0.2;
+      ctx.beginPath();
+      ctx.arc(cx,cy,cd.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(147,197,253,${0.3*cd.life})`;
+      ctx.fill();
+    });
+  }
+
+  // ── RESULT ──
+  if(phase>=5){
+    resultAlpha = Math.min(1, resultAlpha+0.025);
+    drawResult(drill_cx, mat_top, mat_h, resultAlpha);
+  }
+
+  rafId=requestAnimationFrame(animate);
+}
+
+function drawMachine(cx, mat_top, phase, t){
+  // Machine column
+  const colX=cx-90, colW=180, colH=mat_top*0.55;
+  ctx.fillStyle='rgba(30,58,138,0.4)';
+  ctx.fillRect(colX,0,colW,colH);
+  ctx.strokeStyle='rgba(59,130,246,0.3)';
+  ctx.lineWidth=1.5; ctx.strokeRect(colX,0,colW,colH);
+
+  // Machine head box
+  const hx=cx-50, hy=colH-30, hw=100, hh=40;
+  const hg=ctx.createLinearGradient(hx,hy,hx,hy+hh);
+  hg.addColorStop(0,'#1e3a8a'); hg.addColorStop(1,'#1e40af');
+  ctx.fillStyle=hg; ctx.beginPath();
+  ctx.roundRect(hx,hy,hw,hh,6); ctx.fill();
+  ctx.strokeStyle='rgba(96,165,250,0.5)'; ctx.lineWidth=1.5; ctx.stroke();
+
+  // Spindle
+  const sg=ctx.createLinearGradient(cx-8,0,cx+8,0);
+  sg.addColorStop(0,'#374151'); sg.addColorStop(.5,'#6b7280'); sg.addColorStop(1,'#374151');
+  ctx.fillStyle=sg;
+  ctx.fillRect(cx-8, hy+hh, 16, mat_top-hy-hh+10);
+
+  // Control panel lights
+  for(let i=0;i<3;i++){
+    ctx.beginPath(); ctx.arc(cx-30+i*20, hy+hh/2, 4, 0, Math.PI*2);
+    ctx.fillStyle = i===1&&phase>=2?`rgba(74,222,128,${0.5+Math.sin(Date.now()*.01)*0.5})`:'rgba(96,165,250,0.6)';
+    ctx.fill();
+  }
+
+  // JMC label on machine
+  ctx.fillStyle='rgba(255,255,255,0.25)';
+  ctx.font='bold 11px Rajdhani,sans-serif';
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('VMC SPINDLE', cx, hy+hh*.35);
+  ctx.fillText('JMC ENG.', cx, hy+hh*.7);
+}
+
+function drawDrillBit(cx, tip_y, depth, rot){
+  const flute_l = 120 + depth;
+  const d=selectedRow;
+  const dia = Math.min(30, (d?d.tap:6)*4);
+
+  ctx.save(); ctx.translate(cx, tip_y);
+
+  // Tool holder / chuck
+  const cg=ctx.createLinearGradient(-18,0,18,0);
+  cg.addColorStop(0,'#374151'); cg.addColorStop(.5,'#9ca3af'); cg.addColorStop(1,'#374151');
+  ctx.fillStyle=cg;
+  ctx.beginPath();
+  ctx.moveTo(-14,-20); ctx.lineTo(14,-20);
+  ctx.lineTo(dia/2+2,0); ctx.lineTo(-dia/2-2,0);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle='rgba(156,163,175,.5)'; ctx.lineWidth=1; ctx.stroke();
+
+  // Flutes (helix)
+  const fCount=2;
+  for(let f=0;f<fCount;f++){
+    const baseAngle = rot + (f/fCount)*Math.PI;
+    ctx.save(); ctx.rotate(baseAngle);
+    ctx.strokeStyle=`rgba(107,114,128,0.8)`;
+    ctx.lineWidth=dia*0.15+1;
+    ctx.lineCap='round';
+    ctx.beginPath();
+    for(let s=0;s<=flute_l;s+=4){
+      const x=Math.sin(s*0.1)*dia*.35;
+      const y=s;
+      s===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // Body
+  const bg2=ctx.createLinearGradient(-dia/2,0,dia/2,0);
+  bg2.addColorStop(0,'#1f2937'); bg2.addColorStop(.4,'#6b7280'); bg2.addColorStop(.6,'#9ca3af'); bg2.addColorStop(1,'#374151');
+  ctx.fillStyle=bg2;
+  ctx.fillRect(-dia/2, 0, dia, flute_l);
+
+  // Tip (118° point)
+  const tg=ctx.createLinearGradient(-dia/2,flute_l,dia/2,flute_l+dia/2);
+  tg.addColorStop(0,'#374151'); tg.addColorStop(.5,'#9ca3af'); tg.addColorStop(1,'#374151');
+  ctx.fillStyle=tg;
+  ctx.beginPath();
+  ctx.moveTo(-dia/2, flute_l);
+  ctx.lineTo(dia/2, flute_l);
+  ctx.lineTo(0, flute_l+dia/2);
+  ctx.closePath(); ctx.fill();
+
+  // Cutting edge highlights
+  ctx.strokeStyle='rgba(147,197,253,0.6)';
+  ctx.lineWidth=1;
+  ctx.beginPath();
+  ctx.moveTo(-dia/2,flute_l); ctx.lineTo(0,flute_l+dia/2);
+  ctx.moveTo(dia/2,flute_l); ctx.lineTo(0,flute_l+dia/2);
+  ctx.stroke();
+
+  // Cutting glow
+  if(depth>5){
+    const gg=ctx.createRadialGradient(0,flute_l+dia/2,0,0,flute_l+dia/2,dia*1.5);
+    gg.addColorStop(0,'rgba(251,191,36,0.5)');
+    gg.addColorStop(1,'transparent');
+    ctx.fillStyle=gg; ctx.beginPath();
+    ctx.arc(0,flute_l+dia/2,dia*1.5,0,Math.PI*2); ctx.fill();
+  }
+
+  ctx.restore();
+}
+
+function drawMaterial(cx, top, h, phase, t, pT){
+  const w=W*0.72, lx=cx-w/2;
+
+  // Shadow
+  ctx.fillStyle='rgba(0,0,0,.3)';
+  ctx.fillRect(lx+4, top+4, w, h);
+
+  // Material gradient (steel)
+  const mg=ctx.createLinearGradient(lx,top,lx,top+h);
+  mg.addColorStop(0,'#374151'); mg.addColorStop(.3,'#4b5563');
+  mg.addColorStop(.7,'#374151'); mg.addColorStop(1,'#1f2937');
+  ctx.fillStyle=mg; ctx.fillRect(lx,top,w,h);
+
+  // Surface sheen
+  ctx.fillStyle='rgba(156,163,175,0.15)';
+  ctx.fillRect(lx,top,w,6);
+  ctx.strokeStyle='rgba(107,114,128,0.6)';
+  ctx.lineWidth=1.5; ctx.strokeRect(lx,top,w,h);
+
+  // Grain lines
+  ctx.strokeStyle='rgba(75,85,99,0.4)'; ctx.lineWidth=1;
+  for(let i=1;i<5;i++){
+    ctx.beginPath(); ctx.moveTo(lx,top+h*i/5);
+    ctx.lineTo(lx+w,top+h*i/5); ctx.stroke();
+  }
+
+  // Label
+  ctx.fillStyle='rgba(156,163,175,0.4)';
+  ctx.font='600 12px DM Sans,sans-serif';
+  ctx.textAlign='left'; ctx.textBaseline='middle';
+  ctx.fillText('WORKPIECE — MILD STEEL (EN8)', lx+14, top+h-16);
+
+  // Drill hole cut (dark region as drill goes through)
+  if(phase>=2 || drillDepth>0){
+    const holeD = selectedRow ? Math.min(28, selectedRow.tap*3.8) : 20;
+    const holeDepth = drillDepth;
+    ctx.save(); ctx.beginPath();
+    ctx.rect(cx-holeD/2, top, holeD, holeDepth+holeD/2);
+    ctx.clip();
+    ctx.fillStyle='#060f1e'; ctx.fillRect(cx-holeD/2,top,holeD,holeDepth+holeD/2);
+
+    // Machined surface (shiny walls)
+    const wg=ctx.createLinearGradient(cx-holeD/2,0,cx+holeD/2,0);
+    wg.addColorStop(0,'rgba(156,163,175,0.3)');
+    wg.addColorStop(.5,'rgba(209,213,219,0.1)');
+    wg.addColorStop(1,'rgba(156,163,175,0.3)');
+    ctx.fillStyle=wg; ctx.fillRect(cx-holeD/2,top,holeD,holeDepth);
+    ctx.restore();
+
+    // Drill tip conical end
+    if(holeDepth>5){
+      const tipD=holeD/2;
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(cx-holeD/2, top+holeDepth);
+      ctx.lineTo(cx+holeD/2, top+holeDepth);
+      ctx.lineTo(cx, top+holeDepth+tipD);
+      ctx.closePath(); ctx.fillStyle='#060f1e'; ctx.fill();
+      ctx.restore();
+    }
+  }
+}
+
+function drawResult(cx, top, mat_h, alpha){
+  if(!selectedRow) return;
+  const d=selectedRow;
+  const holeD=Math.min(28,d.tap*3.8);
+  const holeDepth=mat_h*0.72;
+  const lx=cx-W*0.36;
+
+  // Transparent material overlay
+  ctx.save(); ctx.globalAlpha=alpha;
+
+  // Ghost material
+  ctx.fillStyle='rgba(55,65,81,0.35)';
+  ctx.strokeStyle='rgba(107,114,128,0.5)';
+  ctx.lineWidth=1.5;
+  ctx.fillRect(lx,top,W*0.72,mat_h);
+  ctx.strokeRect(lx,top,W*0.72,mat_h);
+
+  // Hole walls (machined surface)
+  const wallG=ctx.createLinearGradient(cx-holeD/2,0,cx+holeD/2,0);
+  wallG.addColorStop(0,'rgba(96,165,250,0.25)');
+  wallG.addColorStop(.5,'rgba(147,197,253,0.08)');
+  wallG.addColorStop(1,'rgba(96,165,250,0.25)');
+  ctx.fillStyle=wallG;
+  ctx.fillRect(cx-holeD/2, top, holeD, holeDepth);
+
+  // Thread profile on walls
+  const pitch=d.p*3;
+  const tDepth=4;
+  ctx.strokeStyle='rgba(96,165,250,0.8)';
+  ctx.lineWidth=1.2;
+  for(let y=top+10;y<top+holeDepth-10;y+=pitch){
+    // Left wall threads
+    ctx.beginPath();
+    ctx.moveTo(cx-holeD/2, y);
+    ctx.lineTo(cx-holeD/2+tDepth, y+pitch*0.4);
+    ctx.lineTo(cx-holeD/2, y+pitch*0.8);
+    ctx.stroke();
+    // Right wall threads
+    ctx.beginPath();
+    ctx.moveTo(cx+holeD/2, y);
+    ctx.lineTo(cx+holeD/2-tDepth, y+pitch*0.4);
+    ctx.lineTo(cx+holeD/2, y+pitch*0.8);
+    ctx.stroke();
+  }
+
+  // Hole walls outline
+  ctx.strokeStyle='rgba(96,165,250,0.6)';
+  ctx.lineWidth=1.5;
+  ctx.beginPath();
+  ctx.moveTo(cx-holeD/2,top); ctx.lineTo(cx-holeD/2,top+holeDepth);
+  ctx.moveTo(cx+holeD/2,top); ctx.lineTo(cx+holeD/2,top+holeDepth);
+  ctx.stroke();
+
+  // Drill tip at bottom
+  ctx.strokeStyle='rgba(96,165,250,0.5)';
+  ctx.beginPath();
+  ctx.moveTo(cx-holeD/2,top+holeDepth);
+  ctx.lineTo(cx,top+holeDepth+holeD/2);
+  ctx.lineTo(cx+holeD/2,top+holeDepth);
+  ctx.stroke();
+
+  // Dimension arrows
+  drawDimArrow(cx, top-5, holeD, `⌀${d.tap} mm (Tap Drill)`, 'rgba(74,222,128,0.9)', alpha, -1);
+  drawDimArrow(cx, top+holeDepth+holeD/2+20, holeDepth, `Depth: ${Math.round(holeDepth/3.8*10)/10} × D`, 'rgba(251,191,36,0.9)', alpha, 0, true);
+
+  // Info callout
+  const bx=lx-5, by=top;
+  const lines=[
+    {l:'Thread:', v:`${d.s} × ${d.p} pitch`},
+    {l:'Tap Drill:', v:`⌀ ${d.tap} mm`},
+    {l:'Clearance:', v:`⌀ ${d.cl} mm`},
+    {l:'H7 Tol.:', v:`${d.h7p} µm`},
+    {l:'CB:', v:`⌀${d.cb} × ${d.cbd} deep`},
+  ];
+  const bw=155,bh=lines.length*22+20;
+  ctx.fillStyle='rgba(5,14,36,0.88)';
+  ctx.strokeStyle='rgba(37,99,235,0.4)';
+  ctx.lineWidth=1;
+  roundRect(ctx,lx+W*0.72+10,top,bw,bh,8);
+  ctx.fill(); ctx.stroke();
+
+  lines.forEach((ln,i)=>{
+    ctx.fillStyle='rgba(148,163,184,0.8)';
+    ctx.font='500 10px DM Sans,sans-serif';
+    ctx.textAlign='left';
+    ctx.fillText(ln.l, lx+W*0.72+20, top+18+i*22);
+    ctx.fillStyle='rgba(147,197,253,0.95)';
+    ctx.font='600 11px JetBrains Mono,monospace';
+    ctx.fillText(ln.v, lx+W*0.72+20, top+30+i*22);
+  });
+
+  // COMPLETE badge
+  ctx.fillStyle='rgba(22,163,74,0.9)';
+  ctx.font='bold 13px Rajdhani,sans-serif';
+  ctx.textAlign='center';
+  roundRect(ctx,cx-60,top+mat_h+10,120,28,6);
+  ctx.fill();
+  ctx.fillStyle='#fff';
+  ctx.fillText('DRILLING COMPLETE ✓', cx, top+mat_h+27);
+
+  ctx.restore();
+}
+
+function drawDimArrow(cx,y,w,label,col,alpha,dir,vertical=false){
+  if(vertical){
+    ctx.save(); ctx.globalAlpha=alpha*0.8;
+    ctx.strokeStyle=col; ctx.fillStyle=col; ctx.lineWidth=1;
+    ctx.setLineDash([3,4]);
+    ctx.beginPath(); ctx.moveTo(cx+50,y-w); ctx.lineTo(cx+50,y); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.font='600 10px JetBrains Mono,monospace'; ctx.textAlign='left';
+    ctx.fillText(label, cx+56, y-w/2);
+    ctx.restore(); return;
+  }
+  ctx.save(); ctx.globalAlpha=alpha*0.9;
+  ctx.strokeStyle=col; ctx.fillStyle=col; ctx.lineWidth=1;
+  // Line
+  ctx.beginPath(); ctx.moveTo(cx-w/2,y+dir*20); ctx.lineTo(cx+w/2,y+dir*20); ctx.stroke();
+  // Arrows
+  [[cx-w/2,-1],[cx+w/2,1]].forEach(([x,d])=>{
+    ctx.beginPath(); ctx.moveTo(x,y+dir*20); ctx.lineTo(x+d*5,y+dir*17); ctx.lineTo(x+d*5,y+dir*23); ctx.closePath(); ctx.fill();
+  });
+  ctx.font='600 10px JetBrains Mono,monospace'; ctx.textAlign='center';
+  ctx.fillText(label, cx, y+dir*35);
+  ctx.restore();
+}
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.arcTo(x+w,y,x+w,y+r,r);
+  ctx.lineTo(x+w,y+h-r); ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
+  ctx.lineTo(x+r,y+h); ctx.arcTo(x,y+h,x,y+h-r,r);
+  ctx.lineTo(x,y+r); ctx.arcTo(x,y,x+r,y,r);
+  ctx.closePath();
+}
+
+function drawIdle(){
+  resizeCanvas();
+  const bg=ctx.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0,'#050e24'); bg.addColorStop(1,'#091535');
+  ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='rgba(37,99,235,.05)'; ctx.lineWidth=1;
+  for(let x=0;x<W;x+=30){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=30){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+}
+
+function easeOut(t){return 1-(1-t)*(1-t)*(1-t);}
+function easeInOut(t){return t<.5?4*t*t*t:(t-1)*(2*t-2)*(2*t-2)+1;}
+
+drawIdle();
+renderTable();
+</script>
+</body>
+</html>
