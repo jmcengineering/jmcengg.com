@@ -169,8 +169,8 @@ section{padding:80px 5%;}
 .work-item:hover .work-label{opacity:1;transform:translateY(0);}
 .work-ph-icon{font-size:30px;opacity:.2;}
 .work-ph-text{color:rgba(255,255,255,.3);font-size:10px;font-weight:600;text-align:center;padding:0 10px;}
-.works-view-btn{display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#fff;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;padding:12px 28px;border-radius:10px;text-decoration:none;transition:background .25s,transform .2s,box-shadow .25s;box-shadow:0 4px 20px rgba(37,99,235,.35);}
-.works-view-btn:hover{background:#1d4ed8;transform:translateY(-2px);box-shadow:0 8px 28px rgba(37,99,235,.45);}
+.works-view-btn{display:inline-flex;align-items:center;gap:14px;background:#0f0f0f;color:#fff;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;padding:13px 26px;border-radius:12px;text-decoration:none;transition:background .25s,transform .2s,box-shadow .25s;box-shadow:0 4px 20px rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.08);}
+.works-view-btn:hover{background:#1a1a1a;transform:translateY(-2px);box-shadow:0 8px 32px rgba(255,0,0,.25);}
 
 /* ── CLIENTS MARQUEE ── */
 #clients{background:var(--white);overflow:hidden;}
@@ -287,6 +287,17 @@ footer{background:var(--navy-dark);padding:48px 5% 24px;}
 .footer-copy{font-size:12px;color:rgba(255,255,255,.3);}
 .footer-gstin{font-size:11px;color:rgba(255,255,255,.3);}
 
+
+/* ── YOUTUBE SUBSCRIBE BTN ── */
+.yt-subscribe-btn{display:inline-flex;align-items:center;gap:16px;background:#0f0f0f;color:#fff;padding:14px 24px;border-radius:12px;text-decoration:none;transition:background .25s,transform .2s,box-shadow .25s;box-shadow:0 4px 20px rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.08);}
+.yt-subscribe-btn:hover{background:#1a1a1a;transform:translateY(-2px);box-shadow:0 8px 32px rgba(255,0,0,.25);}
+.yt-logo-wrap{flex-shrink:0;}
+.yt-btn-text{display:flex;flex-direction:column;gap:2px;}
+.yt-sub-label{font-size:11px;color:rgba(255,255,255,.5);font-family:'DM Sans',sans-serif;font-weight:400;letter-spacing:.5px;text-transform:uppercase;}
+.yt-channel{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#fff;}
+.yt-arrow{font-size:18px;color:rgba(255,255,255,.4);margin-left:4px;transition:transform .25s,color .25s;}
+.yt-subscribe-btn:hover .yt-arrow{transform:translateX(4px);color:#fff;}
+
 /* ── WHATSAPP FLOAT ── */
 #wa-float{position:fixed;bottom:28px;right:28px;z-index:998;display:flex;flex-direction:column;align-items:flex-end;gap:10px;}
 .wa-tooltip{background:var(--navy-dark);color:#fff;font-size:12px;padding:7px 14px;border-radius:8px;white-space:nowrap;opacity:0;transform:translateX(8px);transition:opacity .25s,transform .25s;pointer-events:none;}
@@ -312,14 +323,34 @@ footer{background:var(--navy-dark);padding:48px 5% 24px;}
 }
 
 /* ── GEAR GAME ── */
-#gear-game{width:100%;height:100%;position:relative;background:linear-gradient(135deg,#07163a 0%,#0d2250 60%,#1a3a8f 100%);border-radius:20px;overflow:hidden;}
+#gear-game{width:100%;height:100%;position:relative;background:linear-gradient(160deg,#050e24 0%,#091535 50%,#0d1f4a 100%);border-radius:20px;overflow:hidden;}
 #gear-canvas{width:100%;height:100%;display:block;cursor:pointer;}
-#gear-info-box{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(7,22,58,.88);border:1px solid rgba(96,165,250,.3);border-radius:12px;padding:12px 20px;text-align:center;min-width:220px;pointer-events:none;transition:all .35s ease;backdrop-filter:blur(6px);}
-#gear-info-icon{font-size:22px;margin-bottom:4px;}
-#gear-info-title{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#fff;margin-bottom:3px;}
-#gear-info-text{font-size:12px;color:rgba(255,255,255,.6);line-height:1.5;}
-#gear-hint{position:absolute;top:14px;left:50%;transform:translateX(-50%);background:rgba(37,99,235,.25);border:1px solid rgba(37,99,235,.4);color:rgba(255,255,255,.7);font-size:11px;font-weight:600;padding:5px 14px;border-radius:20px;letter-spacing:.5px;pointer-events:none;animation:hint-fade 3s ease 2s forwards;}
-@keyframes hint-fade{0%{opacity:1;}100%{opacity:0;}}
+#gear-info-box{
+  position:absolute;bottom:18px;left:50%;transform:translateX(-50%);
+  background:rgba(5,14,36,.92);
+  border:1px solid rgba(96,165,250,.25);
+  border-radius:14px;padding:14px 22px;text-align:center;
+  min-width:240px;max-width:280px;
+  pointer-events:none;
+  backdrop-filter:blur(10px);
+  box-shadow:0 8px 32px rgba(0,0,0,.4),0 0 0 1px rgba(96,165,250,.1);
+  transition:opacity .3s ease,transform .3s ease;
+}
+#gear-info-icon{font-size:24px;margin-bottom:6px;display:block;}
+#gear-info-title{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;color:#fff;margin-bottom:4px;letter-spacing:.5px;}
+#gear-info-text{font-size:12px;color:rgba(255,255,255,.58);line-height:1.6;}
+#gear-hint{
+  position:absolute;top:14px;left:50%;transform:translateX(-50%);
+  background:rgba(37,99,235,.2);
+  border:1px solid rgba(37,99,235,.35);
+  color:rgba(255,255,255,.65);font-size:11px;font-weight:600;
+  padding:5px 16px;border-radius:20px;letter-spacing:.8px;text-transform:uppercase;
+  pointer-events:none;
+  animation:hint-fade 4s ease 2.5s forwards;
+  white-space:nowrap;
+}
+@keyframes hint-fade{0%{opacity:1;}80%{opacity:1;}100%{opacity:0;}}
+.gear-dot{position:absolute;border-radius:50%;pointer-events:none;}
 </style>
 </head>
 <body>
@@ -615,8 +646,15 @@ footer{background:var(--navy-dark);padding:48px 5% 24px;}
   <div style="text-align:center;margin-top:32px;" class="reveal">
     <p style="color:rgba(255,255,255,.4);font-size:13px;margin-bottom:18px;">See more of our work on YouTube</p>
     <a href="https://www.youtube.com/@jmcengineering" target="_blank" class="works-view-btn">
-      <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-      View More on @JMCEngineering
+      <svg width="28" height="20" viewBox="0 0 28 20" fill="none">
+        <rect width="28" height="20" rx="4" fill="#FF0000"/>
+        <polygon points="11,6 20,10 11,14" fill="white"/>
+      </svg>
+      <span style="display:flex;flex-direction:column;gap:1px;text-align:left;">
+        <span style="font-size:10px;color:rgba(255,255,255,.5);font-weight:400;letter-spacing:.8px;text-transform:uppercase;">Watch on</span>
+        <span>YouTube — @JMCEngineering</span>
+      </span>
+      <span style="color:rgba(255,255,255,.4);font-size:16px;">→</span>
     </a>
   </div>
 </section>
@@ -847,9 +885,18 @@ footer{background:var(--navy-dark);padding:48px 5% 24px;}
     </div>
   </div>
   <div style="text-align:center;margin-top:28px;">
-    <a href="https://www.youtube.com/@jmcengineering" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;background:#ff0000;color:#fff;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;padding:12px 26px;border-radius:10px;text-decoration:none;transition:background .25s,transform .2s;" onmouseover="this.style.background='#cc0000';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#ff0000';this.style.transform='translateY(0)'">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0C.488 3.45.029 5.804 0 12c.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0C23.512 20.55 23.971 18.196 24 12c-.029-6.185-.484-8.549-4.385-8.816zM9 16V8l8 4-8 4z"/></svg>
-      Subscribe on YouTube @JMCEngineering
+    <a href="https://www.youtube.com/@jmcengineering" target="_blank" rel="noopener" class="yt-subscribe-btn">
+      <span class="yt-logo-wrap">
+        <svg width="28" height="20" viewBox="0 0 28 20" fill="none">
+          <rect width="28" height="20" rx="4" fill="#FF0000"/>
+          <polygon points="11,6 20,10 11,14" fill="white"/>
+        </svg>
+      </span>
+      <span class="yt-btn-text">
+        <span class="yt-sub-label">Subscribe on</span>
+        <span class="yt-channel">YouTube — @JMCEngineering</span>
+      </span>
+      <span class="yt-arrow">→</span>
     </a>
   </div>
 </section>
@@ -911,15 +958,6 @@ footer{background:var(--navy-dark);padding:48px 5% 24px;}
     <div class="contact-cards">
       <div class="contact-card reveal delay-1">
         <div class="cc-icon">
-          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-        </div>
-        <div>
-          <div class="cc-label">Phone</div>
-          <div class="cc-value">+91 73051 87874</div>
-        </div>
-      </div>
-      <div class="contact-card reveal delay-2">
-        <div class="cc-icon">
           <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         </div>
         <div>
@@ -927,22 +965,22 @@ footer{background:var(--navy-dark);padding:48px 5% 24px;}
           <div class="cc-value">info@jmcengg.com</div>
         </div>
       </div>
-      <div class="contact-card reveal delay-3">
-        <div class="cc-icon">
-          <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+      <div class="contact-card reveal delay-2">
+        <div class="cc-icon" style="background:#e7f9ed;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
         </div>
         <div>
           <div class="cc-label">WhatsApp</div>
-          <div class="cc-value">+91 73051 87874</div>
+          <div class="cc-value">Send us a message</div>
         </div>
       </div>
-      <div class="contact-card reveal delay-4">
+      <div class="contact-card reveal delay-3" style="grid-column:1/-1;">
         <div class="cc-icon">
           <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
         </div>
         <div>
           <div class="cc-label">Address</div>
-          <div class="cc-value" style="font-size:14px;">#17/9 Asai Thambi St, Mathiyazhagan Nagar,<br>TMP Nagar, Padi, Chennai – 600050</div>
+          <div class="cc-value" style="font-size:14px;">#17/9 Asai Thambi St, Mathiyazhagan Nagar, TMP Nagar, Padi, Chennai – 600050</div>
         </div>
       </div>
     </div>
@@ -1151,7 +1189,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
 });
 
 
-// ── GEAR GAME ──
+// ── GEAR GAME (v2 — Modern Blueprint) ──
 (function(){
   const canvas = document.getElementById('gear-canvas');
   if(!canvas) return;
@@ -1161,95 +1199,91 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
   const infoText = document.getElementById('gear-info-text');
 
   const facts = [
-    {icon:'🏭', title:'Founded 2020', text:'Started as a promising startup, now a trusted precision engineering name in Chennai.'},
-    {icon:'⏱', title:'30+ Years Expertise', text:'Our CEO has 30+ years in Tool & SPM — 12 yrs in Singapore, 18 yrs in Chennai.'},
-    {icon:'📍', title:'Based in Padi, Chennai', text:'#17/9 Asai Thambi St, Mathiyazhagan Nagar, TMP Nagar, Padi — Tamil Nadu 600050.'},
-    {icon:'🏅', title:'MSME Registered', text:'Government of India certified enterprise. UDYAM-TN-02-004828. GST compliant.'},
-    {icon:'🔧', title:'5 Machine Types', text:'M1DR Milling, Surface Grinding, Lathe, VMC/CNC & Wire Cut EDM capabilities.'},
-    {icon:'📞', title:'24hr Response', text:'Engineering review within 24–48 hours. Quotation in 2–3 working days. Always.'},
+    {icon:'🏭', title:'Founded 2020', text:'Started as a precision startup. Now a trusted tooling name in Chennai.'},
+    {icon:'👨‍💼', title:'30+ Years Expertise', text:'CEO — 12 yrs Singapore & 18 yrs Chennai. Tool, die & SPM mastery.'},
+    {icon:'📍', title:'Padi, Chennai', text:'#17/9 Asai Thambi St, TMP Nagar, Padi, Chennai – 600050.'},
+    {icon:'🏅', title:'MSME Registered', text:'Govt. certified. UDYAM-TN-02-004828. GST: 33AXRPJ5951H1Z5.'},
+    {icon:'⚙️', title:'5 Capabilities', text:'Milling, Grinding, Lathe, VMC/CNC & Wire Cut EDM.'},
+    {icon:'⚡', title:'24hr Review', text:'Engineering review 24–48 hrs. Full quote in 2–3 working days.'},
   ];
 
-  // Gear definitions: x%, y%, radius, teeth, speed, direction, color, factIndex
-  const gears = [
-    {xp:.38, yp:.38, r:70, teeth:14, spd:.008, dir:1,  col:'#1e3a8a', stroke:'#3b6fd4', fact:0},
-    {xp:.70, yp:.32, r:42, teeth:9,  spd:.014, dir:-1, col:'#1a3060', stroke:'#2563eb', fact:1},
-    {xp:.72, yp:.65, r:55, teeth:11, spd:.010, dir:1,  col:'#0f2040', stroke:'#1d4ed8', fact:2},
-    {xp:.20, yp:.60, r:48, teeth:10, spd:.012, dir:-1, col:'#162b5c', stroke:'#3b82f6', fact:3},
-    {xp:.55, yp:.75, r:34, teeth:8,  spd:.018, dir:1,  col:'#1a3a8f', stroke:'#60a5fa', fact:4},
-    {xp:.18, yp:.28, r:36, teeth:8,  spd:.016, dir:1,  col:'#0d2250', stroke:'#2563eb', fact:5},
+  const LABELS = ['Founded','CEO','Location','MSME','Machines','Response'];
+
+  // [xFrac, yFrac, radius, teeth, speed, direction]
+  const GD = [
+    [0.42, 0.40, 72, 16, 0.007,  1],
+    [0.73, 0.27, 44, 10, 0.013, -1],
+    [0.74, 0.63, 56, 12, 0.010,  1],
+    [0.18, 0.63, 50, 11, 0.011, -1],
+    [0.57, 0.77, 36,  8, 0.018,  1],
+    [0.16, 0.25, 38,  9, 0.015,  1],
   ];
 
-  let angles = gears.map(()=>0);
-  let W, H, animId;
-  let activeFact = null;
-  let glowAlpha = 0;
+  const RIMS = ['#2563eb','#3b82f6','#1d4ed8','#60a5fa','#2563eb','#3b82f6'];
+  let angles = GD.map(()=>Math.random()*Math.PI*2);
+  let W, H, active = null;
+  let pts = [];
 
   function resize(){
     const box = canvas.parentElement;
     W = canvas.width = box.offsetWidth;
-    H = canvas.height = box.offsetHeight;
+    H = canvas.height = box.offsetHeight || 380;
+    pts = Array.from({length:24},()=>({
+      x:Math.random()*W, y:Math.random()*H,
+      vx:(Math.random()-.5)*.3, vy:(Math.random()-.5)*.3,
+      r:Math.random()*1.4+.4, a:Math.random()*.4+.08
+    }));
   }
   resize();
   window.addEventListener('resize', resize);
 
-  function drawGear(cx, cy, r, teeth, angle, col, stroke, glowing){
-    const inner = r * .65;
-    const toothH = r * .28;
-    const toothW = (2*Math.PI/teeth) * .38;
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.rotate(angle);
+  function gear(cx,cy,R,teeth,angle,rim,isOn){
+    const ri=R*.66, hub=R*.2, th=R*.25, ta=Math.PI/teeth*.52;
+    ctx.save(); ctx.translate(cx,cy); ctx.rotate(angle);
 
-    // Glow
-    if(glowing){
-      ctx.shadowColor = '#60a5fa';
-      ctx.shadowBlur = 22;
+    if(isOn){
+      const g=ctx.createRadialGradient(0,0,R*.5,0,0,R+th+16);
+      g.addColorStop(0,rim+'44'); g.addColorStop(1,'transparent');
+      ctx.beginPath(); ctx.arc(0,0,R+th+16,0,Math.PI*2);
+      ctx.fillStyle=g; ctx.fill();
     }
 
-    // Body
+    // teeth path
     ctx.beginPath();
     for(let i=0;i<teeth;i++){
-      const a = (i/teeth)*Math.PI*2;
-      const a1 = a - toothW/2;
-      const a2 = a + toothW/2;
-      ctx.lineTo(Math.cos(a1)*r, Math.sin(a1)*r);
-      ctx.lineTo(Math.cos(a1)*(r+toothH), Math.sin(a1)*(r+toothH));
-      ctx.lineTo(Math.cos(a2)*(r+toothH), Math.sin(a2)*(r+toothH));
-      ctx.lineTo(Math.cos(a2)*r, Math.sin(a2)*r);
+      const b=(i/teeth)*Math.PI*2;
+      ctx.lineTo(Math.cos(b-ta)*ri,    Math.sin(b-ta)*ri);
+      ctx.lineTo(Math.cos(b-ta*.4)*(R+th), Math.sin(b-ta*.4)*(R+th));
+      ctx.lineTo(Math.cos(b+ta*.4)*(R+th), Math.sin(b+ta*.4)*(R+th));
+      ctx.lineTo(Math.cos(b+ta)*ri,    Math.sin(b+ta)*ri);
     }
     ctx.closePath();
-    ctx.fillStyle = col;
-    ctx.strokeStyle = stroke;
-    ctx.lineWidth = glowing ? 2 : 1.2;
-    ctx.fill();
-    ctx.stroke();
-    ctx.shadowBlur = 0;
+    const bg=ctx.createRadialGradient(0,-R*.25,2,0,0,R+th);
+    bg.addColorStop(0,'#1a3060'); bg.addColorStop(1,'#071428');
+    ctx.fillStyle=bg; ctx.fill();
+    ctx.strokeStyle=isOn?rim:rim+'88'; ctx.lineWidth=isOn?2:1.3; ctx.stroke();
 
-    // Inner circle
-    ctx.beginPath();
-    ctx.arc(0,0,inner,0,Math.PI*2);
-    ctx.fillStyle = glowing ? 'rgba(37,99,235,.35)' : 'rgba(7,22,58,.7)';
-    ctx.strokeStyle = stroke;
-    ctx.lineWidth = 1;
-    ctx.fill();
-    ctx.stroke();
+    // inner rings
+    [ri*.86, ri*.62].forEach(rr=>{
+      ctx.beginPath(); ctx.arc(0,0,rr,0,Math.PI*2);
+      ctx.strokeStyle=rim+'33'; ctx.lineWidth=1; ctx.stroke();
+    });
 
-    // Hub
-    ctx.beginPath();
-    ctx.arc(0,0,inner*.3,0,Math.PI*2);
-    ctx.fillStyle = stroke;
-    ctx.fill();
-
-    // Spokes
+    // spokes
     for(let i=0;i<4;i++){
-      const a = (i/4)*Math.PI*2;
+      const a=(i/4)*Math.PI*2;
       ctx.beginPath();
-      ctx.moveTo(Math.cos(a)*inner*.3, Math.sin(a)*inner*.3);
-      ctx.lineTo(Math.cos(a)*inner*.85, Math.sin(a)*inner*.85);
-      ctx.strokeStyle = stroke;
-      ctx.lineWidth = glowing ? 2 : 1.2;
-      ctx.stroke();
+      ctx.moveTo(Math.cos(a)*hub*1.5, Math.sin(a)*hub*1.5);
+      ctx.lineTo(Math.cos(a)*ri*.58,  Math.sin(a)*ri*.58);
+      ctx.strokeStyle=isOn?rim+'bb':rim+'44';
+      ctx.lineWidth=isOn?2.5:1.5; ctx.lineCap='round'; ctx.stroke();
     }
+
+    // hub
+    ctx.beginPath(); ctx.arc(0,0,hub,0,Math.PI*2);
+    ctx.fillStyle=isOn?rim:rim+'99'; ctx.fill();
+    ctx.beginPath(); ctx.arc(0,0,hub*.38,0,Math.PI*2);
+    ctx.fillStyle='rgba(255,255,255,'+(isOn?.9:.45)+')'; ctx.fill();
 
     ctx.restore();
   }
@@ -1257,64 +1291,81 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
   function frame(){
     ctx.clearRect(0,0,W,H);
 
-    // Subtle grid
-    ctx.strokeStyle = 'rgba(255,255,255,.03)';
-    ctx.lineWidth = 1;
-    for(let x=0;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
-    for(let y=0;y<H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+    // bg
+    const bg=ctx.createLinearGradient(0,0,W,H);
+    bg.addColorStop(0,'#050e24'); bg.addColorStop(.6,'#091535'); bg.addColorStop(1,'#0d1f4a');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
 
-    gears.forEach((g,i)=>{
-      angles[i] += g.spd * g.dir;
-      const cx = g.xp * W;
-      const cy = g.yp * H;
-      const glowing = activeFact === i;
-      drawGear(cx, cy, g.r, g.teeth, angles[i], g.col, g.stroke, glowing);
+    // grid
+    ctx.strokeStyle='rgba(37,99,235,.055)'; ctx.lineWidth=1;
+    for(let x=0;x<W;x+=34){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+    for(let y=0;y<H;y+=34){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
 
-      // Label on gear
+    // particles
+    pts.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0)p.x=W; if(p.x>W)p.x=0; if(p.y<0)p.y=H; if(p.y>H)p.y=0;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(96,165,250,${p.a})`; ctx.fill();
+    });
+
+    // dashed connector lines
+    ctx.strokeStyle='rgba(37,99,235,.15)'; ctx.lineWidth=1; ctx.setLineDash([3,9]);
+    [[0,1],[0,2],[0,3],[2,4],[3,4],[3,5]].forEach(([a,b])=>{
+      ctx.beginPath();
+      ctx.moveTo(GD[a][0]*W,GD[a][1]*H);
+      ctx.lineTo(GD[b][0]*W,GD[b][1]*H);
+      ctx.stroke();
+    });
+    ctx.setLineDash([]);
+
+    // gears + labels
+    GD.forEach((_,gi)=>{
+      angles[gi]+=GD[gi][4]*GD[gi][5];
+      const [xp,yp,R,teeth]=GD[gi];
+      const cx=xp*W, cy=yp*H, isOn=active===gi;
+      gear(cx,cy,R,teeth,angles[gi],RIMS[gi],isOn);
+
+      // label BELOW each gear
+      const ly=cy+R+R*.25+18;
       ctx.save();
-      ctx.translate(cx, cy);
-      ctx.fillStyle = glowing ? '#fff' : 'rgba(255,255,255,.35)';
-      ctx.font = glowing ? 'bold 13px Rajdhani,sans-serif' : '11px Rajdhani,sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      const labels = ['Founded','CEO','Location','MSME','Machines','Response'];
-      ctx.fillText(labels[i], 0, 0);
+      ctx.font=isOn?'bold 13px Rajdhani,sans-serif':'600 11px Rajdhani,sans-serif';
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillStyle=isOn?'#60a5fa':'rgba(255,255,255,.42)';
+      if(isOn){ctx.shadowColor='#2563eb';ctx.shadowBlur=8;}
+      ctx.fillText(LABELS[gi],cx,ly);
       ctx.restore();
     });
 
-    animId = requestAnimationFrame(frame);
+    requestAnimationFrame(frame);
   }
   frame();
 
-  canvas.addEventListener('click', function(e){
-    const rect = canvas.getBoundingClientRect();
-    const mx = (e.clientX - rect.left) * (W / rect.width);
-    const my = (e.clientY - rect.top) * (H / rect.height);
-    let hit = -1;
-    gears.forEach((g,i)=>{
-      const cx = g.xp * W, cy = g.yp * H;
-      const dist = Math.sqrt((mx-cx)**2 + (my-cy)**2);
-      if(dist < g.r + g.r*.28) hit = i;
-    });
-    if(hit >= 0){
-      activeFact = hit;
-      const f = facts[gears[hit].fact];
-      infoIcon.textContent = f.icon;
-      infoTitle.textContent = f.title;
-      infoText.textContent = f.text;
+  function hit(mx,my){
+    for(let gi=GD.length-1;gi>=0;gi--){
+      const [xp,yp,R]=GD[gi];
+      if(Math.hypot(mx-xp*W,my-yp*H)<R+R*.25+4) return gi;
+    }
+    return -1;
+  }
+
+  canvas.addEventListener('click',e=>{
+    const r=canvas.getBoundingClientRect();
+    const mx=(e.clientX-r.left)*(W/r.width), my=(e.clientY-r.top)*(H/r.height);
+    const h=hit(mx,my);
+    if(h>=0){
+      active=h;
+      const f=facts[h];
+      infoIcon.textContent=f.icon;
+      infoTitle.textContent=f.title;
+      infoText.textContent=f.text;
     }
   });
 
-  canvas.addEventListener('mousemove', function(e){
-    const rect = canvas.getBoundingClientRect();
-    const mx = (e.clientX - rect.left) * (W / rect.width);
-    const my = (e.clientY - rect.top) * (H / rect.height);
-    let hovering = false;
-    gears.forEach(g=>{
-      const cx = g.xp * W, cy = g.yp * H;
-      if(Math.sqrt((mx-cx)**2 + (my-cy)**2) < g.r + g.r*.28) hovering = true;
-    });
-    canvas.style.cursor = hovering ? 'pointer' : 'default';
+  canvas.addEventListener('mousemove',e=>{
+    const r=canvas.getBoundingClientRect();
+    const mx=(e.clientX-r.left)*(W/r.width), my=(e.clientY-r.top)*(H/r.height);
+    canvas.style.cursor=hit(mx,my)>=0?'pointer':'default';
   });
 })();
 
