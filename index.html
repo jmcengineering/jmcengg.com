@@ -368,7 +368,6 @@ footer{background:var(--navy-dark);padding:48px 5% 24px;}
 .footer-copy{font-size:12px;color:rgba(255,255,255,.3);}
 .footer-gstin{font-size:11px;color:rgba(255,255,255,.3);}
 
-
 /* ── YOUTUBE SUBSCRIBE BTN ── */
 .yt-subscribe-btn{display:inline-flex;align-items:center;gap:16px;background:#0f0f0f;color:#fff;padding:14px 24px;border-radius:12px;text-decoration:none;transition:background .25s,transform .2s,box-shadow .25s;box-shadow:0 4px 20px rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.08);}
 .yt-subscribe-btn:hover{background:#1a1a1a;transform:translateY(-2px);box-shadow:0 8px 32px rgba(255,0,0,.25);}
@@ -666,7 +665,6 @@ footer{background:var(--navy-dark);padding:48px 5% 24px;}
   </div>
 </section>
 
-
 <!-- SAMPLE WORKS -->
 <section id="sample-works">
   <div class="sec-head reveal">
@@ -674,57 +672,10 @@ footer{background:var(--navy-dark);padding:48px 5% 24px;}
     <h2 class="sec-title">Sample Works</h2>
     <p class="sec-sub">A glimpse of what we manufacture — precision tooling crafted in our Padi, Chennai shop floor.</p>
   </div>
-  <div class="works-grid">
-    <!-- TO ADD: Replace placeholder divs with <img src="your-image.jpg"> inside work-item -->
-    <div class="work-item reveal delay-1">
-      <div class="work-ph-icon">📸</div>
-      <div class="work-ph-text">Add Photo</div>
-      <div class="work-overlay"></div>
-      <div class="work-label">Jig Fixture</div>
-    </div>
-    <div class="work-item reveal delay-1">
-      <div class="work-ph-icon">📸</div>
-      <div class="work-ph-text">Add Photo</div>
-      <div class="work-overlay"></div>
-      <div class="work-label">Press Tool</div>
-    </div>
-    <div class="work-item reveal delay-2">
-      <div class="work-ph-icon">📸</div>
-      <div class="work-ph-text">Add Photo</div>
-      <div class="work-overlay"></div>
-      <div class="work-label">Die Set</div>
-    </div>
-    <div class="work-item reveal delay-2">
-      <div class="work-ph-icon">📸</div>
-      <div class="work-ph-text">Add Photo</div>
-      <div class="work-overlay"></div>
-      <div class="work-label">Gauge</div>
-    </div>
-    <div class="work-item reveal delay-3">
-      <div class="work-ph-icon">📸</div>
-      <div class="work-ph-text">Add Photo</div>
-      <div class="work-overlay"></div>
-      <div class="work-label">Forming Tool</div>
-    </div>
-    <div class="work-item reveal delay-3">
-      <div class="work-ph-icon">📸</div>
-      <div class="work-ph-text">Add Photo</div>
-      <div class="work-overlay"></div>
-      <div class="work-label">Plastic Mould</div>
-    </div>
-    <div class="work-item reveal delay-4">
-      <div class="work-ph-icon">📸</div>
-      <div class="work-ph-text">Add Photo</div>
-      <div class="work-overlay"></div>
-      <div class="work-label">SPM Component</div>
-    </div>
-    <div class="work-item reveal delay-4">
-      <div class="work-ph-icon">📸</div>
-      <div class="work-ph-text">Add Photo</div>
-      <div class="work-overlay"></div>
-      <div class="work-label">Precision Part</div>
-    </div>
-  </div>
+
+  <!-- ✅ DYNAMIC GRID — JS populates this automatically based on uploaded images -->
+  <div class="works-grid" id="works-grid"></div>
+
   <div style="text-align:center;margin-top:32px;" class="reveal">
     <p style="color:rgba(255,255,255,.4);font-size:13px;margin-bottom:18px;">See more of our work on YouTube</p>
     <a href="https://www.youtube.com/@jmcengineering" target="_blank" class="works-view-btn">
@@ -754,7 +705,6 @@ footer{background:var(--navy-dark);padding:48px 5% 24px;}
   </div>
   <div class="marquee-wrapper">
     <div class="marquee-track" id="marquee-track">
-      <!-- Slots duplicated for seamless loop -->
       <div class="client-slot"><span>Client Logo</span></div>
       <div class="client-slot"><span>Client Logo</span></div>
       <div class="client-slot"><span>Client Logo</span></div>
@@ -763,7 +713,6 @@ footer{background:var(--navy-dark);padding:48px 5% 24px;}
       <div class="client-slot"><span>Client Logo</span></div>
       <div class="client-slot"><span>Client Logo</span></div>
       <div class="client-slot"><span>Client Logo</span></div>
-      <!-- Duplicates for infinite scroll -->
       <div class="client-slot"><span>Client Logo</span></div>
       <div class="client-slot"><span>Client Logo</span></div>
       <div class="client-slot"><span>Client Logo</span></div>
@@ -1132,7 +1081,6 @@ footer{background:var(--navy-dark);padding:48px 5% 24px;}
   </div>
 </section>
 
-
 <!-- ENGINEERING TOOLS -->
 <section id="tools" style="background:var(--white);padding:80px 5%;">
   <div class="sec-head reveal" style="text-align:center;margin-bottom:44px;">
@@ -1188,7 +1136,7 @@ footer{background:var(--navy-dark);padding:48px 5% 24px;}
         <li><a href="#clients">Clients</a></li>
         <li><a href="#process">How We Work</a></li>
         <li><a href="#tools">Tools</a></li>
-    <li><a href="#blog">Blog</a></li>
+        <li><a href="#blog">Blog</a></li>
         <li><a href="#vlog">Vlog</a></li>
       </ul>
     </div>
@@ -1326,6 +1274,54 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
 });
 
 
+// ── DYNAMIC WORKS GALLERY ──
+// HOW TO ADD MORE PHOTOS:
+//   1. Name your photo files as: work-3.jpg, work-4.jpg, work-5.jpg ...
+//   2. Upload them to your GitHub repo (same folder as index.html)
+//   3. Add a new line to the workConfig array below with the filename + label
+//   4. The card will appear automatically on the website!
+//
+// CHANGING LABELS: Edit the "label" text for each entry below.
+// CHANGING ORDER:  Rearrange the lines in workConfig to reorder the cards.
+
+const workConfig = [
+  { src: 'work-1.jpg',  label: 'Jig Fixture'    },
+  { src: 'work-2.jpg',  label: 'Press Tool'      },
+  { src: 'work-3.jpg',  label: 'Die Set'         },
+  { src: 'work-4.jpg',  label: 'Gauge'           },
+  { src: 'work-5.jpg',  label: 'Forming Tool'    },
+  { src: 'work-6.jpg',  label: 'Plastic Mould'   },
+  { src: 'work-7.jpg',  label: 'SPM Component'   },
+  { src: 'work-8.jpg',  label: 'Precision Part'  },
+  { src: 'work-9.jpg',  label: 'Custom Fixture'  },
+  { src: 'work-10.jpg', label: 'Tool Assembly'   },
+  // ↓ Add more below as you upload photos ↓
+  // { src: 'work-11.jpg', label: 'Your Label Here' },
+];
+
+(function loadWorks(){
+  const grid = document.getElementById('works-grid');
+  if(!grid) return;
+  workConfig.forEach((item, i) => {
+    const img = new Image();
+    img.onload = () => {
+      const div = document.createElement('div');
+      div.className = 'work-item reveal';
+      div.style.transitionDelay = (i % 4 * 0.1) + 's';
+      div.innerHTML = `
+        <img src="${item.src}" alt="${item.label}" loading="lazy">
+        <div class="work-overlay"></div>
+        <div class="work-label">${item.label}</div>
+      `;
+      grid.appendChild(div);
+      observer.observe(div); // plug into existing scroll-reveal
+    };
+    // onerror: silently skip — no card shown if image doesn't exist
+    img.src = item.src;
+  });
+})();
+
+
 // ── GEAR GAME (v2 — Modern Blueprint) ──
 (function(){
   const canvas = document.getElementById('gear-canvas');
@@ -1346,7 +1342,6 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
 
   const LABELS = ['Founded','CEO','Location','MSME','Machines','Response'];
 
-  // [xFrac, yFrac, radius, teeth, speed, direction]
   const GD = [
     [0.42, 0.40, 72, 16, 0.007,  1],
     [0.73, 0.27, 44, 10, 0.013, -1],
@@ -1385,7 +1380,6 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
       ctx.fillStyle=g; ctx.fill();
     }
 
-    // teeth path
     ctx.beginPath();
     for(let i=0;i<teeth;i++){
       const b=(i/teeth)*Math.PI*2;
@@ -1400,13 +1394,11 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
     ctx.fillStyle=bg; ctx.fill();
     ctx.strokeStyle=isOn?rim:rim+'88'; ctx.lineWidth=isOn?2:1.3; ctx.stroke();
 
-    // inner rings
     [ri*.86, ri*.62].forEach(rr=>{
       ctx.beginPath(); ctx.arc(0,0,rr,0,Math.PI*2);
       ctx.strokeStyle=rim+'33'; ctx.lineWidth=1; ctx.stroke();
     });
 
-    // spokes
     for(let i=0;i<4;i++){
       const a=(i/4)*Math.PI*2;
       ctx.beginPath();
@@ -1416,7 +1408,6 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
       ctx.lineWidth=isOn?2.5:1.5; ctx.lineCap='round'; ctx.stroke();
     }
 
-    // hub
     ctx.beginPath(); ctx.arc(0,0,hub,0,Math.PI*2);
     ctx.fillStyle=isOn?rim:rim+'99'; ctx.fill();
     ctx.beginPath(); ctx.arc(0,0,hub*.38,0,Math.PI*2);
@@ -1428,17 +1419,14 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
   function frame(){
     ctx.clearRect(0,0,W,H);
 
-    // bg
     const bg=ctx.createLinearGradient(0,0,W,H);
     bg.addColorStop(0,'#050e24'); bg.addColorStop(.6,'#091535'); bg.addColorStop(1,'#0d1f4a');
     ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
 
-    // grid
     ctx.strokeStyle='rgba(37,99,235,.055)'; ctx.lineWidth=1;
     for(let x=0;x<W;x+=34){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
     for(let y=0;y<H;y+=34){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
 
-    // particles
     pts.forEach(p=>{
       p.x+=p.vx; p.y+=p.vy;
       if(p.x<0)p.x=W; if(p.x>W)p.x=0; if(p.y<0)p.y=H; if(p.y>H)p.y=0;
@@ -1446,7 +1434,6 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
       ctx.fillStyle=`rgba(96,165,250,${p.a})`; ctx.fill();
     });
 
-    // dashed connector lines
     ctx.strokeStyle='rgba(37,99,235,.15)'; ctx.lineWidth=1; ctx.setLineDash([3,9]);
     [[0,1],[0,2],[0,3],[2,4],[3,4],[3,5]].forEach(([a,b])=>{
       ctx.beginPath();
@@ -1456,14 +1443,12 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
     });
     ctx.setLineDash([]);
 
-    // gears + labels
     GD.forEach((_,gi)=>{
       angles[gi]+=GD[gi][4]*GD[gi][5];
       const [xp,yp,R,teeth]=GD[gi];
       const cx=xp*W, cy=yp*H, isOn=active===gi;
       gear(cx,cy,R,teeth,angles[gi],RIMS[gi],isOn);
 
-      // label BELOW each gear
       const ly=cy+R+R*.25+18;
       ctx.save();
       ctx.font=isOn?'bold 13px Rajdhani,sans-serif':'600 11px Rajdhani,sans-serif';
@@ -1505,7 +1490,6 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
     canvas.style.cursor=hit(mx,my)>=0?'pointer':'default';
   });
 })();
-
 </script>
 </body>
 </html>
