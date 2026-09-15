@@ -389,6 +389,8 @@ section{padding:92px 6%;}
 .ffield input[type=file]{border-style:dashed;cursor:pointer;color:var(--txt-mut);font-size:13px;}
 .consent{display:flex;align-items:flex-start;gap:9px;font-size:12px;color:var(--txt-mut);margin-bottom:16px;line-height:1.55;}
 .consent input{margin-top:3px;flex-shrink:0;}
+.ferr{font-family:var(--font-m);font-size:11.5px;line-height:1.5;color:#B42318;background:#FEF3F2;border-left:3px solid #B42318;padding:8px 11px;margin-top:8px;}
+.btn-submit[disabled]{opacity:.72;cursor:progress;}
 .btn-submit{width:100%;background:var(--blue);color:#fff;font-family:var(--font-d);font-size:16px;font-weight:600;padding:14px;border:none;border-radius:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;letter-spacing:.5px;transition:background .25s,transform .2s,box-shadow .25s;}
 .btn-submit:hover{background:#1D4ED8;transform:translateY(-2px);box-shadow:0 8px 28px rgba(37,99,235,.38);}
 .btn-submit svg{width:17px;height:17px;stroke:#fff;stroke-width:2;fill:none;}
@@ -411,7 +413,8 @@ footer{background:var(--ink);padding:54px 6% 26px;border-top:1px solid var(--hai
 .f-bot{border-top:1px solid var(--hairline-inv);padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-family:var(--font-m);font-size:10.5px;color:var(--txt-inv-mut);letter-spacing:.4px;}
 
 /* ═══════════════════ FLOATS ═══════════════════ */
-#wa-float{position:fixed;bottom:26px;right:26px;z-index:998;}
+#wa-float{position:fixed;bottom:26px;right:26px;z-index:998;opacity:0;visibility:hidden;transform:translateY(10px);transition:opacity .3s,transform .3s,visibility .3s;}
+#wa-float.on{opacity:1;visibility:visible;transform:none;}
 .wa-btn{width:54px;height:54px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(37,211,102,.45);text-decoration:none;transition:transform .25s var(--ease);}
 .wa-btn:hover{transform:scale(1.08);}
 .wa-btn svg{width:27px;height:27px;fill:#fff;}
@@ -457,7 +460,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     <li><a href="#works">Works</a></li>
     <li><a href="#process">Process</a></li>
     <li><a href="#tools">Tools</a></li>
-    <li><a href="#insights">Insights</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
   <a href="#contact" class="nav-cta">Get a Quote</a>
@@ -472,7 +474,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   <a href="#works">Works</a>
   <a href="#process">Process</a>
   <a href="#tools">Tools</a>
-  <a href="#insights">Insights</a>
   <a href="#contact" class="m-cta">Get a Quote</a>
 </div>
 
@@ -498,8 +499,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
         </a>
       </div>
       <div class="titleblock" role="list" aria-label="Key facts">
-        <div class="tb-cell" role="listitem"><div class="tb-k">CEO Expertise</div><div class="tb-v">30+ <small>YRS</small></div></div>
-        <div class="tb-cell" role="listitem"><div class="tb-k">Established</div><div class="tb-v">2020</div></div>
+        <div class="tb-cell" role="listitem"><div class="tb-k">Founder Experience</div><div class="tb-v">30+ <small>YRS</small></div></div>
+        <div class="tb-cell" role="listitem"><div class="tb-k">Company Founded</div><div class="tb-v">2020</div></div>
         <div class="tb-cell" role="listitem"><div class="tb-k">Eng. Review</div><div class="tb-v">24 <small>HRS</small></div></div>
         <div class="tb-cell" role="listitem"><div class="tb-k">Delivery</div><div class="tb-v">On-Time</div></div>
       </div>
@@ -651,10 +652,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
             <line x1="150" y1="500" x2="150" y2="552"/><line x1="228" y1="518" x2="228" y2="552"/>
           </g>
           <g font-family="IBM Plex Mono,monospace" font-size="8" fill="#7DA5EB">
-            <text x="19" y="512">JMC ENGINEERING · PADI, CHENNAI</text>
+            <text x="19" y="512">JMC ENGINEERING · PADI</text>
             <text x="155" y="512">COMPOUND BLANK &amp; PIERCE DIE</text>
             <text x="19" y="530">DWG JMC-CD-0118  ·  REV 02</text>
-            <text x="155" y="530">MATL: DIE SET EN8 / TOOL D2</text>
+            <text x="155" y="530">MATL: EN8 / D2</text>
             <text x="233" y="530">SCALE 1:2</text>
             <text x="19" y="547">SECTION A-A  ·  DIMS IN mm</text>
             <text x="155" y="547">DRN CS · CHK JM</text>
@@ -837,37 +838,18 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 </section>
 
 <!-- ═══════════ INSIGHTS ═══════════ -->
-<section id="insights" class="rv">
+<!-- Hidden until real posts exist, same convention as the vlog section below.
+     The three articles this section used to link to were deleted from the
+     repository; they are still recoverable from git history if wanted. -->
+<section id="insights" class="rv" hidden>
   <div class="sec-head">
     <p class="eyebrow"><span class="idx">SEC 08</span> From the Shop Floor</p>
     <h2 class="sec-title">Engineering Insights</h2>
     <p class="sec-sub">Knowledge, industry notes and updates from the JMC tool room.</p>
   </div>
-  <div class="blog-grid">
-    <article class="blog-card rv d1">
-      <div class="blog-th"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="14" rx="1"/><path d="M3 9h18M9 9v8"/></svg><span class="blog-cat">Press Tools</span></div>
-      <div class="blog-bd">
-        <h3>How We Design Progressive Dies for Tight Tolerances</h3>
-        <p>Our design methodology for complex progressive dies — from strip layout to final tryout and first-article approval.</p>
-        <div class="blog-mt"><time datetime="2025-05">May 2025</time><a href="blog-progressive-dies.html">Read →</a></div>
-      </div>
-    </article>
-    <article class="blog-card rv d2">
-      <div class="blog-th"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 20h20M4 20V10l8-7 8 7v10M10 20v-6h4v6"/></svg><span class="blog-cat">Industry</span></div>
-      <div class="blog-bd">
-        <h3>Why MSME Toolmakers Are the Backbone of India's Auto Sector</h3>
-        <p>India's automotive boom runs on precision tooling — and small MSME shops are the unseen engine behind it.</p>
-        <div class="blog-mt"><time datetime="2025-05">May 2025</time><a href="blog-msme-toolmakers.html">Read →</a></div>
-      </div>
-    </article>
-    <article class="blog-card rv d3">
-      <div class="blog-th"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 00-4 12.7V17a1 1 0 001 1h6a1 1 0 001-1v-2.3A7 7 0 0012 2zM9 21h6"/></svg><span class="blog-cat" style="color:#FF8A8A;">Our Story</span></div>
-      <div class="blog-bd">
-        <h3>Why Engineering Businesses Fail — And What We Did Differently</h3>
-        <p>An honest account of the pitfalls that break small engineering firms — and the decisions that helped JMC rebuild.</p>
-        <div class="blog-mt"><time datetime="2025-05">May 2025</time><a href="blog-engineering-business.html">Read →</a></div>
-      </div>
-    </article>
+  <!-- Cards removed with the posts they pointed at, so crawlers are not
+       handed three 404s. Restore from git history when real posts exist. -->
+  <div class="blog-grid"></div>
   </div>
 </section>
 
@@ -940,15 +922,18 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
       </div>
     </div>
 
-    <!-- FormSubmit: uses the HASHED endpoint so info@jmcengg.com is never
-         exposed in page source to scrapers. Get yours by submitting once,
-         then swap the string below. See README step 6. -->
-    <form class="cform rv-r" action="https://formsubmit.co/REPLACE_WITH_YOUR_FORMSUBMIT_HASH" method="POST" enctype="multipart/form-data">
+    <!-- FormSubmit posts straight to info@jmcengg.com.
+         ONE-TIME ACTIVATION: the first submission triggers a confirmation
+         email to that address — click the link in it once and every later
+         enquiry is delivered silently. The address is already public in the
+         contact card above, so nothing new is exposed here. -->
+    <form id="enquiry-form" class="cform rv-r" action="https://formsubmit.co/info@jmcengg.com" method="POST" enctype="multipart/form-data">
       <h3>Enquiry Form</h3>
       <p class="fnote">GOES STRAIGHT TO OUR TOOL ROOM · ATTACHMENTS SUPPORTED</p>
       <input type="hidden" name="_subject" value="New enquiry — jmcengg.com"/>
       <input type="hidden" name="_template" value="table"/>
       <input type="hidden" name="_next" value="https://jmcengg.com/thanks.html"/>
+      <input type="hidden" name="_captcha" value="false"/>
       <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off"/>
       <div class="frow">
         <div class="ffield"><label for="f-name">Your Name *</label><input id="f-name" name="Name" type="text" required placeholder="e.g. Rajesh Kumar"/></div>
@@ -967,12 +952,12 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
         </select>
       </div>
       <div class="ffield"><label for="f-details">Project Details</label><textarea id="f-details" name="Project Details" placeholder="Material, quantity, tolerance, delivery timeline…"></textarea></div>
-      <div class="ffield"><label for="f-file">Drawing / Spec (PDF, DXF, DWG, STEP, JPG)</label><input id="f-file" name="attachment" type="file" accept=".pdf,.dxf,.dwg,.jpg,.jpeg,.png,.step,.stp"/></div>
+      <div class="ffield"><label for="f-file">Drawing / Spec (PDF, DXF, DWG, STEP, JPG &middot; max 10&nbsp;MB)</label><input id="f-file" name="attachment" type="file" accept=".pdf,.dxf,.dwg,.jpg,.jpeg,.png,.step,.stp"/><p class="ferr" id="f-file-err" hidden></p></div>
       <label class="consent">
         <input type="checkbox" name="Consent" value="Yes" required/>
         <span>I agree that JMC Engineering may use these details to respond to my enquiry. Drawings are treated as confidential and are never shared.</span>
       </label>
-      <button class="btn-submit" type="submit">
+      <button class="btn-submit" id="f-submit" type="submit">
         <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
         Send Enquiry
       </button>
@@ -1003,7 +988,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
         <li><a href="#works">Sample Works</a></li>
         <li><a href="#machinery">Machinery</a></li>
         <li><a href="#process">How We Work</a></li>
-        <li><a href="#insights">Insights</a></li>
       </ul>
     </nav>
     <nav class="f-col" aria-label="Engineering resources">
@@ -1011,8 +995,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
       <ul>
         <li><a href="drill-calculator.html">Drill &amp; Tolerance Calculator</a></li>
         <li><a href="weight-calculator.html">Material Weight Calculator</a></li>
-        <li><a href="blog-progressive-dies.html">Progressive Die Design</a></li>
-        <li><a href="blog-msme-toolmakers.html">MSME Toolmakers in India</a></li>
+
         <li><a href="#contact">Get a Quote</a></li>
       </ul>
     </nav>
@@ -1091,6 +1074,16 @@ function toggleMenu(force) {
 burger.addEventListener('click', () => toggleMenu());
 menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleMenu(false)));
 addEventListener('keydown', e => { if (e.key === 'Escape' && menu.classList.contains('open')) { toggleMenu(false); burger.focus(); } });
+
+/* ── WHATSAPP FLOAT — held back until the visitor is past the hero, so it
+      never sits on top of the key facts on a phone ── */
+(function () {
+  const wa = document.getElementById('wa-float');
+  if (!wa) return;
+  const show = () => wa.classList.toggle('on', scrollY > 520);
+  show();
+  addEventListener('scroll', show, { passive: true });
+})();
 
 /* ── SCROLL REVEAL ── */
 const io = new IntersectionObserver(es => {
@@ -1195,21 +1188,67 @@ document.querySelectorAll('.rv,.rv-l,.rv-r').forEach(el => io.observe(el));
    Reads manifest.json straight from blob storage: no API call,
    no cost, and the order is exactly what was set in /admin.
    ══════════════════════════════════════════════════════════════ */
+/* Shown when blob storage has nothing yet: the real photographs that are
+   already in the repository, rather than a note telling visitors we have
+   nothing to show. */
+const LOCAL_WORKS = [
+  { src: 'work-1.jpg', label: 'Jig fixture assembly' },
+  { src: 'work-2.jpg', label: 'Press tool detail' }
+];
+
 (async function () {
   const grid = document.getElementById('works-grid');
   const note = document.getElementById('works-note');
   if (!grid) return;
 
-  let photos = [];
-  try {
-    const r = await fetch(`${BLOB_BASE}/manifest.json`, { cache: 'no-cache' });
-    if (r.ok) photos = (await r.json()).photos || [];
-  } catch { /* leave the note in place */ }
+  function renderLocal() {
+    if (!LOCAL_WORKS.length) return;
+    note?.remove();
+    LOCAL_WORKS.forEach((p, i) => {
+      const card = document.createElement('div');
+      card.className = 'work-item rv';
+      card.style.transitionDelay = (i * .08) + 's';
+      const img = new Image();
+      img.src = p.src;
+      img.alt = p.label + ' manufactured by JMC Engineering, Chennai';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      card.append(img, Object.assign(document.createElement('div'), { className: 'work-ol' }));
+      const lb = document.createElement('div');
+      lb.className = 'work-lb';
+      lb.innerHTML = '<span></span><small>JMC-' + String(i + 1).padStart(2, '0') + '</small>';
+      lb.firstChild.textContent = p.label;
+      card.appendChild(lb);
+      grid.appendChild(card);
+      io.observe(card);
+    });
+    const box = document.getElementById('about-visual');
+    if (box) {
+      const img = new Image();
+      /* Deliberately NOT lazy: the element is detached until it loads, and a
+         lazy detached image is never in a viewport, so it never loads at all. */
+      img.decoding = 'async';
+      img.alt = 'JMC Engineering tool room, Padi, Chennai';
+      img.onload = () => { box.querySelector('.ph')?.remove(); box.prepend(img); };
+      img.src = LOCAL_WORKS[0].src;
+    }
+    measure();
+  }
 
-  if (!photos.length) return;
+  let photos = [];
+  /* Only reach for blob storage once a real account name is configured —
+     otherwise every visitor pays for a DNS lookup that can never resolve. */
+  if (STORAGE_ACCOUNT && !/^REPLACE_WITH/.test(STORAGE_ACCOUNT)) {
+    try {
+      const r = await fetch(`${BLOB_BASE}/manifest.json`, { cache: 'no-cache' });
+      if (r.ok) photos = (await r.json()).photos || [];
+    } catch { /* fall through to the local set below */ }
+  }
+
+  if (!photos.length) { renderLocal(); return; }
 
   photos.sort((a, b) => (b.featured === true) - (a.featured === true) || (a.order ?? 0) - (b.order ?? 0));
-  note.remove();
+  note?.remove();
 
   const frag = document.createDocumentFragment();
   photos.forEach((p, i) => {
@@ -1240,12 +1279,50 @@ document.querySelectorAll('.rv,.rv-l,.rv-r').forEach(el => io.observe(el));
   const box = document.getElementById('about-visual');
   if (hero && box) {
     const img = new Image();
-    img.src = `${BLOB_BASE}/${hero.id}.webp`;
+    /* Not lazy — see the note in renderLocal(); a detached lazy image never loads. */
+    img.decoding = 'async';
     img.alt = `${hero.label} — JMC Engineering tool room, Padi, Chennai`;
-    img.loading = 'lazy';
     img.onload = () => { box.querySelector('.ph')?.remove(); box.prepend(img); };
+    img.src = `${BLOB_BASE}/${hero.id}.webp`;
   }
   measure();
+})();
+
+/* ── ENQUIRY FORM — size-check attachments and show a sending state, so a
+      slow upload never looks like a dead button ── */
+(function () {
+  const form = document.getElementById('enquiry-form');
+  if (!form) return;
+  const file = document.getElementById('f-file');
+  const err  = document.getElementById('f-file-err');
+  const btn  = document.getElementById('f-submit');
+  const MAX  = 10 * 1024 * 1024;
+
+  function tooBig() {
+    const f = file && file.files && file.files[0];
+    return !!(f && f.size > MAX);
+  }
+  function showErr(on, name, mb) {
+    if (!err) return;
+    err.hidden = !on;
+    if (on) err.textContent = name + ' is ' + mb + ' MB. Please attach a file under 10 MB, ' +
+      'or email it to info@jmcengg.com and we will match it to your enquiry.';
+  }
+  if (file) file.addEventListener('change', function () {
+    const f = file.files[0];
+    showErr(tooBig(), f ? f.name : '', f ? (f.size / 1048576).toFixed(1) : 0);
+  });
+
+  form.addEventListener('submit', function (e) {
+    if (tooBig()) {
+      e.preventDefault();
+      const f = file.files[0];
+      showErr(true, f.name, (f.size / 1048576).toFixed(1));
+      err.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      return;
+    }
+    if (btn) { btn.disabled = true; btn.classList.add('sending'); btn.lastChild.textContent = ' Sending your enquiry\u2026'; }
+  });
 })();
 
 /* ── VLOG — the section stays hidden until real IDs are pasted in ── */
