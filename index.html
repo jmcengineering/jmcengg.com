@@ -410,6 +410,9 @@ footer{background:var(--ink);padding:54px 6% 26px;border-top:1px solid var(--hai
 .f-col ul{list-style:none;display:flex;flex-direction:column;gap:9px;}
 .f-col a{color:var(--txt-inv-mut);font-size:13px;text-decoration:none;transition:color .25s;}
 .f-col a:hover{color:#fff;}
+.f-legal{display:flex;gap:18px;flex-wrap:wrap;}
+.f-legal a{color:var(--txt-inv-mut);text-decoration:none;transition:color .2s;}
+.f-legal a:hover{color:var(--line);}
 .f-bot{border-top:1px solid var(--hairline-inv);padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-family:var(--font-m);font-size:10.5px;color:var(--txt-inv-mut);letter-spacing:.4px;}
 
 /* ═══════════════════ FLOATS ═══════════════════ */
@@ -955,7 +958,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
       <div class="ffield"><label for="f-file">Drawing / Spec (PDF, DXF, DWG, STEP, JPG &middot; max 10&nbsp;MB)</label><input id="f-file" name="attachment" type="file" accept=".pdf,.dxf,.dwg,.jpg,.jpeg,.png,.step,.stp"/><p class="ferr" id="f-file-err" hidden></p></div>
       <label class="consent">
         <input type="checkbox" name="Consent" value="Yes" required/>
-        <span>I agree that JMC Engineering may use these details to respond to my enquiry. Drawings are treated as confidential and are never shared.</span>
+        <span>I agree that JMC Engineering may use these details to respond to my enquiry. Drawings are treated as confidential and are never shared — see our <a href="privacy-policy.html" target="_blank" rel="noopener">Privacy Policy</a>.</span>
       </label>
       <button class="btn-submit" id="f-submit" type="submit">
         <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
@@ -995,6 +998,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
       <ul>
         <li><a href="drill-calculator.html">Drill &amp; Tolerance Calculator</a></li>
         <li><a href="weight-calculator.html">Material Weight Calculator</a></li>
+        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+        <li><a href="terms.html">Terms of Use</a></li>
 
         <li><a href="#contact">Get a Quote</a></li>
       </ul>
@@ -1002,6 +1007,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   </div>
   <div class="f-bot">
     <span>© <span id="yr">2026</span> JMC ENGINEERING · #17/9 ASAI THAMBI ST, TMP NAGAR, PADI, CHENNAI – 600050</span>
+    <nav class="f-legal" aria-label="Legal">
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Use</a>
+    </nav>
     <span>GSTIN 33AXRPJ5951H1Z5 · UDYAM-TN-02-004828</span>
   </div>
 </footer>
