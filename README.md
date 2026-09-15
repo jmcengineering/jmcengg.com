@@ -15,22 +15,32 @@ from data files; everything hand-written predates that and is served as-is.
 ```
 src/
   data/           capabilities.js, industries.js — one object per page
-  layouts/        Page.astro — head, meta, JSON-LD, nav, footer
-  pages/          the routes Astro generates
-  styles/         site.css — shared styling for generated pages
+  layouts/        Page.astro — head, meta, JSON-LD, nav, footer (section pages)
+  pages/          index.astro (homepage) + the generated routes
+  scripts/        home.js — homepage behaviour
+  styles/         home.css (homepage) · site.css (section pages)
 public/           copied to the output untouched
-  index.html      the homepage (hand-written, all CSS/JS inline)
   *-calculator.html, blog-*.html, privacy-policy.html, terms.html, …
 scripts/          check-placeholders.sh — build gate
 dist/             build output (gitignored)
 ```
 
-**Why the split.** The homepage, calculators, blog posts and legal pages were
-written by hand and work. Rewriting them to add section pages would have risked
-breaking what already earns enquiries, so they sit in `public/` and pass
-straight through. New pages are built properly with shared components. The
-homepage gets migrated into Astro next; until then its header and footer are
-maintained in two places, which is the one known cost of this arrangement.
+**Where the migration has got to.** The homepage is now `src/pages/index.astro`
+rather than a 92 KB hand-written file in `public/`; its CSS and JS are real
+files that a browser caches and a person can edit without scrolling through
+markup. The markup itself was moved, not rewritten — page height, section list,
+nav targets, form action and element counts are byte-identical to the version
+that was live before the move, at both 1280px and 390px.
+
+The calculators, blog posts and legal pages are still hand-written HTML in
+`public/`, and that is fine: nothing is duplicated between them.
+
+**What is still duplicated.** The nav and footer exist twice — once in
+`src/pages/index.astro`, once in `src/layouts/Page.astro`. Unifying them is the
+next step and needs `home.css` and `site.css` reconciled first: both define
+`:root`, `.nav-brand`, `.nav-cta`, `.btn-p` and `.btn-o`, so loading both on one
+page collides. That reconciliation is a reviewable change of its own, not
+something to slip into a move.
 
 ## Running it
 

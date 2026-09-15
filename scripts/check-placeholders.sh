@@ -7,47 +7,74 @@
 # told visitors the portfolio was "being photographed". Both were live for
 # months. This check exists so a third one cannot happen quietly.
 #
-# Known exceptions are listed below with a reason and an owner. An exception
-# is a debt, not a decision — delete the line the moment it is resolved.
+# Exceptions are keyed to the placeholder VALUE, not to a filename. Filenames
+# move: REPLACE_WITH_YOUR_STORAGE_ACCOUNT lived in index.html until the
+# homepage moved into Astro, at which point it was bundled into a hashed
+# /_astro/*.js and a filename-keyed exception stopped matching. A value-keyed
+# one keeps working wherever the bundler puts it.
 
 set -euo pipefail
 DIST="${1:-dist}"
 
-PATTERNS='REPLACE_WITH|REPLACE:|\[REPLACE|lorem ipsum|TODO_BEFORE_LAUNCH|YOUR_.*_HERE'
+# Each alternative captures the WHOLE placeholder token, not just its prefix.
+# A pattern of bare 'REPLACE_WITH' extracts only those 12 characters from
+# REPLACE_WITH_YOUR_STORAGE_ACCOUNT, so an exception listing the full name can
+# never match what was extracted - the bug this comment replaces.
+PATTERNS='REPLACE_WITH[A-Za-z0-9_]*|REPLACE:|\[REPLACE[^]]*|lorem ipsum|TODO_BEFORE_LAUNCH|YOUR_[A-Za-z0-9_]*_HERE'
 
 # ── Known exceptions ──────────────────────────────────────────────────────
-# blog-post-template.html
-#   A working template, deliberately kept. It carries noindex,nofollow and is
-#   linked from nowhere, so no visitor or crawler reaches it.
+# Each line is one placeholder that is knowingly still in the output, with a
+# reason. An exception is a debt: delete the line when it is resolved.
 #
-# index.html  (REPLACE_WITH_YOUR_STORAGE_ACCOUNT)
-#   OUTSTANDING. The works gallery has no cloud storage configured yet. The
-#   loader detects the placeholder and falls back to the local photographs,
-#   so nothing is broken and no failing request is made — but this line
-#   should be deleted as soon as the storage account exists.
-EXCEPT='blog-post-template.html|^dist/index.html$'
+#   REPLACE_WITH_YOUR_STORAGE_ACCOUNT
+#     OUTSTANDING. The works gallery has no cloud storage configured yet. The
+#     loader tests for this exact string and falls back to the local
+#     photographs, so nothing is broken and no failing request is made. Delete
+#     this exception the moment the storage account exists.
+#   REPLACE_WITH
+#     The loader's own guard - index.html tests /^REPLACE_WITH/ to decide
+#     whether storage is configured. Matched exactly, so a real placeholder
+#     like REPLACE_WITH_YOUR_API_KEY is still caught.
+ALLOWED_VALUES='REPLACE_WITH_YOUR_STORAGE_ACCOUNT|REPLACE_WITH'
 
-hits=$(grep -rIl -E "$PATTERNS" "$DIST" | grep -vE "$EXCEPT" || true)
+# blog-post-template.html is a working template full of [REPLACE: …] markers.
+# It carries noindex,nofollow and is linked from nowhere.
+ALLOWED_FILES='blog-post-template.html'
 
-if [ -n "$hits" ]; then
-  echo "::error::Placeholder text found in build output:"
-  echo "$hits" | while read -r f; do
+fail=0
+
+# ── Gate 1: no placeholder anywhere except the allowed values ─────────────
+while read -r f; do
+  [ -z "$f" ] && continue
+  case "$f" in *$ALLOWED_FILES) continue ;; esac
+  # every match in this file that is NOT an allowed value
+  bad=$(grep -ohIE "$PATTERNS" "$f" | grep -vxE "$ALLOWED_VALUES" || true)
+  if [ -n "$bad" ]; then
+    [ "$fail" -eq 0 ] && echo "::error::Placeholder text found in build output:"
+    fail=1
     echo "  --- $f"
-    grep -noIE ".{0,40}($PATTERNS).{0,40}" "$f" | head -5 | sed 's/^/      …/;s/$/…/'
-  done
+    grep -noIE ".{0,40}($PATTERNS).{0,40}" "$f" | head -3 | sed 's/^/      …/;s/$/…/'
+  fi
+done <<EOF
+$(grep -rIl -E "$PATTERNS" "$DIST" || true)
+EOF
+
+if [ "$fail" -eq 1 ]; then
   echo ""
-  echo "Either fill the placeholder in, or add it to EXCEPT in $0 with a reason."
+  echo "Either fill the placeholder in, or add its value to ALLOWED_VALUES in"
+  echo "$0 with a reason for why it is allowed to ship."
   exit 1
 fi
 
 echo "Placeholder check passed ($(find "$DIST" -name '*.html' | wc -l | tr -d ' ') HTML files scanned)."
 
-# Second gate: an excepted file may carry a placeholder in a config line, but
-# never in text a visitor can read. Needs a real parse — script and style
-# blocks span many lines, and a line-based tool silently passes them through.
-for f in $(grep -rIl -E "$PATTERNS" "$DIST" | grep -E "$EXCEPT" || true); do
-  case "$f" in *blog-post-template.html) continue ;; esac
-  python3 - "$f" "$PATTERNS" <<'PY' || exit 1
+# ── Gate 2: an allowed value may sit in a config line or a script bundle,
+# but must never appear in text a reader can see. Needs a real parse: script
+# and style blocks span many lines, and a line-based tool passes them through.
+while read -r f; do
+  [ -z "$f" ] && continue
+  case "$f" in *$ALLOWED_FILES) continue ;; esac
+  python3 - "$f" "$PATTERNS" <<'PY' || fail=1
 import io, re, sys
 path, patterns = sys.argv[1], sys.argv[2]
 html = io.open(path, encoding='utf-8', errors='replace').read()
@@ -60,6 +87,9 @@ if hits:
     print('::error::%s shows placeholder text to readers: %s' % (path, hits[:3]))
     sys.exit(1)
 PY
-done
+done <<EOF
+$(find "$DIST" -name '*.html')
+EOF
 
+[ "$fail" -eq 1 ] && exit 1
 echo "No placeholder is visible to a reader."
