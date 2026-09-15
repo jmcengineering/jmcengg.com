@@ -65,6 +65,33 @@ push to `main`, and builds (without deploying) on every pull request.
 > **"Deploy from a branch"** to **"GitHub Actions"**. Until it is, Pages keeps
 > serving the old branch contents and the deploy step fails.
 
+### The custom domain is settings state, not just a file
+
+`public/CNAME` contains `jmcengg.com` and is copied to the root of `dist/`.
+**That file alone does not bind the domain.** The binding lives in
+Settings → Pages → Custom domain.
+
+Moving `CNAME` out of the repository root once cleared that setting, and
+`jmcengg.com` started returning *"There isn't a GitHub Pages site here"* —
+a whole-site outage, not a 404, even though the build and deploy had both
+succeeded and DNS was untouched.
+
+If that happens again: Settings → Pages → Custom domain → enter
+`jmcengg.com` → Save, wait for the DNS check, then tick **Enforce HTTPS**
+once the certificate has been issued. Do not add a `base` to
+`astro.config.mjs` to "fix" a 404 — every path on the site is root-absolute
+and correct for the apex domain.
+
+**There are deliberately two CNAME files. Do not delete either.**
+
+| File | Who owns it | What it does |
+|---|---|---|
+| `CNAME` (repo root) | Written by GitHub when you save the custom domain | Records the setting. Deleting it unbinds the domain again. |
+| `public/CNAME` | Ours | Copied into `dist/` so the deployed artifact carries the domain. |
+
+They must hold the same value (`jmcengg.com`). Two identical files in one
+repo looks like a mistake and invites a tidy-up; that tidy-up is an outage.
+
 ### The placeholder gate
 
 `scripts/check-placeholders.sh` fails the build if placeholder text reaches the
