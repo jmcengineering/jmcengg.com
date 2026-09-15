@@ -1,0 +1,15 @@
+{
+  "name": "jmcengg-com",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Website for JMC Engineering, precision tool room, Padi, Chennai",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "devDependencies": {
+    "astro": "^7.3.2"
+  }
+}

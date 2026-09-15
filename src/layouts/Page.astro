@@ -1,0 +1,183 @@
+---
+import '../styles/site.css';
+import { capabilities } from '../data/capabilities.js';
+import { industries } from '../data/industries.js';
+
+const {
+  title,
+  description,
+  crumbs = [],
+  jsonld = [],
+  ogImage = '/og-cover.png',
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+/* LocalBusiness is repeated on every page deliberately: each of these pages
+   can be someone's first landing page from search, and Google reads the
+   business details from whichever page it indexed. */
+const business = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  '@id': 'https://jmcengg.com/#business',
+  name: 'JMC Engineering',
+  description:
+    'Precision tool room in Padi, Chennai making jig fixtures, press tools, progressive dies, plastic moulds and gauges.',
+  url: 'https://jmcengg.com/',
+  telephone: '+917305187874',
+  email: 'info@jmcengg.com',
+  image: 'https://jmcengg.com/og-cover.png',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '#17/9 Asai Thambi Street, TMP Nagar, Padi',
+    addressLocality: 'Chennai',
+    addressRegion: 'Tamil Nadu',
+    postalCode: '600050',
+    addressCountry: 'IN',
+  },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      opens: '09:00',
+      closes: '18:00',
+    },
+  ],
+};
+
+const breadcrumbLd = crumbs.length
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: crumbs.map((c, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: c.label,
+        item: new URL(c.href, Astro.site).href,
+      })),
+    }
+  : null;
+
+const graphs = [business, breadcrumbLd, ...jsonld].filter(Boolean);
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="author" content="JMC Engineering" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <link rel="canonical" href={canonical} />
+  <link rel="icon" type="image/png" href="/logo.png" />
+  <link rel="apple-touch-icon" href="/logo.png" />
+  <meta name="theme-color" content="#081530" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={new URL(ogImage, Astro.site).href} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="JMC Engineering" />
+  <meta property="og:locale" content="en_IN" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={new URL(ogImage, Astro.site).href} />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+
+  {graphs.map((g) => (
+    <script type="application/ld+json" set:html={JSON.stringify(g)} />
+  ))}
+</head>
+<body>
+
+<nav class="nav" aria-label="Main">
+  <div class="nav-in">
+    <a class="nav-brand" href="/"><img src="/logo.png" alt="" width="31" height="31" />JMC <span>Engineering</span></a>
+    <div class="nav-links">
+      <a href="/capabilities/">Capabilities</a>
+      <a href="/industries/">Industries</a>
+      <a href="/#works">Works</a>
+      <a href="/#process">Process</a>
+      <a href="/#insights">Insights</a>
+      <a href="/#contact">Contact</a>
+    </div>
+    <a class="nav-cta" href="/#contact">Get a Quote</a>
+  </div>
+</nav>
+
+<slot />
+
+<footer class="foot">
+  <div class="foot-in">
+    <div>
+      <a class="nav-brand" href="/"><img src="/logo.png" alt="" width="31" height="31" />JMC <span>Engineering</span></a>
+      <p style="margin-top:12px;font-size:14px;max-width:38ch;">
+        Precision tooling specialists in Padi, Chennai. Jigs, fixtures, press tools,
+        moulds and gauges for manufacturers across India.
+      </p>
+      <p class="contact-line">
+        <a href="tel:+917305187874">+91 73051 87874</a><br />
+        <a href="mailto:info@jmcengg.com">info@jmcengg.com</a><br />
+        Mon–Sat · 9:00–18:00 IST
+      </p>
+    </div>
+    <div>
+      <h4>Capabilities</h4>
+      <ul>
+        {capabilities.map((c) => (
+          <li><a href={`/capabilities/${c.slug}/`}>{c.nav}</a></li>
+        ))}
+      </ul>
+    </div>
+    <div>
+      <h4>Industries</h4>
+      <ul>
+        {industries.map((i) => (
+          <li><a href={`/industries/${i.slug}/`}>{i.nav}</a></li>
+        ))}
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bot">
+    <span>© <span id="yr">2026</span> JMC ENGINEERING · PADI, CHENNAI – 600050</span>
+    <span><a href="/privacy-policy.html">Privacy Policy</a> · <a href="/terms.html">Terms of Use</a></span>
+    <span>GSTIN 33AXRPJ5951H1Z5 · UDYAM-TN-02-004828</span>
+  </div>
+</footer>
+
+<script>
+  document.documentElement.classList.add('js-on');
+  const y = document.getElementById('yr');
+  if (y) y.textContent = String(new Date().getFullYear());
+
+  /* Reveal on scroll, matching the homepage. Scoped to .js-on above so a
+     script failure leaves everything visible rather than blank. */
+  const els = document.querySelectorAll('.rv');
+  if (els.length) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add('in-view');
+            io.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    els.forEach((el) => io.observe(el));
+  }
+</script>
+</body>
+</html>

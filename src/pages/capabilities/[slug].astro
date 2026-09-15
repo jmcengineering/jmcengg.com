@@ -1,0 +1,179 @@
+---
+import Page from '../../layouts/Page.astro';
+import { capabilities } from '../../data/capabilities.js';
+import { bySlug as industryBySlug } from '../../data/industries.js';
+
+export function getStaticPaths() {
+  return capabilities.map((c) => ({ params: { slug: c.slug }, props: { cap: c } }));
+}
+
+const { cap } = Astro.props;
+
+const related = cap.industries.map((s) => industryBySlug[s]).filter(Boolean);
+const others = capabilities.filter((c) => c.slug !== cap.slug);
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: cap.faq.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
+const serviceLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  serviceType: cap.h1,
+  name: cap.h1,
+  description: cap.summary,
+  provider: { '@id': 'https://jmcengg.com/#business' },
+  areaServed: { '@type': 'Country', name: 'India' },
+};
+---
+<Page
+  title={cap.title}
+  description={cap.description}
+  crumbs={[
+    { label: 'Home', href: '/' },
+    { label: 'Capabilities', href: '/capabilities/' },
+    { label: cap.nav, href: `/capabilities/${cap.slug}/` },
+  ]}
+  jsonld={[serviceLd, faqLd]}
+>
+
+  <header class="band">
+    <div class="band-in">
+      <nav class="crumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> <span>/</span> <a href="/capabilities/">Capabilities</a> <span>/</span> <span>{cap.nav}</span>
+      </nav>
+      <h1>{cap.h1}</h1>
+      <p class="lede">{cap.summary}</p>
+      <div class="band-acts">
+        <a class="btn btn-p" href="/#contact">Send your drawing</a>
+        <a class="btn btn-o" href="tel:+917305187874">Call the tool room</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="cols">
+
+      <div>
+        <section class="block prose">
+          {cap.intro.map((p) => <p>{p}</p>)}
+        </section>
+
+        <section class="block rv">
+          <p class="eyebrow">What we build</p>
+          <h2>Tooling we make</h2>
+          <ul class="ticks" style="margin-top:18px">
+            {cap.makes.map((m) => <li>{m}</li>)}
+          </ul>
+        </section>
+
+        <section class="block rv">
+          <p class="eyebrow">Specification</p>
+          <h2>How it is built</h2>
+          <table class="specs" style="margin-top:18px">
+            <tbody>
+              {cap.specs.map(([k, v]) => (
+                <tr><th scope="row">{k}</th><td>{v}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+
+        <section class="block rv">
+          <p class="eyebrow">Process</p>
+          <h2>From your drawing to a working tool</h2>
+          <ol class="steps" style="margin-top:22px">
+            {cap.process.map(([t, d]) => (
+              <li><b>{t}</b><span>{d}</span></li>
+            ))}
+          </ol>
+        </section>
+
+        <section class="block rv">
+          <p class="eyebrow">Questions</p>
+          <h2>Common questions</h2>
+          <div class="faq" style="margin-top:18px">
+            {cap.faq.map((f, i) => (
+              <details open={i === 0}>
+                <summary>{f.q}</summary>
+                <p>{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      </div>
+
+      <aside class="aside">
+        <div class="panel dark">
+          <h3>What to send us</h3>
+          <ul class="ticks">
+            {cap.send.map((s) => <li>{s}</li>)}
+          </ul>
+          <a class="btn btn-p" href="/#contact">Get a 24-hour review</a>
+          <p class="contact-line">
+            Or send it directly:<br />
+            <a href="mailto:info@jmcengg.com">info@jmcengg.com</a><br />
+            <a href="https://wa.me/917305187874" target="_blank" rel="noopener">WhatsApp +91 73051 87874</a>
+          </p>
+        </div>
+
+        {related.length > 0 && (
+          <div class="panel">
+            <h3>Who we build this for</h3>
+            <ul class="ticks">
+              {related.map((r) => (
+                <li><a href={`/industries/${r.slug}/`}>{r.h1.replace(/^Tooling for /, '')}</a></li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div class="panel">
+          <h3>Free engineering tools</h3>
+          <ul class="ticks">
+            <li><a href="/drill-calculator.html">Drill &amp; tolerance calculator</a></li>
+            <li><a href="/weight-calculator.html">Material weight calculator</a></li>
+          </ul>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+
+  <section class="rel">
+    <div class="wrap">
+      <p class="eyebrow">More from the tool room</p>
+      <h2>Other capabilities</h2>
+      <div class="grid" style="margin-top:22px">
+        {others.map((o) => (
+          <a class="card" href={`/capabilities/${o.slug}/`}>
+            <h3>{o.h1}</h3>
+            <p>{o.summary}</p>
+            <span class="go">View capability →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="wrap">
+      <h2>Send a drawing. Get an engineering view in 24 hours.</h2>
+      <p>
+        A real engineer reads it — not an autoresponder. We will tell you whether the tool
+        can be built as drawn, and what we would change to bring the cost down.
+      </p>
+      <div class="band-acts">
+        <a class="btn btn-p" href="/#contact">Send your drawing</a>
+        <a class="btn btn-o" href="/capabilities/">All capabilities</a>
+      </div>
+    </div>
+  </section>
+
+</Page>

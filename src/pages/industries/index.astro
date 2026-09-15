@@ -1,0 +1,66 @@
+---
+import Page from '../../layouts/Page.astro';
+import { industries } from '../../data/industries.js';
+import { capabilities } from '../../data/capabilities.js';
+---
+<Page
+  title="Industries We Serve | Automotive, Two-Wheeler, Sheet Metal — JMC Engineering"
+  description="Tooling for automotive Tier-1 and Tier-2, two-wheeler OEM supply chain, sheet metal and stamping, plastic moulding, general engineering and industrial automation."
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Industries', href: '/industries/' }]}
+>
+  <header class="band">
+    <div class="band-in">
+      <nav class="crumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> <span>/</span> <span>Industries</span>
+      </nav>
+      <h1>Who we build for</h1>
+      <p class="lede">
+        Every sector asks the tool room for something slightly different. These pages say
+        what each one actually needs, and what we change in the design because of it.
+      </p>
+      <div class="band-acts">
+        <a class="btn btn-p" href="/#contact">Send your drawing</a>
+        <a class="btn btn-o" href="/capabilities/">What we build</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap" style="padding-block:52px">
+    <div class="grid">
+      {industries.map((i) => (
+        <a class="card rv" href={`/industries/${i.slug}/`}>
+          <h3>{i.h1.replace(/^Tooling for /, '')}</h3>
+          <p>{i.summary}</p>
+          <span class="go">View sector →</span>
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <section class="rel">
+    <div class="wrap">
+      <p class="eyebrow">By capability</p>
+      <h2>What we build</h2>
+      <div class="grid" style="margin-top:22px">
+        {capabilities.map((c) => (
+          <a class="card" href={`/capabilities/${c.slug}/`}>
+            <h3>{c.h1}</h3>
+            <p>{c.summary}</p>
+            <span class="go">View capability →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="wrap">
+      <h2>Working in a sector that is not listed?</h2>
+      <p>Send the drawing anyway. Most tooling problems look familiar once we see the part.</p>
+      <div class="band-acts">
+        <a class="btn btn-p" href="/#contact">Send your drawing</a>
+        <a class="btn btn-o" href="tel:+917305187874">Call the tool room</a>
+      </div>
+    </div>
+  </section>
+</Page>
