@@ -1,0 +1,66 @@
+---
+import Page from '../../layouts/Page.astro';
+import { capabilities } from '../../data/capabilities.js';
+import { industries } from '../../data/industries.js';
+---
+<Page
+  title="Capabilities | Press Tools, Jig Fixtures, Moulds & Gauges — JMC Engineering, Chennai"
+  description="What our Padi, Chennai tool room builds: press tools and dies, jig fixtures, plastic injection moulds, gauges and SPM, forming tools and precision machining."
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Capabilities', href: '/capabilities/' }]}
+>
+  <header class="band">
+    <div class="band-in">
+      <nav class="crumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> <span>/</span> <span>Capabilities</span>
+      </nav>
+      <h1>What we build</h1>
+      <p class="lede">
+        Six things, done properly, in one tool room in Padi. Each page below says how the
+        tooling is built, what it is built from, and what we need from you to quote it.
+      </p>
+      <div class="band-acts">
+        <a class="btn btn-p" href="/#contact">Send your drawing</a>
+        <a class="btn btn-o" href="/industries/">Industries we serve</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap" style="padding-block:52px">
+    <div class="grid">
+      {capabilities.map((c) => (
+        <a class="card rv" href={`/capabilities/${c.slug}/`}>
+          <h3>{c.h1}</h3>
+          <p>{c.summary}</p>
+          <span class="go">View capability →</span>
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <section class="rel">
+    <div class="wrap">
+      <p class="eyebrow">By sector</p>
+      <h2>Industries we serve</h2>
+      <div class="grid" style="margin-top:22px">
+        {industries.map((i) => (
+          <a class="card" href={`/industries/${i.slug}/`}>
+            <h3>{i.nav}</h3>
+            <p>{i.summary}</p>
+            <span class="go">View sector →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="wrap">
+      <h2>Not sure which of these you need?</h2>
+      <p>Send the component drawing and we will tell you. That is the review, and it is free.</p>
+      <div class="band-acts">
+        <a class="btn btn-p" href="/#contact">Send your drawing</a>
+        <a class="btn btn-o" href="tel:+917305187874">Call the tool room</a>
+      </div>
+    </div>
+  </section>
+</Page>

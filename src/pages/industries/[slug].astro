@@ -1,0 +1,156 @@
+---
+import Page from '../../layouts/Page.astro';
+import { industries } from '../../data/industries.js';
+import { bySlug as capBySlug } from '../../data/capabilities.js';
+
+export function getStaticPaths() {
+  return industries.map((i) => ({ params: { slug: i.slug }, props: { ind: i } }));
+}
+
+const { ind } = Astro.props;
+
+const caps = ind.caps.map((s) => capBySlug[s]).filter(Boolean);
+const others = industries.filter((i) => i.slug !== ind.slug);
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: ind.faq.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+<Page
+  title={ind.title}
+  description={ind.description}
+  crumbs={[
+    { label: 'Home', href: '/' },
+    { label: 'Industries', href: '/industries/' },
+    { label: ind.nav, href: `/industries/${ind.slug}/` },
+  ]}
+  jsonld={[faqLd]}
+>
+
+  <header class="band">
+    <div class="band-in">
+      <nav class="crumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> <span>/</span> <a href="/industries/">Industries</a> <span>/</span> <span>{ind.nav}</span>
+      </nav>
+      <h1>{ind.h1}</h1>
+      <p class="lede">{ind.summary}</p>
+      <div class="band-acts">
+        <a class="btn btn-p" href="/#contact">Send your drawing</a>
+        <a class="btn btn-o" href="tel:+917305187874">Call the tool room</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="cols">
+
+      <div>
+        <section class="block prose">
+          {ind.intro.map((p) => <p>{p}</p>)}
+        </section>
+
+        <section class="block rv">
+          <p class="eyebrow">What this sector needs</p>
+          <h2>What we design for</h2>
+          <ul class="ticks" style="margin-top:18px">
+            {ind.needs.map(([t, d]) => (
+              <li><b>{t}</b> — {d}</li>
+            ))}
+          </ul>
+        </section>
+
+        <section class="block rv">
+          <p class="eyebrow">Typical work</p>
+          <h2>What we build for this sector</h2>
+          <ul class="ticks" style="margin-top:18px">
+            {ind.typical.map((t) => <li>{t}</li>)}
+          </ul>
+        </section>
+
+        <section class="block rv">
+          <p class="eyebrow">Questions</p>
+          <h2>Common questions</h2>
+          <div class="faq" style="margin-top:18px">
+            {ind.faq.map((f, i) => (
+              <details open={i === 0}>
+                <summary>{f.q}</summary>
+                <p>{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      </div>
+
+      <aside class="aside">
+        <div class="panel dark">
+          <h3>Talk to the tool room</h3>
+          <p style="color:var(--txt-inv-mut);font-size:14.5px;">
+            Send a drawing and you get an engineering view back within 24 working hours —
+            including anything we would change to bring the cost down.
+          </p>
+          <a class="btn btn-p" href="/#contact">Send your drawing</a>
+          <p class="contact-line">
+            <a href="mailto:info@jmcengg.com">info@jmcengg.com</a><br />
+            <a href="https://wa.me/917305187874" target="_blank" rel="noopener">WhatsApp +91 73051 87874</a><br />
+            Mon–Sat · 9:00–18:00 IST
+          </p>
+        </div>
+
+        <div class="panel">
+          <h3>Capabilities used here</h3>
+          <ul class="ticks">
+            {caps.map((c) => (
+              <li><a href={`/capabilities/${c.slug}/`}>{c.h1}</a></li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="panel">
+          <h3>Free engineering tools</h3>
+          <ul class="ticks">
+            <li><a href="/drill-calculator.html">Drill &amp; tolerance calculator</a></li>
+            <li><a href="/weight-calculator.html">Material weight calculator</a></li>
+          </ul>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+
+  <section class="rel">
+    <div class="wrap">
+      <p class="eyebrow">Also served</p>
+      <h2>Other industries</h2>
+      <div class="grid" style="margin-top:22px">
+        {others.map((o) => (
+          <a class="card" href={`/industries/${o.slug}/`}>
+            <h3>{o.nav}</h3>
+            <p>{o.summary}</p>
+            <span class="go">View sector →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="wrap">
+      <h2>Send a drawing. Get an engineering view in 24 hours.</h2>
+      <p>
+        MSME registered, GST compliant, and building tooling in Padi since 2020 under a
+        founder with 30+ years across Singapore and Chennai.
+      </p>
+      <div class="band-acts">
+        <a class="btn btn-p" href="/#contact">Send your drawing</a>
+        <a class="btn btn-o" href="/capabilities/">All capabilities</a>
+      </div>
+    </div>
+  </section>
+
+</Page>

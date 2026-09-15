@@ -3,54 +3,95 @@
 Website for **JMC Engineering** — a precision tool room in Padi, Chennai making
 jig fixtures, press tools, progressive dies, plastic moulds and gauges.
 
-Live at <https://jmcengg.com> · served by GitHub Pages from `main` (see `CNAME`).
+Live at <https://jmcengg.com>.
 
 ---
 
-## What's in here
+## How this repo is put together
 
-A hand-written static site. No build step, no framework, no dependencies —
-open any `.html` file in a browser and it works.
+An [Astro](https://astro.build) static site. The section pages are generated
+from data files; everything hand-written predates that and is served as-is.
 
-| File | What it is |
-|---|---|
-| `index.html` | The whole marketing site. All CSS and JS are inline. |
-| `drill-calculator.html` | Free tool — drill sizes and fit tolerances |
-| `weight-calculator.html` | Free tool — material weight by shape and grade |
-| `thanks.html` | Where the enquiry form lands after a successful send |
-| `404.html` | Not-found page |
-| `privacy-policy.html` | Privacy notice (DPDP Act 2023) |
-| `terms.html` | Terms of use |
-| `legal.css` | Shared styling for the two legal pages |
-| `og-cover.png` | 1200×630 social preview, generated from the hero drawing |
-| `sitemap.xml` · `robots.txt` | Search engine files |
-| `logo.png` · `work-1.jpg` · `work-2.jpg` | Images |
-
-## Running it locally
-
-```bash
-python3 -m http.server 8000
-# then open http://localhost:8000
+```
+src/
+  data/           capabilities.js, industries.js — one object per page
+  layouts/        Page.astro — head, meta, JSON-LD, nav, footer
+  pages/          the routes Astro generates
+  styles/         site.css — shared styling for generated pages
+public/           copied to the output untouched
+  index.html      the homepage (hand-written, all CSS/JS inline)
+  *-calculator.html, blog-*.html, privacy-policy.html, terms.html, …
+scripts/          check-placeholders.sh — build gate
+dist/             build output (gitignored)
 ```
 
-Use a server rather than opening the file directly — `file://` breaks the
-gallery loader and relative paths.
+**Why the split.** The homepage, calculators, blog posts and legal pages were
+written by hand and work. Rewriting them to add section pages would have risked
+breaking what already earns enquiries, so they sit in `public/` and pass
+straight through. New pages are built properly with shared components. The
+homepage gets migrated into Astro next; until then its header and footer are
+maintained in two places, which is the one known cost of this arrangement.
 
-## The two configuration placeholders
+## Running it
 
-### 1. Works gallery storage — not yet set
+```bash
+npm install
+npm run dev      # http://localhost:4321
+npm run build    # -> dist/
+npm run preview  # serve dist/ locally
+```
+
+## Adding a capability or an industry page
+
+Add one object to `src/data/capabilities.js` or `src/data/industries.js`. That
+single edit creates the page, its card on the hub page, its footer nav entry
+and its cross-links from related pages. There is no second place to update.
+
+Each entry drives: the `<title>` and meta description, the H1 and lede, the
+"what we build" list, the spec table, the numbered process, the "what to send
+us" panel, and the FAQ — which is also emitted as FAQ structured data so the
+questions can appear directly in Google results.
+
+**Then add the URL to `public/sitemap.xml`.** That file is still maintained by
+hand; it is the one place adding a page needs a second edit.
+
+## Deploying
+
+`.github/workflows/deploy.yml` builds and publishes to GitHub Pages on every
+push to `main`, and builds (without deploying) on every pull request.
+
+> **One-time setup before the first deploy from `main`:**
+> Settings → Pages → Build and deployment → Source must be changed from
+> **"Deploy from a branch"** to **"GitHub Actions"**. Until it is, Pages keeps
+> serving the old branch contents and the deploy step fails.
+
+### The placeholder gate
+
+`scripts/check-placeholders.sh` fails the build if placeholder text reaches the
+output. This exists because the site has shipped placeholders to real visitors
+twice — a contact form posting to `REPLACE_WITH_YOUR_FORMSUBMIT_HASH` that
+binned every enquiry, and a gallery pointed at
+`REPLACE_WITH_YOUR_STORAGE_ACCOUNT` that told visitors the portfolio was "being
+photographed". Both were live for months.
+
+Exceptions are listed in the script with a reason. **There is one outstanding**:
+the storage account below.
+
+## Outstanding configuration
+
+### Works gallery storage — not yet set
 
 ```js
-// index.html, in the config block at the top of the inline <script>
+// public/index.html, config block at the top of the inline <script>
 const STORAGE_ACCOUNT = 'REPLACE_WITH_YOUR_STORAGE_ACCOUNT';
 ```
 
-Until a real storage account name is set, the gallery skips the network call
-entirely and shows `work-1.jpg` and `work-2.jpg` from this repo. Nothing is
-broken and no failing request is made.
+Until a real account name is set, the loader detects the placeholder, skips the
+network call entirely and shows `work-1.jpg` and `work-2.jpg` from this repo.
+Nothing is broken and no failing request is made.
 
-Once cloud storage exists, put the account name here and upload a
-`manifest.json` to the `works` container:
+Once storage exists, set the name and upload a `manifest.json` to the `works`
+container:
 
 ```json
 { "photos": [
@@ -59,88 +100,64 @@ Once cloud storage exists, put the account name here and upload a
 ] }
 ```
 
-Each entry expects `<id>.webp` in the same container. The first `featured`
-photo also fills the About section image.
+Each entry expects `<id>.webp` alongside it. The first `featured` photo also
+fills the About section image.
 
-### 2. Vlog section — hidden until populated
-
-```js
-const videoConfig = [
-  // { id: 'YOUTUBE_ID_HERE', title: 'Jig Fixture Manufacturing' },
-];
-```
-
-The section stays hidden while this array is empty. Same for the Insights
-section, which is `hidden` in the markup until real blog posts exist.
-
-## The enquiry form
+### Enquiry form
 
 Posts to [FormSubmit](https://formsubmit.co) → `info@jmcengg.com`.
 
-> **One-time activation required.** The first submission triggers a
-> confirmation email to `info@jmcengg.com`. Click the link in it once and
-> every later enquiry is delivered silently. Until that click, nothing
-> arrives.
+> **One-time activation required.** The first submission triggers a confirmation
+> email to that address. Click the link in it once and every later enquiry is
+> delivered silently. Until that click, nothing arrives.
 
-Client-side it checks attachments against a 10 MB limit and shows a sending
-state. `_captcha` is set to `false` deliberately — the interstitial captcha
-page loses real enquiries, and the `_honey` honeypot field plus the required
-consent checkbox handle most bot traffic. Re-enable it by removing that hidden
-input if spam becomes a problem.
+`_captcha` is `false` deliberately — the interstitial captcha page loses real
+enquiries, and the `_honey` honeypot plus the required consent checkbox handle
+most bots. Remove that hidden input to re-enable it.
 
 **Known limitation:** attachments pass through FormSubmit's servers, outside
-India. This is disclosed in the privacy policy, and replacing it with a
-self-hosted form endpoint is planned. Customers under NDA are told to email
-drawings directly instead.
+India. Disclosed in the privacy policy; customers under NDA are told to email
+drawings directly. Replacing this with a self-hosted endpoint is planned.
 
-## Editing content
+### Vlog section
 
-Everything is in `index.html`. The sections, in order:
+Hidden while `videoConfig` in `public/index.html` is empty. Paste real YouTube
+IDs in and it appears.
+
+## Editing the homepage
+
+Everything is in `public/index.html`. Sections in order:
 
 `hero` · `about` · `services` · `machinery` · `works` · `industries` ·
-`process` · `tools` · `insights` (hidden) · `vlog` (hidden) · `credentials` ·
-`contact`
+`process` · `tools` · `insights` · `vlog` (hidden) · `credentials` · `contact`
 
 Business details that appear in more than one place — phone, email, address,
-GSTIN, UDYAM number — are also in the `LocalBusiness` JSON-LD block in
-`<head>`. **If you change a phone number or address, change it there too**, or
-Google will keep showing the old one.
-
-## Restoring the deleted blog posts
-
-Five blog files were deleted on 27 July 2026. They are still in git history:
-
-```bash
-git show 8fb2dfd^:blog-progressive-dies.html    > blog-progressive-dies.html
-git show b4c3a02^:blog-msme-toolmakers.html     > blog-msme-toolmakers.html
-git show acaaae3^:blog-engineering-business.html > blog-engineering-business.html
-git show 4b82ca1^:blog-fixture-mistakes.html    > blog-fixture-mistakes.html
-git show 90db604^:blog-post-template.html       > blog-post-template.html
-```
-
-Then remove `hidden` from `<section id="insights">`, restore the cards, and add
-the URLs back to `sitemap.xml`.
+GSTIN, UDYAM — are also in the `LocalBusiness` JSON-LD in `<head>`, and again
+in `src/layouts/Page.astro` for the generated pages. **Change a phone number or
+address and you must change all three**, or Google will keep showing the old one.
 
 ## Conventions worth keeping
 
 - **Never ship a placeholder to visitors.** A section with no content is
-  `hidden`, not filled with an apology. This is why the works gallery falls
-  back to real photos rather than a "coming soon" note.
-- **Never create a detached image with `loading="lazy"`.** A detached lazy
-  image is never in a viewport, so it never loads. Set `src` last, attach on
-  `onload`. This bug silently broke the About image for months.
-- **Check the title block after editing the hero SVG.** The drawing's title
-  block cells are fixed-width; text that outgrows a cell collides with its
-  neighbour.
+  `hidden`, not filled with an apology. The build gate enforces this.
+- **Never create a detached image with `loading="lazy"`.** A detached lazy image
+  is never in a viewport, so it never loads. Set `src` last and attach on
+  `onload`. This silently broke the About image for months.
+- **Scroll-reveal styles stay scoped to `.js-on`.** A script failure must leave
+  content visible, never blank.
+- **Check the title block after editing the hero SVG.** Its cells are
+  fixed-width; text that outgrows one collides with its neighbour.
 - **Test at 390 px.** Most visitors are on a phone.
 
-## Deploying
+## Restoring older content
 
-Push to `main`. GitHub Pages publishes within a minute or two.
+Five blog files were deleted on 27 July 2026 and restored on 15 September 2026.
+If anything else goes missing, it is recoverable:
 
-A move to Azure Static Web Apps is planned — global CDN, free TLS, preview
-builds per pull request, and a staff admin panel so photos and posts can be
-published without touching this repository.
+```bash
+git log --diff-filter=D --name-only   # find the deleting commit
+git show <sha>^:<path> > <path>       # restore from its parent
+```
 
 ## Licence
 
