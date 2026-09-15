@@ -1,73 +1,13 @@
-/* Homepage behaviour, lifted verbatim out of the inline <script> block in
-   the old public/index.html. Same rule as home.css: moved, not rewritten. */
+/* Homepage-only behaviour. Everything the section pages also need - navbar,
+   mobile menu, floats, reveal, smooth anchors, footer year - moved to
+   chrome.js, which this file imports from. */
 
-'use strict';
+import { reduceMotion, io, measure } from './chrome.js';
 
 /* ═══ CONFIG — set this once after running scripts/azure-setup.sh ═══ */
 const STORAGE_ACCOUNT = 'REPLACE_WITH_YOUR_STORAGE_ACCOUNT';
 const WORKS_CONTAINER = 'works';
 const BLOB_BASE = `https://${STORAGE_ACCOUNT}.blob.core.windows.net/${WORKS_CONTAINER}`;
-
-const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-/* Reveal styles only apply once JS is alive — a script failure can never
-   leave the page invisible now. */
-document.documentElement.classList.add('js-on');
-
-/* ── SCROLL: offsets cached, so no layout read per frame ── */
-const navbar  = document.getElementById('navbar');
-const backTop = document.getElementById('back-top');
-const navAs   = [...document.querySelectorAll('.nav-links a')];
-const secs    = [...document.querySelectorAll('main section[id]')];
-let offsets = [], ticking = false;
-
-function measure() {
-  offsets = secs.map(s => ({ id: s.id, top: s.getBoundingClientRect().top + scrollY }));
-}
-function onScroll() {
-  if (ticking) return;
-  ticking = true;
-  requestAnimationFrame(() => {
-    const y = scrollY;
-    navbar.classList.toggle('scrolled', y > 60);
-    backTop.classList.toggle('show', y > 480);
-    let cur = '';
-    for (const o of offsets) { if (y >= o.top - 120) cur = o.id; }
-    navAs.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
-    ticking = false;
-  });
-}
-addEventListener('scroll', onScroll, { passive: true });
-addEventListener('resize', () => { measure(); onScroll(); }, { passive: true });
-addEventListener('load', measure);
-measure();
-
-backTop.addEventListener('click', () => scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' }));
-
-/* ── MOBILE MENU: Escape closes, label reflects state ── */
-const menu = document.getElementById('mobileMenu');
-const burger = document.getElementById('hamburger');
-function toggleMenu(force) {
-  const open = force !== undefined ? force : !menu.classList.contains('open');
-  menu.classList.toggle('open', open);
-  burger.setAttribute('aria-expanded', String(open));
-  burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-  document.body.style.overflow = open ? 'hidden' : '';
-  if (open) menu.querySelector('a').focus();
-}
-burger.addEventListener('click', () => toggleMenu());
-menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleMenu(false)));
-addEventListener('keydown', e => { if (e.key === 'Escape' && menu.classList.contains('open')) { toggleMenu(false); burger.focus(); } });
-
-/* ── WHATSAPP FLOAT — held back until the visitor is past the hero, so it
-      never sits on top of the key facts on a phone ── */
-(function () {
-  const wa = document.getElementById('wa-float');
-  if (!wa) return;
-  const show = () => wa.classList.toggle('on', scrollY > 520);
-  show();
-  addEventListener('scroll', show, { passive: true });
-})();
 
 /* ── HERO ENTRANCE + STAT COUNTERS ──────────────────────────────────────
       The stats are above the fold, so the counters ride the end of the
@@ -101,11 +41,6 @@ addEventListener('keydown', e => { if (e.key === 'Escape' && menu.classList.cont
   setTimeout(() => wrap.classList.add('hero-in'), 1600);
 })();
 
-/* ── SCROLL REVEAL ── */
-const io = new IntersectionObserver(es => {
-  es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); } });
-}, { threshold: 0.12 });
-document.querySelectorAll('.rv,.rv-l,.rv-r').forEach(el => io.observe(el));
 
 /* ── HERO ROTATOR — slower hold so it is never caught mid-word ── */
 (function () {
@@ -365,11 +300,3 @@ const videoConfig = [
   });
 })();
 
-/* ── SMOOTH ANCHORS + YEAR ── */
-document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', function (e) {
-  const href = this.getAttribute('href');
-  if (href === '#') return;
-  const t = document.querySelector(href);
-  if (t) { e.preventDefault(); t.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' }); }
-}));
-document.getElementById('yr').textContent = new Date().getFullYear();

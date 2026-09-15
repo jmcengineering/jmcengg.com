@@ -14,11 +14,12 @@ from data files; everything hand-written predates that and is served as-is.
 
 ```
 src/
+  components/     Nav, Footer, Floats — the chrome, used by every page
   data/           capabilities.js, industries.js — one object per page
-  layouts/        Page.astro — head, meta, JSON-LD, nav, footer (section pages)
+  layouts/        Page.astro — head, meta and JSON-LD for section pages
   pages/          index.astro (homepage) + the generated routes
-  scripts/        home.js — homepage behaviour
-  styles/         home.css (homepage) · site.css (section pages)
+  scripts/        chrome.js (shared) · home.js (homepage only)
+  styles/         base.css (shared) · home.css · site.css
 public/           copied to the output untouched
   *-calculator.html, blog-*.html, privacy-policy.html, terms.html, …
 scripts/          check-placeholders.sh — build gate
@@ -35,12 +36,26 @@ that was live before the move, at both 1280px and 390px.
 The calculators, blog posts and legal pages are still hand-written HTML in
 `public/`, and that is fine: nothing is duplicated between them.
 
-**What is still duplicated.** The nav and footer exist twice — once in
-`src/pages/index.astro`, once in `src/layouts/Page.astro`. Unifying them is the
-next step and needs `home.css` and `site.css` reconciled first: both define
-`:root`, `.nav-brand`, `.nav-cta`, `.btn-p` and `.btn-o`, so loading both on one
-page collides. That reconciliation is a reviewable change of its own, not
-something to slip into a move.
+**Nothing is duplicated any more.** The nav, footer and floating buttons are
+components in `src/components/`, their styling is in `base.css` and their
+behaviour is in `chrome.js` — all three loaded by every page. A nav change is
+one edit.
+
+The two stylesheets had quietly drifted apart before this: buttons at 14px vs
+13px padding, the eyebrow rule 26px vs 24px, body type 15/1.7 vs 15.5/1.68.
+`base.css` takes the homepage's values as canonical, because that is the
+design that has been live and approved, so the section pages moved onto them.
+The homepage is byte-identical; the section pages shifted by 9–72px in height
+and now match it exactly.
+
+**The section pages gained a working mobile menu.** They never had one — their
+nav links simply vanished below 900px with nothing to open. Sharing the nav
+fixed that by construction, along with the WhatsApp and back-to-top buttons.
+
+One thing to watch when editing `.band`: the shared navbar is `position:fixed`,
+so the first element on a page needs top padding to clear it. The section pages'
+old nav was `position:sticky` and needed none, which is how the breadcrumb ended
+up hidden behind the navbar the first time these were merged.
 
 ## Running it
 
