@@ -1,0 +1,47 @@
+---
+/**
+ * The site navigation, used by every page.
+ *
+ * Anchor targets live on the homepage, so away from it they need a leading
+ * slash: #works on the homepage, /#works everywhere else. Pass home={true}
+ * from the homepage only.
+ *
+ * The mobile menu and hamburger ship with this component. The section pages
+ * previously had neither - their links simply disappeared below 900px with
+ * nothing to open them - so including it here fixes that by construction.
+ */
+const { home = false } = Astro.props;
+const A = home ? '' : '/';
+---
+<nav id="navbar" aria-label="Main navigation">
+  <a href={A + "#hero"} class="nav-logo">
+    <img src="/logo.png" alt="JMC Engineering logo" width="38" height="38"/>
+    <span class="nav-brand">JMC <span>Engineering</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href={A + "#about"}>About</a></li>
+    <li><a href="/capabilities/">Capabilities</a></li>
+    <li><a href="/industries/">Industries</a></li>
+    <li><a href={A + "#works"}>Works</a></li>
+    <li><a href={A + "#process"}>Process</a></li>
+    <li><a href={A + "#tools"}>Tools</a></li>
+    <li><a href={A + "#insights"}>Insights</a></li>
+    <li><a href={A + "#contact"}>Contact</a></li>
+  </ul>
+  <a href={A + "#contact"} class="nav-cta">Get a Quote</a>
+  <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href={A + "#about"}>About</a>
+  <a href="/capabilities/">Capabilities</a>
+  <a href="/industries/">Industries</a>
+  <a href={A + "#works"}>Works</a>
+  <a href={A + "#process"}>Process</a>
+  <a href={A + "#tools"}>Tools</a>
+  <a href={A + "#insights"}>Insights</a>
+  <a href={A + "#contact"} class="m-cta">Get a Quote</a>
+</div>
+

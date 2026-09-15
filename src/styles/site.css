@@ -1,52 +1,19 @@
-/* Shared styling for the generated section pages. Same palette and typefaces
-   as the hand-written homepage, so a visitor moving between them does not
-   feel the seam. When the homepage is migrated into Astro this file becomes
-   the single stylesheet for the whole site. */
-:root{
-  --ink:#081530; --steel:#0D2350; --steel-2:#122E66;
-  --blue:#2563EB; --line:#4D8DFF; --line-dim:rgba(77,141,255,.28);
-  --amber:#F5A623; --paper:#F4F7FC; --white:#FFFFFF;
-  --txt:#16233F; --txt-mut:#54658A;
-  --txt-inv:rgba(235,242,255,.92); --txt-inv-mut:rgba(198,214,244,.66);
-  --hairline:rgba(13,35,80,.12); --hairline-inv:rgba(125,165,235,.18);
-  --r:10px;
-  --shadow:0 6px 30px rgba(8,21,48,.10);
-  --ease:cubic-bezier(.22,.8,.3,1);
-  --font-d:'Chakra Petch',sans-serif;
-  --font-b:'Inter',sans-serif;
-  --font-m:'IBM Plex Mono',monospace;
-}
-*{box-sizing:border-box;}
-html{scroll-behavior:smooth;scroll-padding-top:84px;}
-body{margin:0;background:var(--paper);color:var(--txt);font-family:var(--font-b);
-  font-size:15.5px;line-height:1.68;-webkit-font-smoothing:antialiased;}
+/* Section-page layout: /capabilities/*, /industries/* and their hubs.
+
+   Tokens, reset, nav, footer, floats, buttons, the eyebrow rule and the
+   reveal system all live in base.css now and are NOT repeated here. This
+   file loads after base.css and only adds what these pages need on top. */
 h1,h2,h3,h4{font-family:var(--font-d);margin:0;line-height:1.14;letter-spacing:-.4px;text-wrap:balance;}
 p{margin:0;overflow-wrap:break-word;}
-a{color:var(--blue);}
-img{max-width:100%;}
 .mono{font-family:var(--font-m);}
 
-/* ── nav ── */
-.nav{position:sticky;top:0;z-index:100;background:rgba(8,21,48,.97);backdrop-filter:blur(14px);
-  border-bottom:1px solid var(--hairline-inv);}
-.nav-in{max-width:1180px;margin:0 auto;padding:13px 22px;display:flex;align-items:center;
-  justify-content:space-between;gap:18px;}
-.nav-brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:#fff;
-  font-family:var(--font-d);font-size:18px;font-weight:700;letter-spacing:.3px;flex:none;}
-.nav-brand img{width:31px;height:31px;border-radius:50%;}
-.nav-brand span{color:var(--line);}
-.nav-links{display:none;gap:22px;align-items:center;}
-.nav-links a{color:var(--txt-inv-mut);text-decoration:none;font-size:14px;transition:color .2s;}
-.nav-links a:hover,.nav-links a[aria-current]{color:#fff;}
-.nav-cta{background:var(--blue);color:#fff;font-family:var(--font-d);font-size:13.5px;font-weight:600;
-  padding:9px 19px;border-radius:8px;text-decoration:none;letter-spacing:.4px;white-space:nowrap;
-  transition:background .25s,transform .2s;}
-.nav-cta:hover{background:#1D4ED8;transform:translateY(-1px);}
-@media(min-width:900px){.nav-links{display:flex;}}
-
 /* ── page head band ── */
+/* Top padding clears the fixed navbar (73px desktop, 70px mobile) and still
+   leaves ~52px of breathing room. Before base.css made the nav shared, this
+   page's nav was position:sticky and 54px was enough; with a fixed nav the
+   breadcrumb sat entirely behind it. */
 .band{background:linear-gradient(150deg,var(--ink),var(--steel-2));color:var(--txt-inv);
-  padding:54px 22px 48px;border-bottom:1px solid var(--hairline-inv);}
+  padding:126px 22px 48px;border-bottom:1px solid var(--hairline-inv);}
 .band-in{max-width:1180px;margin:0 auto;}
 .crumb{font-family:var(--font-m);font-size:11px;letter-spacing:1.6px;text-transform:uppercase;
   color:var(--txt-inv-mut);margin-bottom:16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
@@ -55,14 +22,6 @@ img{max-width:100%;}
 .band h1{font-size:clamp(30px,5.2vw,50px);font-weight:700;color:#fff;max-width:18ch;letter-spacing:-1px;}
 .band .lede{font-size:17px;color:var(--txt-inv);margin-top:16px;max-width:62ch;}
 .band-acts{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px;}
-.btn{font-family:var(--font-d);font-size:14.5px;font-weight:600;padding:13px 26px;border-radius:9px;
-  text-decoration:none;display:inline-flex;align-items:center;gap:9px;letter-spacing:.4px;
-  transition:transform .2s var(--ease),background .25s,border-color .25s;}
-.btn:hover{transform:translateY(-2px);}
-.btn-p{background:var(--blue);color:#fff;box-shadow:0 6px 26px rgba(37,99,235,.36);}
-.btn-p:hover{background:#1D4ED8;}
-.btn-o{background:transparent;color:#fff;border:1.5px solid var(--hairline-inv);}
-.btn-o:hover{border-color:var(--line);background:rgba(77,141,255,.08);}
 
 /* ── layout ── */
 .wrap{max-width:1180px;margin:0 auto;padding-inline:22px;}
@@ -70,9 +29,6 @@ img{max-width:100%;}
 @media(min-width:960px){.cols{grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:56px;}}
 .prose > * + *{margin-top:16px;}
 .prose p{font-size:16px;}
-.eyebrow{font-family:var(--font-m);font-size:11px;font-weight:500;letter-spacing:2.4px;
-  text-transform:uppercase;color:var(--blue);display:flex;align-items:center;gap:10px;margin-bottom:12px;}
-.eyebrow::before{content:'';width:24px;height:1px;background:var(--blue);}
 h2{font-size:clamp(22px,3vw,30px);font-weight:700;color:var(--ink);}
 h3{font-size:18px;font-weight:600;color:var(--ink);}
 .block{margin-top:44px;}
@@ -155,25 +111,3 @@ h3{font-size:18px;font-weight:600;color:var(--ink);}
 .cta h2{color:#fff;}
 .cta p{color:var(--txt-inv-mut);margin-top:12px;max-width:58ch;}
 
-/* ── footer ── */
-.foot{background:var(--ink);color:var(--txt-inv-mut);padding:38px 22px 26px;border-top:1px solid var(--hairline-inv);}
-.foot-in{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:28px;}
-@media(min-width:760px){.foot-in{grid-template-columns:1.6fr 1fr 1fr;}}
-.foot h4{font-family:var(--font-d);font-size:13px;font-weight:600;color:#fff;letter-spacing:1.2px;
-  text-transform:uppercase;margin-bottom:12px;}
-.foot ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;}
-.foot a{color:var(--txt-inv-mut);text-decoration:none;font-size:14px;transition:color .2s;}
-.foot a:hover{color:var(--line);}
-.foot-bot{max-width:1180px;margin:26px auto 0;padding-top:20px;border-top:1px solid var(--hairline-inv);
-  font-family:var(--font-m);font-size:10.5px;letter-spacing:.4px;display:flex;flex-wrap:wrap;gap:12px;
-  justify-content:space-between;}
-
-/* ── reveal, matching the homepage convention ── */
-.js-on .rv{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease),transform .7s var(--ease);}
-.js-on .rv.in-view{opacity:1;transform:none;}
-
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}
-  html{scroll-behavior:auto;}
-  .js-on .rv{opacity:1;transform:none;}
-}

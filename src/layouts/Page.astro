@@ -1,7 +1,9 @@
 ---
+import '../styles/base.css';
 import '../styles/site.css';
-import { capabilities } from '../data/capabilities.js';
-import { industries } from '../data/industries.js';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import Floats from '../components/Floats.astro';
 
 const {
   title,
@@ -101,83 +103,16 @@ const graphs = [business, breadcrumbLd, ...jsonld].filter(Boolean);
 </head>
 <body>
 
-<nav class="nav" aria-label="Main">
-  <div class="nav-in">
-    <a class="nav-brand" href="/"><img src="/logo.png" alt="" width="31" height="31" />JMC <span>Engineering</span></a>
-    <div class="nav-links">
-      <a href="/capabilities/">Capabilities</a>
-      <a href="/industries/">Industries</a>
-      <a href="/#works">Works</a>
-      <a href="/#process">Process</a>
-      <a href="/#insights">Insights</a>
-      <a href="/#contact">Contact</a>
-    </div>
-    <a class="nav-cta" href="/#contact">Get a Quote</a>
-  </div>
-</nav>
+<Nav />
 
 <slot />
 
-<footer class="foot">
-  <div class="foot-in">
-    <div>
-      <a class="nav-brand" href="/"><img src="/logo.png" alt="" width="31" height="31" />JMC <span>Engineering</span></a>
-      <p style="margin-top:12px;font-size:14px;max-width:38ch;">
-        Precision tooling specialists in Padi, Chennai. Jigs, fixtures, press tools,
-        moulds and gauges for manufacturers across India.
-      </p>
-      <p class="contact-line">
-        <a href="tel:+917305187874">+91 73051 87874</a><br />
-        <a href="mailto:info@jmcengg.com">info@jmcengg.com</a><br />
-        Mon–Sat · 9:00–18:00 IST
-      </p>
-    </div>
-    <div>
-      <h4>Capabilities</h4>
-      <ul>
-        {capabilities.map((c) => (
-          <li><a href={`/capabilities/${c.slug}/`}>{c.nav}</a></li>
-        ))}
-      </ul>
-    </div>
-    <div>
-      <h4>Industries</h4>
-      <ul>
-        {industries.map((i) => (
-          <li><a href={`/industries/${i.slug}/`}>{i.nav}</a></li>
-        ))}
-      </ul>
-    </div>
-  </div>
-  <div class="foot-bot">
-    <span>© <span id="yr">2026</span> JMC ENGINEERING · PADI, CHENNAI – 600050</span>
-    <span><a href="/privacy-policy.html">Privacy Policy</a> · <a href="/terms.html">Terms of Use</a></span>
-    <span>GSTIN 33AXRPJ5951H1Z5 · UDYAM-TN-02-004828</span>
-  </div>
-</footer>
+<Footer />
+
+<Floats />
 
 <script>
-  document.documentElement.classList.add('js-on');
-  const y = document.getElementById('yr');
-  if (y) y.textContent = String(new Date().getFullYear());
-
-  /* Reveal on scroll, matching the homepage. Scoped to .js-on above so a
-     script failure leaves everything visible rather than blank. */
-  const els = document.querySelectorAll('.rv');
-  if (els.length) {
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add('in-view');
-            io.unobserve(e.target);
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-    els.forEach((el) => io.observe(el));
-  }
+  import '../scripts/chrome.js';
 </script>
 </body>
 </html>
