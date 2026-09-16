@@ -80,16 +80,43 @@ jobs:
       - name: Apply
         if: ${{ !inputs.whatif }}
         id: apply
+        shell: bash
         run: |
-          az deployment group create \
-            --name "jmcengg-$(date -u +%Y%m%d%H%M%S)" \
-            --resource-group "${{ vars.AZURE_RESOURCE_GROUP }}" \
-            --template-file infra/main.bicep \
-            --parameters infra/main.bicepparam \
-            --query properties.outputs \
-            --output json | tee outputs.json
-          host=$(jq -r '.defaultHostname.value' outputs.json)
-          name=$(jq -r '.staticSiteName.value' outputs.json)
+          # No pipe into tee here, deliberately. A pipeline reports the exit
+          # status of its LAST command, so `az ... | tee` returned tee's zero
+          # even when the deployment had failed, and the run went green on a
+          # deployment that never happened. Redirect, then print.
+          set -euo pipefail
+
+          if ! az deployment group create \
+              --name "jmcengg-$(date -u +%Y%m%d%H%M%S)" \
+              --resource-group "${{ vars.AZURE_RESOURCE_GROUP }}" \
+              --template-file infra/main.bicep \
+              --parameters infra/main.bicepparam \
+              --query properties.outputs \
+              --output json > outputs.json; then
+            echo "::error::The deployment failed. Azure's own error is printed above."
+            echo "If it reads MissingSubscriptionRegistration for Microsoft.Web, the"
+            echo "resource provider has never been switched on for this subscription."
+            echo "Register it once, by hand: Portal -> Subscriptions -> your"
+            echo "subscription -> Resource providers -> search Microsoft.Web ->"
+            echo "Register. That is a subscription-level action, which this identity"
+            echo "deliberately cannot perform - it holds Contributor on one resource"
+            echo "group and nothing wider. Then run this workflow again."
+            exit 1
+          fi
+
+          cat outputs.json
+
+          host=$(jq -r '.defaultHostname.value // empty' outputs.json)
+          name=$(jq -r '.staticSiteName.value // empty' outputs.json)
+          if [ -z "$host" ] || [ -z "$name" ]; then
+            echo "::error::The deployment reported success but returned no outputs."
+            echo "Nothing can be published until this is understood - do not treat"
+            echo "this run as a working deployment."
+            exit 1
+          fi
+
           {
             echo "### Static Web App deployed"
             echo ""

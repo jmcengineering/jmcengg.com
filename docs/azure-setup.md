@@ -238,8 +238,22 @@ once employees start editing the site; unnecessary while it is just us.
 
 ## Step 8 — Create the hosting
 
-Repository → **Actions** → **Azure infrastructure** (left sidebar) → **Run
-workflow**.
+**First, switch on the resource provider.** A new Azure subscription has most
+resource providers switched off until something asks for one. `Microsoft.Web`
+is the provider that owns Static Web Apps, and without it the deployment fails
+with `MissingSubscriptionRegistration`.
+
+Portal → **Subscriptions** → your subscription → **Resource providers** →
+search **`Microsoft.Web`** → select it → **Register**. It takes a minute or two
+to move from *Registering* to *Registered*; refresh until it does.
+
+This is a subscription-level action, so the GitHub identity cannot do it — it
+holds Contributor on one resource group and nothing wider. That is the design
+working as intended, not an obstacle to route around. Do it once, by hand, as
+the subscription Owner.
+
+Then: Repository → **Actions** → **Azure infrastructure** (left sidebar) →
+**Run workflow**.
 
 1. Run it first with **"Preview the changes without applying them" ticked**. It
    signs in, checks the template and prints what it *would* create without
@@ -344,4 +358,5 @@ region only fixes where the management plane lives.
 | `AuthorizationFailed` | Step 5 did not take, or was assigned at the wrong scope. It must be on `rg-jmcengg-prod` |
 | Azure jobs show as skipped | `AZURE_CLIENT_ID` is not set, or was added under Secrets instead of Variables |
 | Empty deployment token | The role assignment exists but has not propagated. Wait five minutes and re-run |
+| `MissingSubscriptionRegistration` for `Microsoft.Web` | The resource provider has never been switched on for this subscription. Register it as described at the top of step 8, then run the workflow again |
 | Custom domain will not validate | DNS has not propagated. Re-check the record, then wait — up to 72 hours for an apex |
