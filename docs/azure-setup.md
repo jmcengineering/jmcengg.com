@@ -244,8 +244,23 @@ is the provider that owns Static Web Apps, and without it the deployment fails
 with `MissingSubscriptionRegistration`.
 
 Portal → **Subscriptions** → your subscription → **Resource providers** →
-search **`Microsoft.Web`** → select it → **Register**. It takes a minute or two
-to move from *Registering* to *Registered*; refresh until it does.
+search **`Microsoft.Web`** → select the row → **Register**. It takes a minute or
+two to move from *Registering* to *Registered*; refresh until it does.
+
+*Resource providers* sits well down the subscription's left-hand menu, in the
+**Settings** group, below Cost Management and Billing — the menu scrolls, and
+it is not visible from the top. The quickest route is the **Search** box at the
+top of that menu: type `resource providers` and it filters straight to it.
+
+Or do it in Cloud Shell — the `>_` icon in the portal toolbar — which is the
+same action without the menu hunt:
+
+```bash
+az provider register --namespace Microsoft.Web --wait
+az provider show --namespace Microsoft.Web --query registrationState -o tsv
+```
+
+The second line prints `Registered` when it is done.
 
 This is a subscription-level action, so the GitHub identity cannot do it — it
 holds Contributor on one resource group and nothing wider. That is the design
