@@ -151,12 +151,37 @@ photographed". Both were live for months.
 Exceptions are listed in the script with a reason. **There is one outstanding**:
 the storage account below.
 
+### Azure Static Web Apps — the next home
+
+The site is being moved to Azure Static Web Apps, inside the Microsoft 365
+tenant JMC Engineering already pays for. The move is built but not switched on:
+until DNS changes, GitHub Pages remains the live site and the Azure jobs publish
+only to a temporary `azurestaticapps.net` address.
+
+| File | What it does |
+|---|---|
+| `infra/main.bicep`, `infra/main.bicepparam` | The Static Web App declared as code, so the hosting can be rebuilt identically |
+| `.github/workflows/azure-infra.yml` | Creates and updates that infrastructure. Manual — infrastructure changes a few times a year, content many times a day |
+| `.github/workflows/azure-swa.yml` | Builds and publishes on every push to `main`; every pull request gets its own preview URL |
+| `public/staticwebapp.config.json` | Routing, our 404 page, cache rules, security headers |
+
+**No deployment token is stored in this repository.** GitHub proves its identity
+to Entra ID with a short-lived OIDC token and reads the deployment token from
+Azure at run time, masked, for the duration of that one run. There is no
+password to rotate and nothing to leak. The Azure jobs check for the
+`AZURE_CLIENT_ID` repository variable and skip themselves quietly until the
+Azure side exists, so all of this is safe to have merged.
+
+The portal steps that only a human with an Azure sign-in can do are written out
+in **[docs/azure-setup.md](docs/azure-setup.md)**, including the DNS cutover —
+which is the one step that can take the site down, and so is deliberately last.
+
 ## Outstanding configuration
 
 ### Works gallery storage — not yet set
 
 ```js
-// public/index.html, config block at the top of the inline <script>
+// src/scripts/home.js, config block at the top
 const STORAGE_ACCOUNT = 'REPLACE_WITH_YOUR_STORAGE_ACCOUNT';
 ```
 
@@ -195,12 +220,14 @@ drawings directly. Replacing this with a self-hosted endpoint is planned.
 
 ### Vlog section
 
-Hidden while `videoConfig` in `public/index.html` is empty. Paste real YouTube
+Hidden while `videoConfig` in `src/scripts/home.js` is empty. Paste real YouTube
 IDs in and it appears.
 
 ## Editing the homepage
 
-Everything is in `public/index.html`. Sections in order:
+The markup is `src/pages/index.astro`, the styling `src/styles/home.css`, the
+behaviour `src/scripts/home.js`. (`public/index.html` no longer exists — it was
+migrated in September 2026.) Sections in order:
 
 `hero` · `about` · `services` · `machinery` · `works` · `industries` ·
 `process` · `tools` · `insights` · `vlog` (hidden) · `credentials` · `contact`
