@@ -139,6 +139,20 @@ and correct for the apex domain.
 They must hold the same value (`jmcengg.com`). Two identical files in one
 repo looks like a mistake and invites a tidy-up; that tidy-up is an outage.
 
+### The Node 20 deprecation warning
+
+Every Actions run ends with a warning that some actions target Node.js 20 and
+are being forced onto Node.js 24. As of September 2026 the remaining ones are
+`setup-node@v4`, `upload-artifact@v5` and `download-artifact@v5`.
+
+**Do not chase it.** `checkout` and `azure/login` were moved to v5 and v3,
+which did clear them. The artifact actions were then moved v4 to v5 and the
+warning stayed, because v5 is the current major and still targets Node 20
+upstream — there is no newer tag to move to that fixes it. Nothing is broken:
+the actions run on Node 24 and every job passes. Revisit when the maintainers
+ship Node 24 builds, not before. Guessing at version tags to silence a log
+line is how a working pipeline collects changes nobody validated.
+
 ### The placeholder gate
 
 `scripts/check-placeholders.sh` fails the build if placeholder text reaches the
