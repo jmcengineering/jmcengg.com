@@ -112,14 +112,26 @@ Still on the `github-jmcengg-deploy` registration:
 Add **two** credentials. The values must match exactly — they are compared
 character for character, and they are case-sensitive.
 
+**The newer portal asks for numeric IDs.** If the form has *Organization ID*
+and *Repository ID* fields, these are the real values for this repository,
+read from the GitHub API:
+
+| | |
+|---|---|
+| Organization ID | `281013465` |
+| Repository ID | `1236850364` |
+
 **Credential 1 — production deploys**
 
 | Field | Value |
 |---|---|
 | Organization | `jmcengineering` |
+| Organization ID | `281013465` |
 | Repository | `jmcengg.com` |
+| Repository ID | `1236850364` |
 | Entity type | **Environment** |
 | Environment name | `azure-production` |
+| Subject identifier | click **Edit (optional)** and set it by hand — see below |
 | Name | `github-production` |
 
 **Credential 2 — pull request previews**
@@ -127,11 +139,43 @@ character for character, and they are case-sensitive.
 | Field | Value |
 |---|---|
 | Organization | `jmcengineering` |
+| Organization ID | `281013465` |
 | Repository | `jmcengg.com` |
+| Repository ID | `1236850364` |
 | Entity type | **Pull request** |
+| Subject identifier | click **Edit (optional)** and set it by hand — see below |
 | Name | `github-pull-request` |
 
 Leave the audience as the default `api://AzureADTokenExchange`.
+
+### Override the generated subject identifier
+
+The newer portal generates a subject in GitHub's *immutable* format, which
+embeds the numeric IDs:
+
+```
+repo:jmcengineering@281013465/jmcengg.com@1236850364:environment:azure-production
+```
+
+**That will not work for this repository, and the failure is silent until the
+first deploy.** GitHub only sends that format for repositories created after
+15 July 2026, or for older ones that have opted in. `jmcengg.com` was created
+on 12 May 2026 and has not opted in, so what GitHub actually sends is the
+name-based form. Click **Edit (optional)** under *Subject identifier* and set
+each credential by hand to exactly:
+
+```
+repo:jmcengineering/jmcengg.com:environment:azure-production
+repo:jmcengineering/jmcengg.com:pull_request
+```
+
+> **If deploys ever start failing with AADSTS70021 out of nowhere**, check
+> whether the repository was renamed or transferred to an organisation. GitHub
+> switches a repository to the immutable format automatically when either
+> happens, and these credentials stop matching. The fix is to add the same two
+> credentials again without editing the subject, letting the portal generate
+> it. Keeping both formats side by side is supported and is what Microsoft
+> recommends during a migration.
 
 > Why two: the production jobs run inside a GitHub environment called
 > `azure-production`, and GitHub stamps the environment name into the token it
