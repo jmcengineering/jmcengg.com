@@ -249,11 +249,24 @@ two to move from *Registering* to *Registered*; refresh until it does.
 
 *Resource providers* sits well down the subscription's left-hand menu, in the
 **Settings** group, below Cost Management and Billing — the menu scrolls, and
-it is not visible from the top. The quickest route is the **Search** box at the
-top of that menu: type `resource providers` and it filters straight to it.
+it is not visible from the top. **Those lower entries are collapsible groups,
+collapsed by default**: Cost Management, Billing, Settings and Support +
+troubleshooting each have a `>` chevron and have to be clicked open. Resource
+providers is inside **Settings**, alongside Resource locks and Usage + quotas.
+
+Quicker than any of that: the **Search** box at the top of that menu — type
+`resource providers` and it filters straight to it.
+
+Do not confuse it with **Resources** or **Resource groups**, which are higher
+up the menu and are not the same thing. Those list what you have created;
+Resource providers controls which Azure services the subscription may create
+at all.
 
 Or do it in Cloud Shell — the `>_` icon in the portal toolbar — which is the
-same action without the menu hunt:
+same action without the menu hunt. If Cloud Shell offers to create a storage
+account, take the **ephemeral / no storage account** option: a Cloud Shell
+storage account would be the first thing on this subscription that actually
+costs money, and two commands do not need one.
 
 ```bash
 az provider register --namespace Microsoft.Web --wait
