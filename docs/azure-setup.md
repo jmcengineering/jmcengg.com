@@ -87,8 +87,10 @@ reused anywhere else. There is no password to leak.
 1. Portal → search **Microsoft Entra ID** → **App registrations** → **New
    registration**.
 2. Name: **`github-jmcengg-deploy`**.
-3. Supported account types: **Accounts in this organizational directory only
-   (JMC Engineering only - Single tenant)**.
+3. Supported account types: **Single tenant only - JMC Engineering** — the top
+   option, and the one already selected. Older portal builds word this
+   "Accounts in this organizational directory only"; it is the same setting.
+   The other three let accounts outside your company use the registration.
 4. Redirect URI: leave empty.
 5. **Register**.
 6. On the Overview page that appears, copy both:
