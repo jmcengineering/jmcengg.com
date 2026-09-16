@@ -1,0 +1,293 @@
+---
+import Page from '../layouts/Page.astro';
+import '../styles/pcd.css';
+
+const faq = [
+  {
+    q: 'How do you calculate the distance between two holes on a PCD?',
+    a: 'The straight centre-to-centre distance between adjacent holes is the chord: PCD × sin(180° ÷ number of holes). For six holes on a 100 mm PCD that is 100 × sin(30°) = 50 mm exactly. The arc pitch, measured round the circle rather than across it, is π × PCD ÷ number of holes.',
+  },
+  {
+    q: 'How do I find the PCD when the drawing does not give one?',
+    a: 'Measure the centre distance between two adjacent holes, count the holes on the circle, and work backwards: PCD = chord ÷ sin(180° ÷ number of holes). The "work back from a measurement" panel on this page does it for you.',
+  },
+  {
+    q: 'What is the minimum web between two pierced holes?',
+    a: 'As a working rule the web between adjacent holes should be at least twice the material thickness for piercing. Below that the punch is prone to breakage and the strip to distortion. This calculator flags the web against your thickness if you enter one.',
+  },
+  {
+    q: 'Can I export the coordinates to CAD or a CNC machine?',
+    a: 'Yes. DXF gives you the holes, centre marks and the pitch circle on named layers for CAD or wire-cut. The G-code export writes a G81 drill cycle with your depth, feed and speed. Both are plain files — check them against your post-processor and your datum before running.',
+  },
+];
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map((f) => ({
+    '@type': 'Question', name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
+const appLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'PCD Hole Calculator',
+  applicationCategory: 'EngineeringApplication',
+  operatingSystem: 'Any',
+  url: 'https://jmcengg.com/pcd-calculator/',
+  description: 'Bolt circle coordinate calculator with DXF, G-code, CSV and PDF export.',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+  publisher: { '@id': 'https://jmcengg.com/#business' },
+};
+---
+<Page
+  title="PCD Hole Calculator — Bolt Circle Coordinates, DXF & G-code | JMC Engineering"
+  description="Free PCD calculator for jig boring, CNC drilling and wire-cut. Hole coordinates, chord, arc pitch and web check, with DXF, G-code, CSV and PDF export. Metric and imperial."
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'PCD Calculator', href: '/pcd-calculator/' }]}
+  jsonld={[appLd, faqLd]}
+>
+
+  <header class="band">
+    <div class="band-in">
+      <nav class="crumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> <span>/</span> <span>PCD Calculator</span>
+      </nav>
+      <h1>PCD hole calculator</h1>
+      <p class="lede">
+        Bolt circle coordinates for jig boring, CNC drilling, wire-cut and punch layout.
+        Angles run from the X axis, anticlockwise positive. Export to DXF, G-code, CSV or a
+        signed-off PDF sheet.
+      </p>
+    </div>
+  </header>
+
+  <div class="tool">
+    <div class="tool-grid">
+
+      <!-- ───────── inputs ───────── -->
+      <div>
+        <section class="tp">
+          <h2>Hole pattern</h2>
+
+          <div class="units" role="group" aria-label="Units">
+            <button type="button" class="unit-btn" data-u="mm" aria-pressed="true">MILLIMETRES</button>
+            <button type="button" class="unit-btn" data-u="in" aria-pressed="false">INCHES</button>
+          </div>
+
+          <div class="fld">
+            <label for="pcd">Pitch circle diameter <span class="hint" style="display:inline" data-unit>mm</span></label>
+            <input id="pcd" type="number" value="100" step="0.001" min="0.001" />
+          </div>
+
+          <div class="fld">
+            <label for="n">Number of holes</label>
+            <input id="n" type="number" value="6" step="1" min="1" max="360" />
+          </div>
+
+          <div class="fld">
+            <label for="dia">Hole diameter <span class="hint" style="display:inline" data-unit>mm</span></label>
+            <input id="dia" type="number" value="10" step="0.001" min="0" />
+          </div>
+
+          <div class="fld">
+            <label for="thread">Set hole size from a thread</label>
+            <select id="thread">
+              <option value="">— choose a size —</option>
+              <option value="M3:clear">M3 clearance (3.40)</option>
+              <option value="M3:tap">M3 tap drill (2.50)</option>
+              <option value="M4:clear">M4 clearance (4.50)</option>
+              <option value="M4:tap">M4 tap drill (3.30)</option>
+              <option value="M5:clear">M5 clearance (5.50)</option>
+              <option value="M5:tap">M5 tap drill (4.20)</option>
+              <option value="M6:clear">M6 clearance (6.60)</option>
+              <option value="M6:tap">M6 tap drill (5.00)</option>
+              <option value="M8:clear">M8 clearance (9.00)</option>
+              <option value="M8:tap">M8 tap drill (6.80)</option>
+              <option value="M10:clear">M10 clearance (11.00)</option>
+              <option value="M10:tap">M10 tap drill (8.50)</option>
+              <option value="M12:clear">M12 clearance (13.50)</option>
+              <option value="M12:tap">M12 tap drill (10.20)</option>
+              <option value="M16:clear">M16 clearance (17.50)</option>
+              <option value="M16:tap">M16 tap drill (14.00)</option>
+              <option value="M20:clear">M20 clearance (22.00)</option>
+              <option value="M20:tap">M20 tap drill (17.50)</option>
+            </select>
+            <div class="hint">Medium fit · coarse pitch. Check against your standard.</div>
+          </div>
+
+          <div class="fld">
+            <label for="start">First hole at angle</label>
+            <input id="start" type="number" value="0" step="0.001" />
+            <div class="hint">0 = 3 o'clock · 90 = 12 o'clock</div>
+          </div>
+
+          <div class="fld">
+            <label for="dir">Numbering direction</label>
+            <select id="dir">
+              <option value="ccw">Anticlockwise</option>
+              <option value="cw">Clockwise</option>
+            </select>
+          </div>
+
+          <div class="r2">
+            <div class="fld">
+              <label for="cx">Centre X</label>
+              <input id="cx" type="number" value="0" step="0.001" />
+            </div>
+            <div class="fld">
+              <label for="cy">Centre Y</label>
+              <input id="cy" type="number" value="0" step="0.001" />
+            </div>
+          </div>
+
+          <div class="fld">
+            <label for="thk">Material thickness <span class="opt">(optional)</span></label>
+            <input id="thk" type="number" value="" step="0.001" min="0" placeholder="for web check" />
+            <div class="hint">Checks punch-to-punch web</div>
+          </div>
+        </section>
+
+        <section class="tp">
+          <h2>G-code settings</h2>
+          <div class="r2">
+            <div class="fld">
+              <label for="g-depth">Drill depth</label>
+              <input id="g-depth" type="number" value="10" step="0.1" min="0" />
+            </div>
+            <div class="fld">
+              <label for="g-clear">Retract R</label>
+              <input id="g-clear" type="number" value="2" step="0.1" />
+            </div>
+          </div>
+          <div class="r2">
+            <div class="fld">
+              <label for="g-safe">Safe Z</label>
+              <input id="g-safe" type="number" value="25" step="1" />
+            </div>
+            <div class="fld">
+              <label for="g-rpm">Spindle rpm</label>
+              <input id="g-rpm" type="number" value="1200" step="50" min="1" />
+            </div>
+          </div>
+          <div class="fld">
+            <label for="g-feed">Feed rate</label>
+            <input id="g-feed" type="number" value="80" step="5" min="1" />
+          </div>
+          <div class="hint">G81 cycle, G54, tool 1. Verify against your post-processor.</div>
+        </section>
+
+        <section class="tp">
+          <h2>Job details for the sheet</h2>
+          <div class="fld"><label for="part">Part / tool name</label><input id="part" type="text" placeholder="e.g. Bottom plate" /></div>
+          <div class="fld"><label for="drg">Drawing number</label><input id="drg" type="text" placeholder="e.g. JMC-2411-03" /></div>
+          <div class="fld"><label for="wo">Work order</label><input id="wo" type="text" placeholder="e.g. RN-1182" /></div>
+          <div class="fld"><label for="cust">Customer</label><input id="cust" type="text" placeholder="e.g. Rane Group" /></div>
+        </section>
+      </div>
+
+      <!-- ───────── output ───────── -->
+      <div>
+        <div class="dro">
+          <div class="dro-grid">
+            <div class="dro-cell"><div class="k">INCLUDED ANGLE</div><div class="v" id="d-angle">60.000<small>&deg;</small></div></div>
+            <div class="dro-cell"><div class="k">CHORD, HOLE TO HOLE</div><div class="v" id="d-chord">50.000</div></div>
+            <div class="dro-cell"><div class="k">ARC PITCH</div><div class="v" id="d-arc">52.360</div></div>
+            <div class="dro-cell"><div class="k">WEB BETWEEN HOLES</div><div class="v" id="d-web">40.000</div></div>
+          </div>
+        </div>
+
+        <figure>
+          <svg class="plot" id="plot" viewBox="0 0 640 520" role="img" aria-label="Bolt circle layout preview"></svg>
+        </figure>
+
+        <div id="notes"></div>
+
+        <section class="tp rev" style="margin-top:22px">
+          <h2>Work back from a measurement</h2>
+          <div class="r2">
+            <div class="fld">
+              <label for="mchord">Measured centre distance, adjacent holes</label>
+              <input id="mchord" type="number" value="" step="0.001" min="0" placeholder="chord" />
+            </div>
+            <div class="fld">
+              <label for="mn">Holes on that circle</label>
+              <input id="mn" type="number" value="6" step="1" min="2" max="360" />
+            </div>
+          </div>
+          <div class="out" id="revout">Enter a measured chord to find the PCD <small>— useful when the print has no PCD called out</small></div>
+        </section>
+      </div>
+    </div>
+
+    <!-- ───────── coordinates ───────── -->
+    <div class="tw">
+      <div class="bar">
+        <h2>Hole coordinates</h2>
+        <button class="tbtn ghost" id="copy" type="button">Copy table</button>
+      </div>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Hole</th><th>Angle&deg;</th><th>X</th><th>Y</th>
+              <th>&Delta;X from centre</th><th>&Delta;Y from centre</th><th>Radius</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="acts">
+      <button class="tbtn" id="dxf" type="button">Download DXF</button>
+      <button class="tbtn" id="gcode" type="button">Download G-code</button>
+      <button class="tbtn ghost" id="csv" type="button">Download CSV</button>
+      <button class="tbtn ghost" id="pdf" type="button" disabled>Export PDF</button>
+      <button class="tbtn ghost" id="print" type="button">Print sheet</button>
+      <button class="tbtn ghost" id="share" type="button">Copy shareable link</button>
+      <span class="status" id="status">Loading PDF engine…</span>
+    </div>
+
+    <div class="note" style="margin-top:20px">
+      <strong>Before you cut.</strong> These figures are geometry, not a process sheet. Confirm the
+      datum on the part, check the G-code against your post-processor, and satisfy yourself that
+      the web and hole sizes suit the material and the operation. If you would like us to review
+      the layout, <a href="/#contact">send us the drawing</a> — the engineering review is free.
+    </div>
+
+    <section style="margin-top:44px">
+      <p class="eyebrow">Questions</p>
+      <h2 style="font-family:var(--font-d);font-size:clamp(22px,3vw,28px);color:var(--ink);margin:0 0 16px;">Common questions</h2>
+      <div class="faq">
+        {faq.map((f, i) => (
+          <details open={i === 0}>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </div>
+
+  <section class="cta">
+    <div class="wrap">
+      <h2>Need the tooling as well as the coordinates?</h2>
+      <p>
+        We build press tools, jig fixtures, moulds and gauges in Padi, Chennai. Send a drawing and
+        you get an engineering view back within 24 working hours.
+      </p>
+      <div class="band-acts">
+        <a class="btn-p" href="/#contact">Send your drawing</a>
+        <a class="btn-o" href="/capabilities/">What we build</a>
+      </div>
+    </div>
+  </section>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" is:inline></script>
+  <script>
+    import { init } from '../scripts/pcd.js';
+    init();
+  </script>
+</Page>

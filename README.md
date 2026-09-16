@@ -18,8 +18,8 @@ src/
   data/           capabilities.js, industries.js — one object per page
   layouts/        Page.astro — head, meta and JSON-LD for section pages
   pages/          index.astro (homepage) + the generated routes
-  scripts/        chrome.js (shared) · home.js (homepage only)
-  styles/         base.css (shared) · home.css · site.css
+  scripts/        chrome.js (shared) · home.js · pcd.js
+  styles/         base.css (shared) · home.css · site.css · pcd.css
 public/           copied to the output untouched
   *-calculator.html, blog-*.html, privacy-policy.html, terms.html, …
 scripts/          check-placeholders.sh — build gate
@@ -65,6 +65,28 @@ npm run dev      # http://localhost:4321
 npm run build    # -> dist/
 npm run preview  # serve dist/ locally
 ```
+
+## The PCD calculator
+
+`/pcd-calculator/` is an Astro page (`src/pages/pcd-calculator.astro`) with its
+logic in `src/scripts/pcd.js`. It exports DXF, G-code, CSV and PDF.
+
+Two things to know before changing it:
+
+- **The maths is unit-agnostic.** Everything is a ratio or a linear scale, so
+  the mm/inch switch converts the values in the fields and changes what the
+  exporters declare — there is no second internal scale to keep in step.
+- **The DXF is deliberately R12 ASCII, ENTITIES only.** That is the dialect
+  every CAD package and wire-EDM controller still reads without complaint.
+  Holes, centre marks and the pitch circle go on separate named layers so the
+  holes can be selected on their own.
+
+The thread presets in `THREADS` are medium-fit clearance and coarse-pitch tap
+drill sizes in mm. If your shop works to a different standard, that object is
+the only place to change them.
+
+jsPDF loads from cdnjs. If it fails to load the Export PDF button falls back to
+the print dialogue rather than sitting dead.
 
 ## Adding a capability or an industry page
 
