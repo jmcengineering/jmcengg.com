@@ -109,8 +109,10 @@ Still on the `github-jmcengg-deploy` registration:
    credential**.
 2. Scenario: **GitHub Actions deploying Azure resources**.
 
-Add **two** credentials. The values must match exactly — they are compared
-character for character, and they are case-sensitive.
+Add **two** credentials. Entity type is one value per credential, so you go
+through this form **twice** — there is no screen on which you tick both. The
+values must match exactly: they are compared character for character, and they
+are case-sensitive.
 
 **The newer portal asks for numeric IDs.** If the form has *Organization ID*
 and *Repository ID* fields, these are the real values for this repository,
@@ -134,7 +136,8 @@ read from the GitHub API:
 | Subject identifier | click **Edit (optional)** and set it by hand — see below |
 | Name | `github-production` |
 
-**Credential 2 — pull request previews**
+**Credential 2 — pull request previews.** Add credential again. This one has
+no environment name field; Pull request does not take one.
 
 | Field | Value |
 |---|---|
