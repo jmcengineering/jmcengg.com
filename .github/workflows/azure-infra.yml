@@ -1,0 +1,102 @@
+name: Azure infrastructure
+
+# Creates or updates the Azure resources that host jmcengg.com.
+#
+# Run by hand, not on every push — the site's content changes many times a day,
+# the infrastructure a few times a year. Actions -> "Azure infrastructure" ->
+# Run workflow.
+#
+# Requires these repository variables (Settings -> Secrets and variables ->
+# Actions -> Variables). None of them is a secret; they are identifiers, and
+# they are useless without the federated trust configured on the Azure side.
+#   AZURE_CLIENT_ID        application (client) ID of the app registration
+#   AZURE_TENANT_ID        directory (tenant) ID of the JMC Engineering tenant
+#   AZURE_SUBSCRIPTION_ID  subscription the resource group lives in
+#   AZURE_RESOURCE_GROUP   rg-jmcengg-prod
+#
+# There is deliberately no client secret anywhere. GitHub proves who it is with
+# a short-lived OIDC token that Azure validates against the federated credential.
+
+on:
+  workflow_dispatch:
+    inputs:
+      whatif:
+        description: 'Preview the changes without applying them'
+        type: boolean
+        default: true
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: azure-infra
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: ${{ inputs.whatif && 'Preview' || 'Apply' }} infrastructure
+    runs-on: ubuntu-latest
+    environment: azure-production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fail early if the repository variables are missing
+        env:
+          CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
+          TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+          SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+          RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
+        run: |
+          missing=
+          for v in CLIENT_ID TENANT_ID SUBSCRIPTION_ID RESOURCE_GROUP; do
+            [ -n "${!v}" ] || missing="$missing AZURE_$v"
+          done
+          if [ -n "$missing" ]; then
+            echo "::error::Missing repository variable(s):$missing"
+            echo "Set them under Settings -> Secrets and variables -> Actions -> Variables."
+            echo "See docs/azure-setup.md for where each value comes from."
+            exit 1
+          fi
+
+      - name: Sign in to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Lint the template
+        run: az bicep build --file infra/main.bicep --stdout > /dev/null
+
+      - name: Preview changes
+        if: inputs.whatif
+        run: |
+          az deployment group what-if \
+            --resource-group "${{ vars.AZURE_RESOURCE_GROUP }}" \
+            --template-file infra/main.bicep \
+            --parameters infra/main.bicepparam
+
+      - name: Apply
+        if: ${{ !inputs.whatif }}
+        id: apply
+        run: |
+          az deployment group create \
+            --name "jmcengg-$(date -u +%Y%m%d%H%M%S)" \
+            --resource-group "${{ vars.AZURE_RESOURCE_GROUP }}" \
+            --template-file infra/main.bicep \
+            --parameters infra/main.bicepparam \
+            --query properties.outputs \
+            --output json | tee outputs.json
+          host=$(jq -r '.defaultHostname.value' outputs.json)
+          name=$(jq -r '.staticSiteName.value' outputs.json)
+          {
+            echo "### Static Web App deployed"
+            echo ""
+            echo "| | |"
+            echo "|---|---|"
+            echo "| Resource | \`$name\` |"
+            echo "| Default hostname | https://$host |"
+            echo ""
+            echo "Test the site on that hostname before moving DNS off GitHub Pages."
+          } >> "$GITHUB_STEP_SUMMARY"
