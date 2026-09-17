@@ -16,6 +16,20 @@ import '../styles/home.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import Floats from '../components/Floats.astro';
+/* The Our Work gallery, rendered at build time from src/data/works.json.
+
+   It used to be fetched from blob storage by home.js and built in the
+   browser, which meant the photographs were not in the HTML: Google indexed
+   an empty gallery, and a visitor with a slow connection watched it appear.
+   The photographs live in the repository now, so there is no reason to
+   assemble this at runtime. */
+import worksData from '../data/works.json';
+
+const works = [...worksData.photos].sort(
+  (a, b) => (b.featured === true) - (a.featured === true) || (a.order ?? 0) - (b.order ?? 0)
+);
+const heroWork = works.find((p) => p.featured) || works[0] || null;
+
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -336,10 +350,21 @@ import Floats from '../components/Floats.astro';
 <section id="about" class="rv">
   <div class="about-grid">
     <div class="about-visual bracketed rv-l" id="about-visual">
-      <div class="ph">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-        <span>JMC Tool Room · Padi</span>
-      </div>
+      {heroWork ? (
+        <img
+          src={heroWork.file}
+          alt={`${heroWork.label} — JMC Engineering tool room, Padi, Chennai`}
+          width={heroWork.w || 1600}
+          height={heroWork.h || 1200}
+          loading="lazy"
+          decoding="async"
+        />
+      ) : (
+        <div class="ph">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span>JMC Tool Room · Padi</span>
+        </div>
+      )}
       <div class="exp-chip"><b>30+</b><i>YRS CEO EXPERTISE</i></div>
     </div>
     <div class="about-copy rv-r">
@@ -425,11 +450,30 @@ import Floats from '../components/Floats.astro';
     <p class="sec-sub">Precision tooling crafted on our Padi shop floor.</p>
   </div>
   <div class="works-grid" id="works-grid">
-    <div class="works-note" id="works-note">
-      <b>Portfolio is being photographed</b>
-      New work is added from the tool room each week. In the meantime,
-      <a href="#contact">send us a drawing</a> and we'll show you exactly how we'd build it.
-    </div>
+    {works.length === 0 && (
+      <div class="works-note" id="works-note">
+        <b>Portfolio is being photographed</b>
+        New work is added from the tool room each week. In the meantime,
+        <a href="#contact">send us a drawing</a> and we'll show you exactly how we'd build it.
+      </div>
+    )}
+    {works.map((p, i) => (
+      <div class="work-item rv" style={`transition-delay:${(i % 4) * 0.08}s`}>
+        <img
+          src={p.file}
+          alt={`${p.label} manufactured by JMC Engineering, Chennai`}
+          width={p.w || 1600}
+          height={p.h || 1200}
+          loading={i < 2 ? 'eager' : 'lazy'}
+          decoding="async"
+        />
+        <div class="work-ol"></div>
+        <div class="work-lb">
+          <span>{p.label}</span>
+          <small>JMC-{String(i + 1).padStart(2, '0')}</small>
+        </div>
+      </div>
+    ))}
   </div>
   <div style="text-align:center;margin-top:34px;">
     <a href="https://www.youtube.com/@jmcengineering" target="_blank" rel="noopener" class="yt-btn">

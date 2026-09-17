@@ -4,11 +4,6 @@
 
 import { reduceMotion, io, measure } from './chrome.js';
 
-/* ═══ CONFIG — set this once after running scripts/azure-setup.sh ═══ */
-const STORAGE_ACCOUNT = 'REPLACE_WITH_YOUR_STORAGE_ACCOUNT';
-const WORKS_CONTAINER = 'works';
-const BLOB_BASE = `https://${STORAGE_ACCOUNT}.blob.core.windows.net/${WORKS_CONTAINER}`;
-
 /* ── HERO ENTRANCE + STAT COUNTERS ──────────────────────────────────────
       The stats are above the fold, so the counters ride the end of the
       entrance sequence rather than waiting on an observer. Under reduced
@@ -134,110 +129,10 @@ const BLOB_BASE = `https://${STORAGE_ACCOUNT}.blob.core.windows.net/${WORKS_CONT
   })).observe(cv);
 })();
 
-/* ══════════════════════════════════════════════════════════════
-   WORKS GALLERY — driven by the admin panel.
-   Reads manifest.json straight from blob storage: no API call,
-   no cost, and the order is exactly what was set in /admin.
-   ══════════════════════════════════════════════════════════════ */
-/* Shown when blob storage has nothing yet: the real photographs that are
-   already in the repository, rather than a note telling visitors we have
-   nothing to show. */
-const LOCAL_WORKS = [
-  { src: 'work-1.jpg', label: 'Jig fixture assembly' },
-  { src: 'work-2.jpg', label: 'Press tool detail' }
-];
-
-(async function () {
-  const grid = document.getElementById('works-grid');
-  const note = document.getElementById('works-note');
-  if (!grid) return;
-
-  function renderLocal() {
-    if (!LOCAL_WORKS.length) return;
-    note?.remove();
-    LOCAL_WORKS.forEach((p, i) => {
-      const card = document.createElement('div');
-      card.className = 'work-item rv';
-      card.style.transitionDelay = (i * .08) + 's';
-      const img = new Image();
-      img.src = p.src;
-      img.alt = p.label + ' manufactured by JMC Engineering, Chennai';
-      img.loading = 'lazy';
-      img.decoding = 'async';
-      card.append(img, Object.assign(document.createElement('div'), { className: 'work-ol' }));
-      const lb = document.createElement('div');
-      lb.className = 'work-lb';
-      lb.innerHTML = '<span></span><small>JMC-' + String(i + 1).padStart(2, '0') + '</small>';
-      lb.firstChild.textContent = p.label;
-      card.appendChild(lb);
-      grid.appendChild(card);
-      io.observe(card);
-    });
-    const box = document.getElementById('about-visual');
-    if (box) {
-      const img = new Image();
-      /* Deliberately NOT lazy: the element is detached until it loads, and a
-         lazy detached image is never in a viewport, so it never loads at all. */
-      img.decoding = 'async';
-      img.alt = 'JMC Engineering tool room, Padi, Chennai';
-      img.onload = () => { box.querySelector('.ph')?.remove(); box.prepend(img); };
-      img.src = LOCAL_WORKS[0].src;
-    }
-    measure();
-  }
-
-  let photos = [];
-  /* Only reach for blob storage once a real account name is configured —
-     otherwise every visitor pays for a DNS lookup that can never resolve. */
-  if (STORAGE_ACCOUNT && !/^REPLACE_WITH/.test(STORAGE_ACCOUNT)) {
-    try {
-      const r = await fetch(`${BLOB_BASE}/manifest.json`, { cache: 'no-cache' });
-      if (r.ok) photos = (await r.json()).photos || [];
-    } catch { /* fall through to the local set below */ }
-  }
-
-  if (!photos.length) { renderLocal(); return; }
-
-  photos.sort((a, b) => (b.featured === true) - (a.featured === true) || (a.order ?? 0) - (b.order ?? 0));
-  note?.remove();
-
-  const frag = document.createDocumentFragment();
-  photos.forEach((p, i) => {
-    const card = document.createElement('div');
-    card.className = 'work-item rv';
-    card.style.transitionDelay = ((i % 4) * .08) + 's';
-    const img = new Image();
-    img.src = `${BLOB_BASE}/${p.id}.webp`;
-    img.alt = `${p.label} manufactured by JMC Engineering, Chennai`;
-    img.loading = 'lazy';
-    img.decoding = 'async';
-    img.width = p.w || 1600;
-    img.height = p.h || 1200;
-    card.append(img, Object.assign(document.createElement('div'), { className: 'work-ol' }));
-    const lb = document.createElement('div');
-    lb.className = 'work-lb';
-    lb.innerHTML = `<span></span><small>JMC-${String(i + 1).padStart(2, '0')}</small>`;
-    lb.firstChild.textContent = p.label;
-    card.appendChild(lb);
-    frag.appendChild(card);
-    io.observe(card);
-  });
-  grid.appendChild(frag);
-
-  /* The About photo fills itself from the first featured work —
-     so there is never a placeholder sitting on the live site again. */
-  const hero = photos.find(p => p.featured) || photos[0];
-  const box = document.getElementById('about-visual');
-  if (hero && box) {
-    const img = new Image();
-    /* Not lazy — see the note in renderLocal(); a detached lazy image never loads. */
-    img.decoding = 'async';
-    img.alt = `${hero.label} — JMC Engineering tool room, Padi, Chennai`;
-    img.onload = () => { box.querySelector('.ph')?.remove(); box.prepend(img); };
-    img.src = `${BLOB_BASE}/${hero.id}.webp`;
-  }
-  measure();
-})();
+/* The Our Work gallery and the About photograph are rendered at build time
+   from src/data/works.json — see index.astro. They used to be fetched from
+   blob storage and assembled here, which kept the photographs out of the HTML
+   and therefore out of Google's index. Nothing about them needs JavaScript. */
 
 /* ── ENQUIRY FORM — size-check attachments and show a sending state, so a
       slow upload never looks like a dead button ── */

@@ -35,7 +35,11 @@ PATTERNS='REPLACE_WITH[A-Za-z0-9_]*|REPLACE:|\[REPLACE[^]]*|lorem ipsum|TODO_BEF
 #     The loader's own guard - index.html tests /^REPLACE_WITH/ to decide
 #     whether storage is configured. Matched exactly, so a real placeholder
 #     like REPLACE_WITH_YOUR_API_KEY is still caught.
-ALLOWED_VALUES='REPLACE_WITH_YOUR_STORAGE_ACCOUNT|REPLACE_WITH'
+# Nothing is excepted by value any more. REPLACE_WITH_YOUR_STORAGE_ACCOUNT was
+# the only entry, and it went when the works gallery moved into the repository
+# and started rendering at build time — there is no storage account to name.
+# An empty pattern would match every line, so this is a string nothing equals.
+ALLOWED_VALUES='<<<no-exceptions>>>'
 
 # blog-post-template.html is a working template full of [REPLACE: …] markers.
 # It carries noindex,nofollow and is linked from nowhere.
