@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /admin-signin
+Disallow: /api
 
 Sitemap: https://jmcengg.com/sitemap.xml

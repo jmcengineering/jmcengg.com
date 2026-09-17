@@ -1,0 +1,49 @@
+---
+import Admin from '../../layouts/Admin.astro';
+---
+<Admin title="Overview" active="home">
+
+  <h1 class="adm-h1">Admin</h1>
+  <p class="adm-lede">
+    Update the website without touching GitHub. Everything you change here goes
+    live on jmcengg.com.
+  </p>
+
+  <div class="adm-grid">
+
+    <div class="adm-card soon">
+      <span class="adm-tag">Being built</span>
+      <h2>Photos</h2>
+      <p>
+        Upload photographs of finished tools, the shop floor and work in progress.
+        They appear in the Our Work section on the homepage.
+      </p>
+    </div>
+
+    <div class="adm-card soon">
+      <span class="adm-tag">Being built</span>
+      <h2>Writing</h2>
+      <p>
+        Write and publish articles. These are what bring engineers to the site
+        from a search, so they stay part of the site rather than loading later.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="adm-note">
+    <p>
+      <b>Who can get in.</b> Signing in with a Microsoft account is not enough on
+      its own — an account needs a role before any of this is reachable, and
+      roles are handed out by invitation from the Azure portal. Someone who
+      finds this address and signs in without an invitation is refused.
+    </p>
+    <p style="margin-top:10px">
+      <b>The two roles.</b> <code>editor</code> can add photos and write
+      articles. <code>admin</code> can do that and invite other people. To add
+      a colleague, see <code>docs/admin-panel.md</code> in the repository, or
+      ask whoever set this up.
+    </p>
+  </div>
+
+</Admin>

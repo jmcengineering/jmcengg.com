@@ -1,0 +1,77 @@
+---
+/* Layout for everything under /admin.
+   Deliberately NOT the public Page layout. The marketing chrome — the nav,
+   the WhatsApp float, the footer sitemap, the LocalBusiness structured data —
+   is all aimed at a customer deciding whether to send us a drawing. None of
+   it helps someone who is here to upload photographs, and the structured data
+   would be actively wrong on a page search engines must never see. */
+import '../styles/base.css';
+import '../styles/admin.css';
+
+const { title, active = '' } = Astro.props;
+
+const nav = [
+  { id: 'home',   label: 'Overview', href: '/admin/' },
+  { id: 'photos', label: 'Photos',   href: '/admin/photos/' },
+  { id: 'blog',   label: 'Writing',  href: '/admin/blog/' },
+];
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>{title} · JMC Engineering</title>
+
+<!-- Belt and braces. Static Web Apps already refuses these routes to anyone
+     without a role, so a crawler cannot read them, but if a URL ever leaks
+     into a link or a sitemap this stops it being indexed. -->
+<meta name="robots" content="noindex, nofollow" />
+
+<link rel="icon" href="/logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+/>
+</head>
+<body class="adm">
+
+  <header class="adm-bar">
+    <a class="adm-brand" href="/admin/">
+      <img src="/logo.png" alt="" width="30" height="30" />
+      <span><b>JMC</b> Admin</span>
+    </a>
+
+    <nav class="adm-nav" aria-label="Admin sections">
+      {nav.map((n) => (
+        <a href={n.href} class={n.id === active ? 'on' : ''}>{n.label}</a>
+      ))}
+    </nav>
+
+    <div class="adm-who">
+      <!-- Filled in by admin.js from /.auth/me. Until then it says nothing
+           rather than guessing, so nobody reads a stale name as fact. -->
+      <span class="adm-user" id="adm-user" hidden>
+        <span class="adm-name" id="adm-name"></span>
+        <span class="adm-role" id="adm-role"></span>
+      </span>
+      <a class="adm-out" href="/.auth/logout?post_logout_redirect_uri=/">Sign out</a>
+    </div>
+  </header>
+
+  <main class="adm-main">
+    <slot />
+  </main>
+
+  <footer class="adm-foot">
+    <span>JMC Engineering · staff only</span>
+    <a href="/" target="_blank" rel="noopener">View the public site ↗</a>
+  </footer>
+
+  <script>
+    import '../scripts/admin.js';
+  </script>
+</body>
+</html>

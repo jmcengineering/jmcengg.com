@@ -1,0 +1,81 @@
+---
+/* The page Static Web Apps rewrites to on a 401 or 403 from anything under
+   /admin or /api.
+
+   It lives OUTSIDE /admin on purpose. Everything under /admin requires a role,
+   so putting this page there would mean the response to "you have no role" is
+   itself refused for want of a role — a redirect loop, and a confusing one.
+
+   It also does not sit behind the platform's own login redirect. Sending a
+   stranger straight to a Microsoft prompt tells them nothing and invites them
+   to try accounts; this tells them plainly that access is by invitation, which
+   is both more honest and less interesting to poke at. */
+import '../../styles/base.css';
+import '../../styles/admin.css';
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Staff sign in · JMC Engineering</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" href="/logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+/>
+</head>
+<body class="adm">
+  <div class="adm-gate">
+    <div class="adm-gate-in">
+      <img src="/logo.png" alt="JMC Engineering" width="46" height="46" />
+      <h1>Staff sign in</h1>
+      <p>This part of the site is for JMC Engineering staff.</p>
+
+      <a class="adm-signin" href="/.auth/login/aad?post_login_redirect_uri=/admin/">
+        Sign in with Microsoft
+      </a>
+
+      <p class="adm-gate-note" id="gate-note">
+        Use your <b>@jmcengg.com</b> account — the same one you use for email.
+      </p>
+
+      <a class="adm-gate-back" href="/">← Back to jmcengg.com</a>
+    </div>
+  </div>
+
+  <script>
+    /* Two different failures land on this page and they need different words.
+       Signed out: sign in. Signed in but never invited: signing in again will
+       not help, and saying so saves someone trying five times and concluding
+       the site is broken. */
+    (async function () {
+      const note = document.getElementById('gate-note');
+      const btn = document.querySelector('.adm-signin');
+      if (!note) return;
+      try {
+        const r = await fetch('/.auth/me', { credentials: 'include' });
+        if (!r.ok) return;
+        const p = (await r.json()).clientPrincipal;
+        if (!p) return;
+
+        const mine = (p.userRoles || []).filter((x) => x === 'admin' || x === 'editor');
+        if (mine.length) {
+          note.innerHTML = 'You are signed in. <a href="/admin/">Continue to the admin panel →</a>';
+          return;
+        }
+        note.innerHTML =
+          'You are signed in as <b>' + (p.userDetails || 'your account') + '</b>, ' +
+          'but this account has not been given access. Signing in again will not ' +
+          'change that — ask an administrator to invite it.';
+        if (btn) btn.textContent = 'Sign in as someone else';
+      } catch {
+        /* Leave the default wording. It is correct for the common case. */
+      }
+    })();
+  </script>
+</body>
+</html>
