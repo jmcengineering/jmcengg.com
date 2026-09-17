@@ -613,10 +613,27 @@ import Floats from '../components/Floats.astro';
     </div>
 
     <!-- FormSubmit posts straight to info@jmcengg.com.
-         ONE-TIME ACTIVATION: the first submission triggers a confirmation
-         email to that address — click the link in it once and every later
-         enquiry is delivered silently. The address is already public in the
-         contact card above, so nothing new is exposed here. -->
+         ACTIVATION IS PER ORIGIN, NOT ONCE FOR EVER. The first submission from
+         any new host triggers a confirmation email to that address; until
+         someone clicks the link, submissions from that host are not delivered.
+         Activated from the azurestaticapps.net host on 17 Sep 2026.
+
+         So a host change is an outage in waiting: the activation email only
+         fires WHEN SOMEONE SUBMITS, which means the first person to use the
+         form on the new host has their enquiry consumed as the trigger rather
+         than delivered. Whenever this site starts serving from a new hostname,
+         submit a test enquiry yourself and click the link before anyone else
+         finds the form.
+
+         The address is already public in the contact card above, so nothing new
+         is exposed by having it here. FormSubmit offers an opaque hash to use
+         in place of it; it buys nothing while the address is displayed in plain
+         text one div up, and it would make this line unreadable.
+
+         _next is absolute and points at the production domain on purpose.
+         FormSubmit redirects from its own servers, so a relative path will not
+         do. Testing on a non-production host therefore lands you on the live
+         thanks page. That is expected, not a bug. -->
     <form id="enquiry-form" class="cform rv-r" action="https://formsubmit.co/info@jmcengg.com" method="POST" enctype="multipart/form-data">
       <h3>Enquiry Form</h3>
       <p class="fnote">GOES STRAIGHT TO OUR TOOL ROOM · ATTACHMENTS SUPPORTED</p>

@@ -220,9 +220,21 @@ fills the About section image.
 
 Posts to [FormSubmit](https://formsubmit.co) → `info@jmcengg.com`.
 
-> **One-time activation required.** The first submission triggers a confirmation
-> email to that address. Click the link in it once and every later enquiry is
-> delivered silently. Until that click, nothing arrives.
+> **Activation is per origin, and it is not a one-time thing.** The first
+> submission from any new hostname triggers a confirmation email to that
+> address; until someone clicks the link, submissions from that host are
+> silently not delivered.
+>
+> **This makes every hostname change an outage in waiting.** The activation
+> email fires only *when someone submits* — so the first person to use the form
+> on a new host has their enquiry consumed as the trigger rather than delivered
+> to us. If that person is a customer, the enquiry is simply gone.
+>
+> **So whenever this site starts serving from a new hostname, submit a test
+> enquiry yourself and click the link before anyone else finds the form.**
+>
+> Activated so far: the `azurestaticapps.net` host and `jmcengg.com`, both on
+> 17 September 2026.
 
 `_captcha` is `false` deliberately — the interstitial captcha page loses real
 enquiries, and the `_honey` honeypot plus the required consent checkbox handle
