@@ -372,8 +372,25 @@ Do not press **Set default** on that toolbar yet. It decides which hostname
 Azure treats as canonical, and that should not move until the apex works.
 
 **Then the apex.** **Add** → `jmcengg.com` → hostname record type **TXT** →
-**Generate code**. Add a TXT record at host `@` with that code as the value,
-wait for it to propagate, then **Validate**. Once validated, point the apex at
+**Generate code**. Add a TXT record at Name `@` with that code as the value,
+wait for it to propagate, then **Validate**.
+
+> **ADD a TXT record. Do not edit an existing one.** `@` already carries TXT
+> records that run the company's email: an SPF record beginning
+> `v=spf1 include:spf.protection.outlook.com`, and an `MS=ms…` record verifying
+> the domain to Microsoft 365. Multiple TXT records on one host is normal and
+> is what is wanted here. Editing either of those instead of adding a third
+> makes outbound mail start failing SPF and breaks the Microsoft 365 domain
+> verification — an email outage caused by a website change, which is the
+> hardest kind to trace.
+>
+> Check all three are present before returning to Azure:
+> `nslookup -type=TXT jmcengg.com 8.8.8.8`. If the SPF or `MS=` line has
+> disappeared, it was edited rather than added. Put it back first.
+
+Adding the TXT record changes nothing about who serves the site. The apex still
+points at GitHub Pages at this stage and should stay there until validation
+passes — that is what keeps the site up while the move is in progress. Once validated, point the apex at
 Azure. On GoDaddy that means an **A** record at Name `@` whose value is the
 **`stableInboundIP`** from the app's Overview → **JSON View**; ALIAS and ANAME
 are not on offer there.
