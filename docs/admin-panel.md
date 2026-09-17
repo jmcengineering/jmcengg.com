@@ -42,6 +42,39 @@ a login page; it would not stop them reaching anything, because reaching
 anything requires a role and roles are invitation-only. The plan is worth paying
 for when the panel holds something worth attacking. It does not yet.
 
+## Known fault: the built-in Entra ID sign-in is broken (17 Sep 2026)
+
+Signing in fails with **401: Unauthorized** at
+`identity.N.azurestaticapps.net/.auth/login/done`, and `/.auth/me` keeps
+returning `clientPrincipal: null`. The login never completes, so roles and
+invitations are not involved — there is nothing to fix on the invitation side.
+
+This is a Microsoft platform fault, not a misconfiguration here. It is reported
+against Static Web Apps **created within the last 48 hours**, on both Free and
+Standard plans, across several `identity.N` hosts. `swa-jmcengg-prod` was
+created on 16 September 2026, which puts it squarely in that window. Nothing in
+`staticwebapp.config.json` can cause it: the failure happens on Microsoft's own
+identity host before control returns to jmcengg.com.
+
+**What to do, in order:**
+
+1. **Retry over the next day or two.** Platform faults of this shape are
+   normally fixed without anyone doing anything, and this costs nothing.
+2. **Try GitHub sign-in** — `/.auth/login/github`. It is the other
+   pre-configured provider and exercises a different path. If it works, the
+   broker is fine and the fault is specific to Entra ID. It is also a usable
+   fallback: roles still come from invitations, so the provider only decides
+   how someone proves who they are. The cost is that staff need GitHub
+   accounts, which are free but are one more thing to explain.
+3. **Custom authentication on the Standard plan**, about ₹800 a month. This
+   uses our own app registration and bypasses the broken pre-configured path
+   entirely, which is the workaround Microsoft's own support threads point to.
+   It also brings tenant restriction and an SLA. Only worth it if the panel
+   has to work now and the first two options have not delivered.
+
+The invitation you generate is unaffected and does not need redoing — it grants
+a role to an identity, and no identity has been established yet.
+
 ## Inviting someone
 
 Only an Owner or Contributor on the Azure resource can do this.
