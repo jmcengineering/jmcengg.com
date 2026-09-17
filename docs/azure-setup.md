@@ -390,10 +390,27 @@ wait for it to propagate, then **Validate**.
 
 Adding the TXT record changes nothing about who serves the site. The apex still
 points at GitHub Pages at this stage and should stay there until validation
-passes — that is what keeps the site up while the move is in progress. Once validated, point the apex at
-Azure. On GoDaddy that means an **A** record at Name `@` whose value is the
-**`stableInboundIP`** from the app's Overview → **JSON View**; ALIAS and ANAME
-are not on offer there.
+passes — that is what keeps the site up while the move is in progress.
+
+Once validated, point the apex at Azure. On GoDaddy that means an **A** record
+at Name `@`; ALIAS and ANAME are not on offer there.
+
+**`stableInboundIP` is the name of a field, not a value to type.** Find it at
+Overview → **JSON View** → Ctrl+F for `stableInboundIP`. It reads:
+
+```json
+"stableInboundIP": "20.119.42.7",
+```
+
+The A record takes only what is inside the quotes — a four-number IP address.
+Typing the words `stableInboundIP` into GoDaddy's Value field returns "Invalid
+data provided for record data", which is GoDaddy correctly refusing something
+that is not an IP.
+
+**Wait for Validated before saving that record.** If the apex points at Azure
+before Azure has finished accepting the hostname, visitors get an error from the
+Azure edge rather than the site — and by then the GitHub Pages records are gone,
+so nothing is catching them.
 
 **Delete the four GitHub Pages A records in the same edit** — `185.199.108.153`,
 `185.199.109.153`, `185.199.110.153`, `185.199.111.153`. Left alongside the
