@@ -233,11 +233,32 @@ Posts to [FormSubmit](https://formsubmit.co) → `info@jmcengg.com`.
 > **So whenever this site starts serving from a new hostname, submit a test
 > enquiry yourself and click the link before anyone else finds the form.**
 >
-> **Activated so far: nothing.** The `azurestaticapps.net` host produced its
-> activation email on 17 September 2026 and the link has not been confirmed as
-> clicked. `jmcengg.com` has never been activated at all. Update this line when
-> each one is genuinely confirmed — an inbox that has actually received a test
-> enquiry, not a link that was clicked and assumed to work.
+> **Activated so far:** the `azurestaticapps.net` host, 17 September 2026,
+> confirmed by three test enquiries actually arriving. **`jmcengg.com` is still
+> not activated** — a test from the live site on 17 September produced another
+> activation email rather than a delivery, and an earlier one from 16 July 2026
+> was never clicked either. Update this line only when a test enquiry has
+> genuinely landed, not when a link has been clicked.
+
+### Enquiries land in Junk, and that is not FormSubmit's fault
+
+Microsoft 365 files `submissions@formsubmit.co` as spam. The three test
+enquiries on 17 September 2026 were all delivered correctly and all went
+straight to **Junk Email**, unread.
+
+This is the worst kind of failure for this business: FormSubmit reports
+success, the enquiry exists, and nobody sees it. It is indistinguishable from
+the form being broken unless you think to look in Junk.
+
+The filter dislikes the shape of the message — the From is
+`submissions@formsubmit.co` while the Reply-To is the customer's own address,
+and the body is a table of form fields. It will not correct itself.
+
+**Fix, per mailbox:** Outlook → Settings → Mail → Junk email → Safe senders and
+domains → add `formsubmit.co`. And mark one of the existing messages *Not
+junk*, which offers to trust the sender permanently.
+
+**If enquiries ever seem to stop, look in Junk before assuming the form broke.**
 
 `_captcha` is `false` deliberately — the interstitial captcha page loses real
 enquiries, and the `_honey` honeypot plus the required consent checkbox handle
