@@ -119,6 +119,13 @@ jobs:
           # The API has no dependencies — no package to install, nothing to
           # bundle — so there is nothing for Oryx to build. staticwebapp.config.json
           # declares the Node runtime it should run on.
+          #
+          # This logs "Unexpected input(s) 'skip_api_build'" on every run. The
+          # action's action.yml has not listed it for years, but it is passed
+          # to the container as INPUT_SKIP_API_BUILD and the deployment engine
+          # honours it — the run log says "Skipping step to build .../api with
+          # Oryx". Do not delete the line to silence the warning; that would
+          # hand the API to Oryx, which is the thing being avoided.
           skip_api_build: true
 
       - name: Sign out
@@ -169,6 +176,13 @@ jobs:
           # The API has no dependencies — no package to install, nothing to
           # bundle — so there is nothing for Oryx to build. staticwebapp.config.json
           # declares the Node runtime it should run on.
+          #
+          # This logs "Unexpected input(s) 'skip_api_build'" on every run. The
+          # action's action.yml has not listed it for years, but it is passed
+          # to the container as INPUT_SKIP_API_BUILD and the deployment engine
+          # honours it — the run log says "Skipping step to build .../api with
+          # Oryx". Do not delete the line to silence the warning; that would
+          # hand the API to Oryx, which is the thing being avoided.
           skip_api_build: true
 
       - name: Sign out
