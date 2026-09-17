@@ -239,12 +239,13 @@ Posts to [FormSubmit](https://formsubmit.co) → `info@jmcengg.com`.
 > **So whenever this site starts serving from a new hostname, submit a test
 > enquiry yourself and click the link before anyone else finds the form.**
 >
-> **Activated so far:** the `azurestaticapps.net` host, 17 September 2026,
-> confirmed by three test enquiries actually arriving. **`jmcengg.com` is still
-> not activated** — a test from the live site on 17 September produced another
-> activation email rather than a delivery, and an earlier one from 16 July 2026
-> was never clicked either. Update this line only when a test enquiry has
-> genuinely landed, not when a link has been clicked.
+> **Activated:** `jmcengg.com` and the `azurestaticapps.net` host, both on
+> 17 September 2026, reported confirmed by the owner. Before that the form had
+> been unactivated on the live domain since 16 July 2026, so nothing submitted
+> in that window was ever delivered.
+>
+> Update this line only when a test enquiry has genuinely landed in the inbox,
+> never when a link has merely been clicked.
 
 ### Enquiries land in Junk, and that is not FormSubmit's fault
 
@@ -260,9 +261,10 @@ The filter dislikes the shape of the message — the From is
 `submissions@formsubmit.co` while the Reply-To is the customer's own address,
 and the body is a table of form fields. It will not correct itself.
 
-**Fix, per mailbox:** Outlook → Settings → Mail → Junk email → Safe senders and
-domains → add `formsubmit.co`. And mark one of the existing messages *Not
-junk*, which offers to trust the sender permanently.
+**Fixed 17 September 2026** by adding `formsubmit.co` to the safe senders list:
+Outlook → Settings → Mail → Junk email → Safe senders and domains. Marking a
+message *Not junk* does the same thing and offers to trust the sender
+permanently.
 
 **If enquiries ever seem to stop, look in Junk before assuming the form broke.**
 
