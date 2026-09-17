@@ -104,40 +104,71 @@ hand; it is the one place adding a page needs a second edit.
 
 ## Deploying
 
-`.github/workflows/deploy.yml` builds and publishes to GitHub Pages on every
-push to `main`, and builds (without deploying) on every pull request.
+`.github/workflows/azure-swa.yml` builds and publishes to **Azure Static Web
+Apps** on every push to `main`. Every pull request gets its own preview URL,
+torn down when the pull request closes.
 
-> **One-time setup before the first deploy from `main`:**
-> Settings → Pages → Build and deployment → Source must be changed from
-> **"Deploy from a branch"** to **"GitHub Actions"**. Until it is, Pages keeps
-> serving the old branch contents and the deploy step fails.
+| | |
+|---|---|
+| Live at | <https://jmcengg.com> and <https://www.jmcengg.com> |
+| Hosted on | Azure Static Web Apps, Free tier, East Asia |
+| Resource | `swa-jmcengg-prod` in `rg-jmcengg-prod` |
+| Azure hostname | `black-mud-0cdfad000.1.azurestaticapps.net` — still works, useful for testing |
+| Cost | ₹0. The Free tier covers 100 GB/month, SSL and custom domains |
 
-### The custom domain is settings state, not just a file
+The infrastructure is code: `infra/main.bicep` declares the Static Web App and
+`.github/workflows/azure-infra.yml` applies it on demand. It is deliberately
+not run on every push — content changes many times a day, infrastructure a few
+times a year.
 
-`public/CNAME` contains `jmcengg.com` and is copied to the root of `dist/`.
-**That file alone does not bind the domain.** The binding lives in
-Settings → Pages → Custom domain.
+**No deployment token is stored in this repository.** GitHub proves its
+identity to Entra ID with a short-lived OIDC token and reads the Static Web
+App's deployment token from Azure at run time, masked, for that one run. There
+is no password to rotate and nothing to leak. The federated trust is pinned to
+this repository and to either the `azure-production` environment or a pull
+request, and the identity holds Contributor on one resource group and nothing
+wider.
 
-Moving `CNAME` out of the repository root once cleared that setting, and
-`jmcengg.com` started returning *"There isn't a GitHub Pages site here"* —
-a whole-site outage, not a 404, even though the build and deploy had both
-succeeded and DNS was untouched.
+The full setup, including everything that had to be done by hand in the Azure
+portal and at GoDaddy, is in **[docs/azure-setup.md](docs/azure-setup.md)**.
 
-If that happens again: Settings → Pages → Custom domain → enter
-`jmcengg.com` → Save, wait for the DNS check, then tick **Enforce HTTPS**
-once the certificate has been issued. Do not add a `base` to
-`astro.config.mjs` to "fix" a 404 — every path on the site is root-absolute
-and correct for the apex domain.
+### DNS
 
-**There are deliberately two CNAME files. Do not delete either.**
+Records live at **GoDaddy** — My Products → Domains → jmcengg.com → DNS.
 
-| File | Who owns it | What it does |
-|---|---|---|
-| `CNAME` (repo root) | Written by GitHub when you save the custom domain | Records the setting. Deleting it unbinds the domain again. |
-| `public/CNAME` | Ours | Copied into `dist/` so the deployed artifact carries the domain. |
+| Host | Type | Value | What it does |
+|---|---|---|---|
+| `@` | A | `52.175.64.109` | The apex, pointed at the Static Web App's `stableInboundIP` |
+| `www` | CNAME | `black-mud-0cdfad000.1.azurestaticapps.net` | The www subdomain |
+| `@` | TXT | `_381pzek3…` | Azure's proof of domain ownership. Leave it |
 
-They must hold the same value (`jmcengg.com`). Two identical files in one
-repo looks like a mistake and invites a tidy-up; that tidy-up is an outage.
+GoDaddy supports neither ALIAS nor ANAME, so the apex has to be an A record.
+That pins apex traffic to a single Static Web Apps host rather than the global
+edge — an accepted trade for a business whose visitors are mostly in India.
+
+**Never touch the `MX`, SPF `TXT`, `_domainkey` or `autodiscover` rows.** Those
+carry the company's Microsoft 365 email. There are three TXT records on `@` and
+all three must stay: Azure's, the SPF one, and the `MS=` one.
+
+### GitHub Pages is gone
+
+The site served from GitHub Pages until 17 September 2026. `deploy.yml`, the
+repo-root `CNAME` and `public/CNAME` were all deleted once Azure was live and
+verified, and Pages was switched off in Settings → Pages.
+
+Two things worth keeping from that era:
+
+- **A custom domain is settings state, not just a file.** Moving `CNAME` out of
+  the repository root once cleared GitHub's custom-domain setting and
+  jmcengg.com returned *"There isn't a GitHub Pages site here"* — a whole-site
+  outage, with the build and deploy both green and DNS untouched. Azure works
+  differently: the custom domain is a resource on the Static Web App, declared
+  in the portal, and no file in this repository affects it.
+- **Rollback, if ever needed**, is to restore the four GitHub Pages A records
+  (`185.199.108.153`, `.109.153`, `.110.153`, `.111.153`) at GoDaddy, re-enable
+  Pages, re-save the custom domain, and `git revert` the commit that removed
+  `deploy.yml`. It is recorded here because the knowledge is worth keeping, not
+  because it is expected.
 
 ### The Node 20 deprecation warning
 
@@ -164,31 +195,6 @@ photographed". Both were live for months.
 
 Exceptions are listed in the script with a reason. **There is one outstanding**:
 the storage account below.
-
-### Azure Static Web Apps — the next home
-
-The site is being moved to Azure Static Web Apps, inside the Microsoft 365
-tenant JMC Engineering already pays for. The move is built but not switched on:
-until DNS changes, GitHub Pages remains the live site and the Azure jobs publish
-only to a temporary `azurestaticapps.net` address.
-
-| File | What it does |
-|---|---|
-| `infra/main.bicep`, `infra/main.bicepparam` | The Static Web App declared as code, so the hosting can be rebuilt identically |
-| `.github/workflows/azure-infra.yml` | Creates and updates that infrastructure. Manual — infrastructure changes a few times a year, content many times a day |
-| `.github/workflows/azure-swa.yml` | Builds and publishes on every push to `main`; every pull request gets its own preview URL |
-| `public/staticwebapp.config.json` | Routing, our 404 page, cache rules, security headers |
-
-**No deployment token is stored in this repository.** GitHub proves its identity
-to Entra ID with a short-lived OIDC token and reads the deployment token from
-Azure at run time, masked, for the duration of that one run. There is no
-password to rotate and nothing to leak. The Azure jobs check for the
-`AZURE_CLIENT_ID` repository variable and skip themselves quietly until the
-Azure side exists, so all of this is safe to have merged.
-
-The portal steps that only a human with an Azure sign-in can do are written out
-in **[docs/azure-setup.md](docs/azure-setup.md)**, including the DNS cutover —
-which is the one step that can take the site down, and so is deliberately last.
 
 ## Outstanding configuration
 

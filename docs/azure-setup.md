@@ -420,11 +420,14 @@ which presents as an intermittent fault and is miserable to diagnose.
 Check GoDaddy's **Forwarding** section too. If domain forwarding is switched on
 it injects records of its own and will fight the A record you just made.
 
-**Only then, remove the old wiring.** Delete the GitHub Pages A records, turn
-off Pages under repository Settings → Pages, and delete
-`.github/workflows/deploy.yml` and the `CNAME` files. Not before — leaving Pages
+**Only then, remove the old wiring.** Done on 17 September 2026:
+`.github/workflows/deploy.yml`, the repo-root `CNAME` and `public/CNAME` are
+deleted. What remains is switching Pages off under repository Settings → Pages,
+which is a portal action.
+
+The order mattered and still would if this were ever repeated: leaving Pages
 configured is the safety net while DNS propagates, which can take up to 72
-hours.
+hours. Removing it first is how the July outage happened.
 
 Do not touch any **MX**, **SPF**, **DKIM** or **autodiscover** record. Those
 carry your email. We are only changing the records that point at the website.

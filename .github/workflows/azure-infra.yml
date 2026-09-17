@@ -125,5 +125,6 @@ jobs:
             echo "| Resource | \`$name\` |"
             echo "| Default hostname | https://$host |"
             echo ""
-            echo "Test the site on that hostname before moving DNS off GitHub Pages."
+            echo "jmcengg.com is served by this resource. Check the hostname above"
+            echo "after any infrastructure change before assuming the site is fine."
           } >> "$GITHUB_STEP_SUMMARY"

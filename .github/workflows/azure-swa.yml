@@ -2,10 +2,10 @@ name: Deploy to Azure Static Web Apps
 
 # Publishes the built site to Azure Static Web Apps.
 #
-# While DNS still points at GitHub Pages this workflow runs alongside
-# deploy.yml and publishes to the azurestaticapps.net hostname only — the live
-# site is unaffected. It becomes the production path the moment jmcengg.com is
-# pointed at Azure, and deploy.yml can be deleted then.
+# This is the production deployment path. jmcengg.com and www.jmcengg.com have
+# served from Azure since 17 September 2026; GitHub Pages and deploy.yml are
+# gone. The azurestaticapps.net hostname still resolves and is useful for
+# testing a change against the real platform without touching the domain.
 #
 # No deployment token is stored in this repository. GitHub proves its identity
 # to Entra ID with a short-lived OIDC token, and the workflow reads the Static
