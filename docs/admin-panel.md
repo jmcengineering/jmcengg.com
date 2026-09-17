@@ -125,12 +125,99 @@ identities, and the role is attached to the invited one.
 
 - Sign-in, roles and route protection — **done**
 - The panel shell: header, navigation, who you are signed in as — **done**
-- Photos — not yet
+- Photos: upload, name, describe, reorder, remove — **done**
 - Writing — not yet
 
 `/admin` and `/api` are disallowed in `robots.txt` and every admin page carries
 `noindex, nofollow`. Neither is the actual protection — the role check is — but
 they stop a URL that leaks into a link from being indexed.
+
+## Photographs
+
+Staff add photographs at **/admin/photos/**. Each one asks for two things, and
+both are compulsory:
+
+| Box | Becomes |
+|---|---|
+| **What is it?** | The filename, the caption under the photograph, and part of what Google reads |
+| **Describe it in one line** | The alt text read aloud to blind visitors, and the `ImageObject` description in the page's structured data |
+
+So "Blanking die for 3 mm mild steel" becomes
+`/works/blanking-die-for-3-mm-mild-steel.jpg` with a real caption, rather than
+`work-7.jpg` with none. That is the entire difference between a photograph that
+can be found and one that cannot.
+
+**The panel refuses stuffed text** — "press tool chennai press tool
+manufacturer press tool" — and says why. This is not fussiness. Keyword
+stuffing is a named violation of Google's spam policies, and the modern penalty
+is not a warning, it is simply not ranking. A tool room ranks on photographs
+described plainly.
+
+Photographs are shrunk in the browser before they are sent: 1600 px on the long
+edge, JPEG quality 0.82, which takes a 6 MB phone photograph to a few hundred
+KB. Up to eight at a time, and a batch is **one commit** — the images and the
+manifest entry that points at them land together, so the site is never
+momentarily referencing a file that does not exist.
+
+Saving commits to `main`, GitHub Actions builds, Azure publishes. About two
+minutes, and the panel says so rather than pretending it is instant.
+
+### Removing a photograph
+
+Removal deletes the file and its manifest entry in one commit. It stays in the
+repository's history, so it can be restored with git — but not from the panel.
+
+## The GitHub token
+
+This is **the only long-lived secret in the whole setup**, and it is worth
+knowing where it is.
+
+Everything else authenticates without a stored password: GitHub proves itself
+to Azure with short-lived OIDC tokens, and the deployment token is read at run
+time and never stored. But the admin panel has to commit to GitHub from inside
+Azure, and GitHub has no federated equivalent for that. So: one token.
+
+| | |
+|---|---|
+| Lives in | Azure portal → `swa-jmcengg-prod` → **Environment variables** (Configuration), as `GITHUB_TOKEN` |
+| Type | A **fine-grained** personal access token |
+| Repository access | **Only select repositories** → `jmcengg.com`. Nothing else |
+| Permissions | **Contents: Read and write**, and nothing else. (Metadata: Read-only is added automatically and cannot be removed) |
+| Never has | Actions, Secrets, Administration or Workflows permission |
+
+Those limits are the point. A token with Contents write can add a photograph
+and can, at worst, damage this one repository's files — which are all
+recoverable from history. A token with Workflows or Secrets could rewrite the
+deployment pipeline or read the Azure credentials. It is never worth the
+convenience.
+
+The token is never sent to a browser. It exists in the Static Web App's
+settings and is read by the function at the moment it commits.
+
+### When it expires
+
+Fine-grained tokens expire. When one does, the panel stops saving and says
+**"GitHub refused the panel's access token"** — that message means this and
+nothing else.
+
+To replace it: GitHub → Settings → Developer settings → Personal access tokens
+→ Fine-grained tokens → the existing one → **Regenerate**, or create a new one
+with the table above. Then paste it into the Static Web App's environment
+variables over the old value and save. The app restarts on its own; no
+deployment is needed.
+
+Set a calendar reminder a week before it expires. The failure is not dangerous,
+but it is confusing if nobody remembers this page exists.
+
+### Two optional settings
+
+Neither is normally needed. Both exist so the panel can be pointed somewhere
+else without a code change — a fork, or a test repository.
+
+| Setting | Default |
+|---|---|
+| `GH_REPO` | `jmcengineering/jmcengg.com` |
+| `GH_BRANCH` | `main` |
 
 ## Files
 
@@ -142,3 +229,11 @@ they stop a URL that leaks into a link from being indexed.
 | `src/pages/admin-signin/index.astro` | The sign-in and no-access page. Lives outside `/admin` on purpose — inside, the response to "you have no role" would itself need a role, which is a redirect loop |
 | `src/scripts/admin.js` | Reads `/.auth/me` for display. Not a security control |
 | `src/styles/admin.css` | Panel styling, on the site's own tokens |
+| `src/pages/admin/photos/index.astro` | The gallery editor |
+| `src/scripts/admin-photos.js` | Its behaviour, including shrinking photographs in the browser |
+| `api/photos/` | The API the editor talks to |
+| `api/_lib/auth.js` | The second role check, from the platform-signed principal header |
+| `api/_lib/github.js` | The commit itself — blobs, tree, commit, ref |
+| `api/_lib/works.js` | The manifest: ordering, the featured photo, adds and removals |
+| `api/_lib/validate.js` | The naming rules, including the keyword-stuffing refusal |
+| `api/test/photos.test.mjs` | The API's tests. `npm run test:api`, and CI runs them on every push |

@@ -1,0 +1,7 @@
+{
+  "name": "jmcengg-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Admin panel API for jmcengg.com, running as Azure Static Web Apps managed functions",
+  "engines": { "node": ">=20" }
+}

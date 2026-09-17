@@ -196,31 +196,37 @@ photographed". Both were live for months.
 Exceptions are listed in the script with a reason. **There is one outstanding**:
 the storage account below.
 
-## Outstanding configuration
+## The works gallery
 
-### Works gallery storage — not yet set
+Lives in this repository — `src/data/works.json` for the captions and ordering,
+`public/works/` for the files. The homepage imports the manifest and renders the
+gallery at build time, so the photographs are in the HTML that Google fetches.
 
-```js
-// src/scripts/home.js, config block at the top
-const STORAGE_ACCOUNT = 'REPLACE_WITH_YOUR_STORAGE_ACCOUNT';
-```
+There is no storage account and no runtime fetch. That was the earlier design
+and it was wrong for this site: it put the photographs outside the HTML, cost
+money, and added a service that could be down. At twenty photographs the whole
+gallery is smaller than one page of most websites.
 
-Until a real account name is set, the loader detects the placeholder, skips the
-network call entirely and shows `work-1.jpg` and `work-2.jpg` from this repo.
-Nothing is broken and no failing request is made.
-
-Once storage exists, set the name and upload a `manifest.json` to the `works`
-container:
+Staff add photographs at **[/admin/photos/](https://jmcengg.com/admin/photos/)**,
+which commits to this repository through `/api/photos`. Editing the JSON by hand
+works too; the panel is just the expected route.
 
 ```json
 { "photos": [
-    { "id": "jig-001", "label": "Jig fixture assembly",
-      "featured": true, "order": 1, "w": 1600, "h": 1200 }
+    { "file": "/works/blanking-die-for-3-mm-mild-steel.jpg",
+      "label": "Blanking die for 3 mm mild steel",
+      "alt": "Finished blanking die on the bench with the punch located",
+      "featured": true, "order": 1, "w": 1600, "h": 1067 }
 ] }
 ```
 
-Each entry expects `<id>.webp` alongside it. The first `featured` photo also
-fills the About section image.
+`label` is the caption and the filename; `alt` is the alt text and the
+`ImageObject` description in the page's structured data. The `featured` photo
+also fills the About section image. Exactly one is featured — the API enforces
+that on every write, so the file cannot drift into a state the homepage has to
+guess about.
+
+## Outstanding configuration
 
 ### Enquiry form
 

@@ -47,6 +47,9 @@ jobs:
 
       - run: npm run build
 
+      - name: Test the admin API
+        run: npm run test:api
+
       - name: Check nothing shipped with a placeholder in it
         run: ./scripts/check-placeholders.sh dist
 
@@ -56,10 +59,16 @@ jobs:
             || { echo "::error::dist/staticwebapp.config.json is missing — routing and security headers would be lost"; exit 1; }
           node -e "JSON.parse(require('fs').readFileSync('dist/staticwebapp.config.json','utf8'))"
 
+      # The deploy jobs do not check the repository out — they only download
+      # this artifact — so the managed functions have to travel with the site.
+      # The tests are excluded: they are for CI, not for the running API.
       - uses: actions/upload-artifact@v5
         with:
           name: site
-          path: dist
+          path: |
+            dist
+            api
+            !api/test
           retention-days: 3
           if-no-files-found: error
 
@@ -75,7 +84,6 @@ jobs:
       - uses: actions/download-artifact@v5
         with:
           name: site
-          path: dist
 
       - name: Sign in to Azure
         uses: azure/login@v3
@@ -105,8 +113,12 @@ jobs:
           azure_static_web_apps_api_token: ${{ steps.token.outputs.token }}
           action: upload
           app_location: dist
+          api_location: api
           output_location: ''
           skip_app_build: true
+          # The API has no dependencies — no package to install, nothing to
+          # bundle — so there is nothing for Oryx to build. staticwebapp.config.json
+          # declares the Node runtime it should run on.
           skip_api_build: true
 
       - name: Sign out
@@ -126,7 +138,6 @@ jobs:
       - uses: actions/download-artifact@v5
         with:
           name: site
-          path: dist
 
       - name: Sign in to Azure
         uses: azure/login@v3
@@ -152,8 +163,12 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: upload
           app_location: dist
+          api_location: api
           output_location: ''
           skip_app_build: true
+          # The API has no dependencies — no package to install, nothing to
+          # bundle — so there is nothing for Oryx to build. staticwebapp.config.json
+          # declares the Node runtime it should run on.
           skip_api_build: true
 
       - name: Sign out

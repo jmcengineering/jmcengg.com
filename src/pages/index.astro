@@ -30,6 +30,39 @@ const works = [...worksData.photos].sort(
 );
 const heroWork = works.find((p) => p.featured) || works[0] || null;
 
+/* Structured data for the gallery.
+
+   Each photograph is an ImageObject carrying the name and description the
+   admin panel collected, which is the whole point of asking for them: Google
+   Images has almost nothing else to work with on a photograph of a die set,
+   and "blanking-die-for-3-mm-mild-steel.jpg" plus a real description is the
+   difference between being findable and being a grey square.
+
+   Built from the same manifest the gallery renders from, so the two can never
+   disagree. */
+const SITE = 'https://jmcengg.com';
+const galleryLd = works.length
+  ? {
+      '@type': 'ImageGallery',
+      '@id': `${SITE}/#works`,
+      name: 'Sample works \u2014 JMC Engineering tool room, Padi, Chennai',
+      isPartOf: { '@id': `${SITE}/#website` },
+      associatedMedia: works.map((p) => ({
+        '@type': 'ImageObject',
+        contentUrl: SITE + p.file,
+        name: p.label,
+        ...(p.alt ? { description: p.alt } : {}),
+        ...(p.w ? { width: p.w } : {}),
+        ...(p.h ? { height: p.h } : {}),
+        creditText: 'JMC Engineering',
+        creator: { '@id': `${SITE}/#business` },
+      })),
+    }
+  : null;
+const galleryJson = galleryLd
+  ? ',\n    ' + JSON.stringify(galleryLd, null, 2).split('\n').join('\n    ')
+  : '';
+
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -141,7 +174,7 @@ const heroWork = works.find((p) => p.featured) || works[0] || null;
         { "@type": "Question", "name": "What types of press tools does JMC Engineering manufacture?", "acceptedAnswer": { "@type": "Answer", "text": "Blanking dies, piercing tools, forming and bending tools, compound dies and progressive dies for precision sheet metal operations, alongside jig fixtures, plastic moulds, gauges and SPM." } },
         { "@type": "Question", "name": "Which areas does JMC Engineering serve?", "acceptedAnswer": { "@type": "Answer", "text": "We are based in Padi, Chennai and serve manufacturers across Tamil Nadu and India, with delivery and post-delivery technical support included." } }
       ]
-    }
+    }${galleryJson}
   ]
 }`} />
 </head>
@@ -353,7 +386,7 @@ const heroWork = works.find((p) => p.featured) || works[0] || null;
       {heroWork ? (
         <img
           src={heroWork.file}
-          alt={`${heroWork.label} — JMC Engineering tool room, Padi, Chennai`}
+          alt={heroWork.alt || `${heroWork.label} — JMC Engineering tool room, Padi, Chennai`}
           width={heroWork.w || 1600}
           height={heroWork.h || 1200}
           loading="lazy"
@@ -461,7 +494,7 @@ const heroWork = works.find((p) => p.featured) || works[0] || null;
       <div class="work-item rv" style={`transition-delay:${(i % 4) * 0.08}s`}>
         <img
           src={p.file}
-          alt={`${p.label} manufactured by JMC Engineering, Chennai`}
+          alt={p.alt || `${p.label} manufactured by JMC Engineering, Chennai`}
           width={p.w || 1600}
           height={p.h || 1200}
           loading={i < 2 ? 'eager' : 'lazy'}

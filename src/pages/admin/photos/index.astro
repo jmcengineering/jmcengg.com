@@ -6,22 +6,75 @@ import Admin from '../../../layouts/Admin.astro';
   <h1 class="adm-h1">Photos</h1>
   <p class="adm-lede">
     Photographs of finished tools, work in progress and the shop floor, for the
-    Our Work section on the homepage.
+    Our Work section on the homepage. Adding one commits it to the website;
+    it appears about two minutes later.
   </p>
 
-  <div class="adm-wip">
-    <span class="adm-tag">Being built</span>
-    <h2>Uploading is not switched on yet</h2>
-    <p>
-      The page you are looking at is real, the upload is not. It needs one thing
-      from the Azure side first — a token that lets this panel commit your
-      photographs to the site. Until that exists, pressing an upload button
-      would fail silently, so there is no upload button.
-    </p>
-    <p>
-      <b>You can get ahead of it now.</b> Photographs are the single biggest
-      thing missing from the site, and taking them does not wait on any of this.
-    </p>
+  <p class="ph-status" id="ph-status" role="status" aria-live="polite" hidden></p>
+
+  <p class="ph-loading" id="ph-loading">Loading the gallery…</p>
+
+  <div id="ph-panel" hidden>
+
+    <!-- ── add ── -->
+    <section class="ph-add">
+      <h2 class="ph-h2">Add photographs</h2>
+
+      <div class="ph-drop" id="ph-drop">
+        <label class="ph-choose">
+          <input type="file" id="ph-file" accept="image/*" multiple hidden />
+          <span class="ph-choose-btn">Choose photographs</span>
+        </label>
+        <p class="ph-drop-note">
+          or drag them here · up to 8 at a time · straight from a phone is fine,
+          they are shrunk before they are sent
+        </p>
+      </div>
+
+      <div id="ph-queue" hidden></div>
+      <p class="ph-hint" id="ph-hint" hidden></p>
+      <button type="button" class="ph-btn" id="ph-upload" hidden disabled>Add</button>
+
+      <!-- The naming rules are enforced by the API, not here. This says why,
+           before someone types "press tool chennai press tool" and is refused
+           by a machine with no explanation. -->
+      <div class="ph-why">
+        <h3>Why the two boxes matter</h3>
+        <p>
+          <b>What it is</b> becomes the photograph's filename, the caption under
+          it, and part of what Google reads. <b>Blanking die for 3 mm mild
+          steel</b> is findable. <b>IMG_4471</b> is not.
+        </p>
+        <p>
+          <b>The description</b> is read aloud to blind visitors and is the main
+          thing Google Images has to go on. Say what is visible — the material,
+          the operation, the machine.
+        </p>
+        <p>
+          Write both as you would say them to a customer. Repeating keywords —
+          <i>press tool chennai press tool manufacturer press tool</i> — is the
+          one thing that actively damages a site's ranking, so the panel refuses
+          it rather than letting it through.
+        </p>
+      </div>
+    </section>
+
+    <!-- ── the existing gallery ── -->
+    <section class="ph-have">
+      <div class="ph-have-head">
+        <div>
+          <h2 class="ph-h2">On the homepage</h2>
+          <p class="ph-count" id="ph-count"></p>
+        </div>
+        <button type="button" class="ph-btn" id="ph-save" disabled>Saved</button>
+      </div>
+      <p class="ph-order-note">
+        The <b>main photo</b> also appears beside the About text. Order here is
+        the order on the homepage.
+      </p>
+      <div id="ph-list"></div>
+    </section>
+
   </div>
 
   <section class="adm-brief">
@@ -46,5 +99,9 @@ import Admin from '../../../layouts/Admin.astro';
       photograph of good work does the work a disservice.
     </p>
   </section>
+
+  <script>
+    import '../../../scripts/admin-photos.js';
+  </script>
 
 </Admin>
