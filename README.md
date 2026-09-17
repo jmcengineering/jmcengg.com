@@ -233,8 +233,11 @@ Posts to [FormSubmit](https://formsubmit.co) → `info@jmcengg.com`.
 > **So whenever this site starts serving from a new hostname, submit a test
 > enquiry yourself and click the link before anyone else finds the form.**
 >
-> Activated so far: the `azurestaticapps.net` host and `jmcengg.com`, both on
-> 17 September 2026.
+> **Activated so far: nothing.** The `azurestaticapps.net` host produced its
+> activation email on 17 September 2026 and the link has not been confirmed as
+> clicked. `jmcengg.com` has never been activated at all. Update this line when
+> each one is genuinely confirmed — an inbox that has actually received a test
+> enquiry, not a link that was clicked and assumed to work.
 
 `_captcha` is `false` deliberately — the interstitial captcha page loses real
 enquiries, and the `_honey` honeypot plus the required consent checkbox handle
