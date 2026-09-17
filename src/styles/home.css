@@ -214,27 +214,28 @@ section{padding:92px 6%;}
 .cc-k{font-family:var(--font-m);font-size:9.5px;color:var(--txt-mut);letter-spacing:1.6px;text-transform:uppercase;margin-bottom:3px;}
 .cc-v{font-family:var(--font-d);font-size:16px;font-weight:600;color:var(--txt);}
 /* ── map ──
-   The placeholder carries the address on its own, so a visitor who never
-   presses the button still gets what they came for. Fixed aspect ratio on
-   both states so swapping the iframe in does not shift the page. */
+   A live Google embed. The iframe is lazy so it costs nothing to a reader who
+   never scrolls to the contact section, and it carries a fixed aspect ratio so
+   the caption below it does not jump when the tiles arrive. */
 .map{margin:0;}
-.map-ph,.map-frame{aspect-ratio:16/11;width:100%;border:1px solid var(--hairline);border-radius:var(--r);overflow:hidden;}
-.map-ph{background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:12px;text-align:center;padding:24px 20px;}
-.map-pin{width:30px;height:30px;fill:none;stroke:var(--blue);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
-.map-addr{font-size:14px;line-height:1.6;color:var(--txt-mut);margin:0;}
-.map-addr b{color:var(--ink);font-weight:600;}
-.map-acts{display:flex;gap:9px;flex-wrap:wrap;justify-content:center;}
-.map-btn{font-family:var(--font-d);font-size:13.5px;font-weight:600;letter-spacing:.3px;padding:9px 16px;
-  border:1.5px solid var(--ink);background:var(--ink);color:#fff;border-radius:8px;cursor:pointer;
-  text-decoration:none;transition:background .2s var(--ease),transform .2s var(--ease);}
+.map-frame{display:block;width:100%;aspect-ratio:16/11;border:1px solid var(--hairline);
+  border-radius:var(--r) var(--r) 0 0;background:var(--paper);}
+.map-cap{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  background:var(--paper);border:1px solid var(--hairline);border-top:none;
+  border-radius:0 0 var(--r) var(--r);padding:13px 16px;}
+.map-cap-a{font-size:13.5px;line-height:1.5;color:var(--txt-mut);}
+.map-cap-a b{color:var(--ink);font-weight:600;}
+.map-btn{font-family:var(--font-d);font-size:13.5px;font-weight:600;letter-spacing:.3px;
+  padding:9px 16px;border:1.5px solid var(--ink);background:var(--ink);color:#fff;border-radius:8px;
+  cursor:pointer;text-decoration:none;white-space:nowrap;
+  transition:background .2s var(--ease),transform .2s var(--ease);}
 .map-btn:hover{background:var(--steel);transform:translateY(-1px);}
-.map-btn.ghost{background:transparent;color:var(--ink);}
-.map-btn.ghost:hover{background:rgba(8,21,48,.06);}
 .map-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px;}
-.map-note{font-family:var(--font-m);font-size:11px;color:var(--txt-mut);margin:0;}
-.map-frame{display:block;border:1px solid var(--hairline);}
-@media(max-width:600px){.map-ph,.map-frame{aspect-ratio:4/3;}}
+@media(max-width:600px){
+  .map-frame{aspect-ratio:4/3;}
+  .map-cap{flex-direction:column;align-items:stretch;text-align:center;}
+  .map-btn{text-align:center;}
+}
 
 .cform{background:var(--paper);border:1px solid var(--hairline);border-radius:14px;padding:32px;}
 .cform h3{font-size:21px;font-weight:600;margin-bottom:6px;}

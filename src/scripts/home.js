@@ -299,34 +299,3 @@ const videoConfig = [
     grid.appendChild(a); io.observe(a);
   });
 })();
-
-/* ── MAP — load Google's iframe only when the visitor asks ──
-      The markup already carries the address and a link out to Google Maps, so
-      this is an upgrade rather than the only way in: with no JavaScript the
-      section still does its job. Not loading the iframe up front keeps several
-      hundred KB and a third-party cookie off every page view by someone who
-      never intended to look at a map. ── */
-(function () {
-  const ph = document.getElementById('map-ph');
-  if (!ph) return;
-  const src = ph.dataset.embed;
-  const acts = ph.querySelector('.map-acts');
-  if (!src || !acts) return;
-
-  const btn = document.createElement('button');
-  btn.type = 'button';
-  btn.className = 'map-btn ghost';
-  btn.textContent = 'Show map here';
-  acts.insertBefore(btn, acts.firstChild);
-
-  btn.addEventListener('click', () => {
-    const f = document.createElement('iframe');
-    f.className = 'map-frame';
-    f.title = 'JMC Engineering, Padi, Chennai — location map';
-    f.loading = 'lazy';
-    f.referrerPolicy = 'no-referrer-when-downgrade';
-    f.allowFullscreen = true;
-    f.src = src;
-    ph.replaceWith(f);
-  }, { once: true });
-})();

@@ -611,27 +611,30 @@ import Floats from '../components/Floats.astro';
         <div><div class="cc-k">Working Hours</div><div class="cc-v" style="font-size:14px;">Mon–Sat · 9:00 – 18:00 IST</div></div>
       </div>
 
-      <!-- Map. Deliberately NOT an iframe on page load.
-           Google Maps is a third party that sets cookies and pulls several
-           hundred KB before anyone has asked to see a map, and the privacy
-           policy lists who receives visitor data. So the visitor decides.
+      <!-- Map. A live embed, shown rather than hidden behind a button —
+           people deciding whether to drive to Padi should see where it is.
 
-           Progressive enhancement: with no JavaScript this is an address and
-           a link to Google Maps, which is useful on its own. home.js adds the
-           "Show map here" button that swaps in the iframe. -->
+           loading="lazy" keeps it off the wire until the contact section is
+           near the viewport, so a reader who never scrolls this far never
+           loads it. Google is contacted at that point and is disclosed in the
+           privacy policy alongside Fonts.
+
+           The pin comes from geocoding the business name and address, which
+           Google resolves correctly — its own listing for JMC Engineering
+           carries this address. -->
       <figure class="map">
-        <div
-          class="map-ph"
-          id="map-ph"
-          data-embed="https://maps.google.com/maps?q=JMC+Engineering+Asai+Thambi+St+TMP+Nagar+Padi+Chennai+600050&amp;z=16&amp;output=embed"
-        >
-          <svg class="map-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          <p class="map-addr"><b>JMC Engineering</b><br/>#17/9 Asai Thambi St, TMP Nagar,<br/>Padi, Chennai – 600 050</p>
-          <div class="map-acts">
-            <a class="map-btn" href="https://maps.google.com/?q=JMC+Engineering+Asai+Thambi+St+TMP+Nagar+Padi+Chennai+600050" target="_blank" rel="noopener">Open in Google Maps</a>
-          </div>
-          <p class="map-note">The map loads from Google only when you ask for it.</p>
-        </div>
+        <iframe
+          class="map-frame"
+          title="JMC Engineering, Asai Thambi St, TMP Nagar, Padi, Chennai — location map"
+          src="https://maps.google.com/maps?q=JMC+Engineering+Asai+Thambi+St+TMP+Nagar+Padi+Chennai+600050&amp;z=16&amp;output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+        ></iframe>
+        <figcaption class="map-cap">
+          <span class="map-cap-a"><b>JMC Engineering</b> · #17/9 Asai Thambi St, TMP Nagar, Padi, Chennai – 600 050</span>
+          <a class="map-btn" href="https://maps.google.com/?q=JMC+Engineering+Asai+Thambi+St+TMP+Nagar+Padi+Chennai+600050" target="_blank" rel="noopener">Get directions</a>
+        </figcaption>
       </figure>
     </div>
 
