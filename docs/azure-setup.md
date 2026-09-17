@@ -323,28 +323,68 @@ there is no deadline.
 Do not start this until you are happy. This is the part that can take the site
 down, so it gets its own section and its own order of operations.
 
-First, tell me who hosts the DNS for jmcengg.com — the registrar or provider
-where the records live. It matters: an apex domain like `jmcengg.com` cannot use
-a plain CNAME, so the right record depends on whether your provider supports
-**ALIAS**/**ANAME** records or only **A** records. Cloudflare and most modern
-providers do; GoDaddy does not.
+DNS for jmcengg.com is hosted at **GoDaddy** — My Products → Domains →
+jmcengg.com → DNS. Two consequences follow, and they shape the whole step:
+
+- GoDaddy calls the host field **Name**, and appends the domain itself. So the
+  value is `www`, never `www.jmcengg.com` — the full name produces
+  `www.jmcengg.com.jmcengg.com` and fails validation with "CNAME Record is
+  invalid", which reads like Azure's fault and is not.
+- **GoDaddy supports neither ALIAS nor ANAME.** An apex domain cannot take a
+  plain CNAME, so `jmcengg.com` needs an **A record** pointing at the Static Web
+  App's `stableInboundIP`. That works, but Microsoft is explicit that an A
+  record pins traffic to a single Static Web Apps host instead of the global
+  edge. For a Chennai tool room serving mostly Indian visitors, an acceptable
+  trade. The alternative — moving DNS to Cloudflare, whose CNAME flattening
+  handles apex properly — means moving the MX records carrying the company's
+  email, which is not a risk worth taking for this.
+
+**The portal does not create DNS records for you.** It shows the record it
+expects, you create it at GoDaddy, and only then does it verify. Pressing
+**Add** before the record exists fails with "CNAME Record is invalid. Please
+ensure the CNAME record has been created." Nothing is broken when that happens
+and nothing is at risk — the check simply ran before the record did.
 
 The shape of it, verified against Microsoft's current documentation:
 
-**www first, as a rehearsal.** In the portal, open `swa-jmcengg-prod` →
-**Custom domains** → **Add** → `www.jmcengg.com` → hostname record type
-**CNAME**. Azure asks you to add a CNAME at host `www` pointing to the
-azurestaticapps.net hostname. Add it at your DNS provider, wait, then
-**Validate**. Azure issues the SSL certificate itself, free.
+**www first, as a rehearsal.** Prove the whole path — record, validation,
+certificate — on a hostname whose failure cannot take the site down.
+
+1. GoDaddy → Manage DNS. Find the existing `CNAME` named `www` (it points at
+   `jmcengineering.github.io`). **Edit it; do not add a second** — two records
+   for one host will not work.
+
+   | Type | Name | Value | TTL |
+   |---|---|---|---|
+   | CNAME | `www` | the app's azurestaticapps.net hostname | Custom → 600 |
+
+   Set the TTL to 600 while you are there. It makes the apex change later
+   propagate in ten minutes rather than an hour.
+
+2. Confirm it is live before returning to Azure — dnschecker.org with record
+   type CNAME, or `nslookup -type=CNAME www.jmcengg.com 8.8.8.8`.
+
+3. Then portal → `swa-jmcengg-prod` → **Custom domains** → **Add** → **Custom
+   domain on other DNS** → `www.jmcengg.com` → record type **CNAME** → **Add**.
+   Azure issues the SSL certificate itself, free.
+
+Do not press **Set default** on that toolbar yet. It decides which hostname
+Azure treats as canonical, and that should not move until the apex works.
 
 **Then the apex.** **Add** → `jmcengg.com` → hostname record type **TXT** →
 **Generate code**. Add a TXT record at host `@` with that code as the value,
 wait for it to propagate, then **Validate**. Once validated, point the apex at
-Azure — an **ALIAS**/**ANAME** record at host `@` whose value is the
-azurestaticapps.net hostname without the `https://`, or, if your provider has
-no ALIAS support, an **A** record at host `@` pointing to the
-**`stableInboundIP`** shown in the app's Overview → **JSON View**. Prefer ALIAS:
-an A record pins every visitor to one Azure host and gives up the global edge.
+Azure. On GoDaddy that means an **A** record at Name `@` whose value is the
+**`stableInboundIP`** from the app's Overview → **JSON View**; ALIAS and ANAME
+are not on offer there.
+
+**Delete the four GitHub Pages A records in the same edit** — `185.199.108.153`,
+`185.199.109.153`, `185.199.110.153`, `185.199.111.153`. Left alongside the
+Azure one, visitors get load-balanced at random between Azure and GitHub Pages,
+which presents as an intermittent fault and is miserable to diagnose.
+
+Check GoDaddy's **Forwarding** section too. If domain forwarding is switched on
+it injects records of its own and will fight the A record you just made.
 
 **Only then, remove the old wiring.** Delete the GitHub Pages A records, turn
 off Pages under repository Settings → Pages, and delete
