@@ -56,6 +56,33 @@ a.adm-card:hover{border-color:var(--blue);box-shadow:var(--shadow);}
   color:var(--txt-mut);border:1px solid var(--hairline);border-radius:99px;padding:3px 9px;
   align-self:flex-start;}
 
+/* ── a section that is real but not yet finished ──
+   Says so plainly rather than showing a disabled button, which invites
+   someone to press it repeatedly and conclude the panel is broken. */
+.adm-wip{background:var(--white);border:1px solid var(--hairline);
+  border-left:3px solid var(--amber);border-radius:0 var(--r) var(--r) 0;
+  padding:20px 22px;display:flex;flex-direction:column;gap:10px;}
+.adm-wip h2{font-family:var(--font-d);font-size:17px;font-weight:600;color:var(--ink);margin:0;}
+.adm-wip p{margin:0;font-size:14.5px;color:var(--txt-mut);}
+.adm-wip b{color:var(--ink);}
+
+/* ── the briefing sections ──
+   Worth more than they look: the reason the gallery and the blog are empty is
+   not the software, it is that nobody knows what to photograph or write. */
+.adm-brief{margin-top:30px;background:var(--white);border:1px solid var(--hairline);
+  border-radius:var(--r);padding:24px;}
+.adm-brief h2{font-family:var(--font-d);font-size:18px;font-weight:600;color:var(--ink);margin:0 0 8px;}
+.adm-brief-lede{font-size:14.5px;color:var(--txt-mut);margin:0 0 16px;max-width:66ch;}
+.adm-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;}
+.adm-list li{font-size:14.5px;color:var(--txt-mut);line-height:1.6;padding:10px 0 10px 26px;
+  border-bottom:1px solid var(--hairline);position:relative;}
+.adm-list li:last-child{border-bottom:none;}
+.adm-list li::before{content:'';position:absolute;left:4px;top:18px;width:7px;height:7px;
+  border-radius:50%;background:var(--blue);}
+.adm-list b{color:var(--ink);font-weight:600;}
+.adm-brief-foot{font-size:14px;color:var(--txt-mut);margin:16px 0 0;padding-top:14px;
+  border-top:1px solid var(--hairline);max-width:66ch;}
+
 .adm-note{background:var(--white);border:1px solid var(--hairline);
   border-left:3px solid var(--blue);border-radius:0 var(--r) var(--r) 0;
   padding:16px 18px;margin-top:26px;font-size:14.5px;color:var(--txt-mut);}
