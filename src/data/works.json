@@ -4,6 +4,7 @@
     {
       "file": "/work-1.jpg",
       "label": "Jig fixture assembly",
+      "alt": "",
       "featured": true,
       "order": 1,
       "w": 1024,
@@ -12,10 +13,20 @@
     {
       "file": "/work-2.jpg",
       "label": "Press tool detail",
+      "alt": "",
       "featured": false,
       "order": 2,
       "w": 1024,
       "h": 458
+    },
+    {
+      "file": "/works/brass-holding-locator.jpg",
+      "label": "Brass Holding Locator",
+      "alt": "It is a part to hold and locate the pipe model machined components which is delicate in nature",
+      "featured": false,
+      "order": 3,
+      "w": 1360,
+      "h": 1020
     }
   ]
 }
