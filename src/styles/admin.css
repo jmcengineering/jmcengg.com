@@ -205,3 +205,58 @@ a.adm-card:hover{border-color:var(--blue);box-shadow:var(--shadow);}
 .ph-why p{font-size:14px;color:var(--txt-mut);margin:0 0 9px;max-width:66ch;line-height:1.6;}
 .ph-why p:last-child{margin-bottom:0;}
 .ph-why b{color:var(--ink);font-weight:600;}
+
+/* ══════════ the writing screen ══════════ */
+
+.wr-row{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;
+  flex-wrap:wrap;padding:16px 0;border-bottom:1px solid var(--hairline);}
+.wr-row:last-child{border-bottom:none;}
+.wr-row-main{min-width:0;flex:1;}
+.wr-row-main h3{font-family:var(--font-d);font-size:16.5px;font-weight:600;color:var(--ink);
+  margin:7px 0 4px;line-height:1.35;}
+.wr-row-meta{font-family:var(--font-m);font-size:11.5px;color:var(--txt-mut);margin:0;letter-spacing:.03em;}
+.wr-row-acts{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.wr-row-note{font-size:12px;color:var(--txt-mut);max-width:20ch;line-height:1.4;}
+
+.wr-pill{display:inline-block;font-family:var(--font-m);font-size:9.5px;letter-spacing:.11em;
+  text-transform:uppercase;padding:3px 9px;border-radius:99px;border:1px solid;}
+.wr-published{color:#166534;border-color:#bbf7d0;background:#f0fdf4;}
+.wr-draft{color:#92400e;border-color:#fde68a;background:#fffbeb;}
+.wr-legacy{color:var(--txt-mut);border-color:var(--hairline);background:var(--paper);}
+
+/* ── the form ── */
+.wr-form{display:flex;flex-direction:column;gap:18px;margin-top:20px;}
+.wr-form .ph-field select{font-family:var(--font-b);font-size:14.5px;color:var(--txt);
+  background:var(--paper);border:1px solid var(--hairline);border-radius:7px;padding:9px 11px;width:100%;}
+.wr-form .ph-field select:focus{outline:2px solid var(--blue);outline-offset:-1px;background:var(--white);}
+.wr-help{font-family:var(--font-m);font-size:11px;color:var(--txt-mut);letter-spacing:.03em;}
+.wr-help.warn{color:#92400e;}
+
+/* Monospace for the article body: it is the only field where a stray double
+   space or a mis-indented list marker changes the output, and proportional
+   type hides both. */
+.wr-body{font-family:var(--font-m)!important;font-size:14px!important;line-height:1.7!important;
+  min-height:420px;}
+
+.wr-acts{display:flex;flex-wrap:wrap;align-items:center;gap:10px;}
+.wr-acts .ph-btn{margin-top:0;}
+.wr-acts .ph-btn-s{padding:11px 16px;text-decoration:none;display:inline-flex;align-items:center;}
+.wr-pub{background:#166534;}
+.wr-pub:hover:not(:disabled){background:#14532d;}
+.wr-note{font-size:13px;color:var(--txt-mut);margin:0;max-width:64ch;line-height:1.55;}
+.wr-note b{color:var(--ink);}
+
+/* ── the formatting help ── */
+.wr-md{margin-top:24px;background:var(--white);border:1px solid var(--hairline);
+  border-radius:var(--r);padding:0 20px;}
+.wr-md summary{font-family:var(--font-d);font-size:15px;font-weight:600;color:var(--ink);
+  padding:16px 0;cursor:pointer;}
+.wr-md summary:focus-visible{outline:2px solid var(--blue);outline-offset:2px;}
+.wr-md-in{padding-bottom:20px;}
+.wr-md-in p{font-size:14px;color:var(--txt-mut);margin:0 0 14px;max-width:66ch;line-height:1.6;}
+.wr-md-tbl{border-collapse:collapse;width:100%;margin-bottom:14px;}
+.wr-md-tbl td{padding:7px 12px 7px 0;font-size:13.5px;color:var(--txt-mut);
+  border-bottom:1px solid var(--hairline);vertical-align:top;}
+.wr-md-tbl td:first-child{width:46%;}
+.wr-md-tbl code{font-family:var(--font-m);font-size:12.5px;background:var(--paper);
+  padding:2px 6px;border-radius:4px;color:var(--ink);white-space:nowrap;}

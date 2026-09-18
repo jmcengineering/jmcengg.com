@@ -1,0 +1,59 @@
+---
+/* The rendered article: header, prose, footer call to action.
+
+   Shared by the public page at /insights/<slug>/ and the draft preview at
+   /admin/preview/<slug>/, so what an editor previews is the real page rather
+   than an approximation of it. */
+import { tintFor, longDate, isoDate } from '../data/article-meta.js';
+
+const { article, draft = false } = Astro.props;
+const tint = tintFor(article.category);
+const Body = article.Content;
+---
+<article class="art">
+
+  {draft && (
+    <p class="art-draft">
+      <b>Draft.</b> This page is visible only to signed-in staff and is not on
+      the public site. Publish it from <a href="/admin/blog/">Writing</a>.
+    </p>
+  )}
+
+  <header class="art-head">
+    <span class="art-cat" style={`color:${tint};border-color:${tint}55;`}>{article.category}</span>
+    <h1>{article.title}</h1>
+    <p class="art-sub">{article.description}</p>
+    <p class="art-meta">
+      <time datetime={isoDate(article.date)}>{longDate(article.date)}</time>
+      {isoDate(article.updated) !== isoDate(article.date) && (
+        <span> · updated <time datetime={isoDate(article.updated)}>{longDate(article.updated)}</time></span>
+      )}
+      <span> · {article.author}</span>
+    </p>
+  </header>
+
+  <div class="art-body">
+    {Body ? (
+      <Body />
+    ) : (
+      <p>
+        This article is one of the four hand-written HTML pages that predate
+        this system. It is served from its own file — see
+        <code>src/data/articles.json</code>.
+      </p>
+    )}
+  </div>
+
+  <footer class="art-foot">
+    <h2>Have a drawing you want built?</h2>
+    <p>
+      Send it across and you will get an engineering review within 24 hours —
+      what we would change, what it will cost, and how long it takes.
+    </p>
+    <div class="art-foot-btns">
+      <a class="btn btn-p" href="/#contact">Send your drawing</a>
+      <a class="btn-o-light" href="/insights/">More articles</a>
+    </div>
+  </footer>
+
+</article>

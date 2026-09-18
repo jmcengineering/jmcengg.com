@@ -1,0 +1,45 @@
+{
+  "_comment": "The Insights index. Written by the admin panel at /admin/blog/. Entries with `legacy: true` are the four hand-written HTML articles in public/ that predate this system — they keep their own URLs and their own markup, and the panel will not edit them. Everything else is a markdown file in src/content/articles/<slug>.md and is served at /insights/<slug>/. Newest first is the display order; `date` decides it, not position in this file.",
+  "articles": [
+    {
+      "slug": "progressive-dies",
+      "title": "How We Design Progressive Dies for Tight Tolerances",
+      "description": "Our design methodology for complex progressive dies — from strip layout to final tryout and first-article approval.",
+      "category": "Press Tools",
+      "date": "2025-05-01",
+      "status": "published",
+      "url": "/blog-progressive-dies.html",
+      "legacy": true
+    },
+    {
+      "slug": "fixture-mistakes",
+      "title": "5 Common Fixture Design Mistakes & How to Avoid Them",
+      "description": "Locating, clamping and datum errors we see again and again on incoming fixture drawings — and what they cost on the shop floor.",
+      "category": "Fixtures",
+      "date": "2025-05-01",
+      "status": "published",
+      "url": "/blog-fixture-mistakes.html",
+      "legacy": true
+    },
+    {
+      "slug": "msme-toolmakers",
+      "title": "Why MSME Toolmakers Are the Backbone of India's Auto Sector",
+      "description": "India's automotive boom runs on precision tooling — and small MSME shops are the unseen engine behind it.",
+      "category": "Industry",
+      "date": "2025-05-01",
+      "status": "published",
+      "url": "/blog-msme-toolmakers.html",
+      "legacy": true
+    },
+    {
+      "slug": "engineering-business",
+      "title": "Why Engineering Businesses Fail — And What JMC Did Differently",
+      "description": "An honest account of the pitfalls that break small engineering firms — and the decisions that helped JMC rebuild.",
+      "category": "Our Story",
+      "date": "2025-05-01",
+      "status": "published",
+      "url": "/blog-engineering-business.html",
+      "legacy": true
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+---
+/* One article card. Used on the homepage and on /insights/.
+   The homepage variant is the dark one; both share the markup. */
+import { iconFor, tintFor, longDate, isoDate } from '../data/article-meta.js';
+
+const { article, delay = 1 } = Astro.props;
+const tint = tintFor(article.category);
+---
+<article class={`blog-card rv d${delay}`}>
+  <div class="blog-th">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d={iconFor(article.category)} /></svg>
+    <span class="blog-cat" style={`color:${tint};`}>{article.category}</span>
+  </div>
+  <div class="blog-bd">
+    <h3><a href={article.url}>{article.title}</a></h3>
+    <p>{article.description}</p>
+    <div class="blog-mt">
+      <time datetime={isoDate(article.date)}>{longDate(article.date)}</time>
+      <a href={article.url} aria-label={`Read: ${article.title}`}>Read →</a>
+    </div>
+  </div>
+</article>

@@ -1,0 +1,65 @@
+---
+/* /insights/ — every published article.
+
+   The homepage carries the four most recent; this is the full list, and it is
+   what a search engine follows to find articles that have scrolled off the
+   homepage. */
+import Page from '../../layouts/Page.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { published } from '../../data/articles.js';
+import { isoDate } from '../../data/article-meta.js';
+
+const listLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  '@id': 'https://jmcengg.com/insights/#blog',
+  name: 'Engineering Insights — JMC Engineering',
+  description:
+    'Practical notes on press tools, jig fixtures, moulds and gauges from a working tool room in Padi, Chennai.',
+  publisher: { '@id': 'https://jmcengg.com/#business' },
+  blogPost: published.map((a) => ({
+    '@type': 'BlogPosting',
+    headline: a.title,
+    description: a.description,
+    datePublished: isoDate(a.date),
+    dateModified: isoDate(a.updated),
+    url: new URL(a.url, 'https://jmcengg.com/').href,
+    author: { '@type': 'Organization', name: a.author },
+  })),
+};
+---
+<Page
+  title="Engineering Insights — Press Tools, Fixtures & Tooling Notes | JMC Engineering"
+  description="Practical notes from a working tool room in Padi, Chennai — press tool and progressive die design, jig fixture mistakes, material choices and the state of MSME toolmaking in India."
+  crumbs={[
+    { label: 'Home', href: '/' },
+    { label: 'Insights', href: '/insights/' },
+  ]}
+  jsonld={[listLd]}
+>
+
+  <header class="band">
+    <div class="band-in">
+      <nav class="crumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> <span>/</span> <span>Insights</span>
+      </nav>
+      <h1>Engineering Insights</h1>
+      <p class="lede">
+        Notes from the shop floor in Padi — what we have actually built, what
+        went wrong, and the rules we use. Written by the people who run the
+        machines, not by a marketing department.
+      </p>
+    </div>
+  </header>
+
+  <div class="wrap" style="padding-block:52px">
+    {published.length === 0 ? (
+      <p class="ins-empty">The first articles are being written.</p>
+    ) : (
+      <div class="blog-grid">
+        {published.map((a, i) => <ArticleCard article={a} delay={(i % 4) + 1} />)}
+      </div>
+    )}
+  </div>
+
+</Page>

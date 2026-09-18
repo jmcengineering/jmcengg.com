@@ -99,8 +99,9 @@ Each entry drives: the `<title>` and meta description, the H1 and lede, the
 us" panel, and the FAQ — which is also emitted as FAQ structured data so the
 questions can appear directly in Google results.
 
-**Then add the URL to `public/sitemap.xml`.** That file is still maintained by
-hand; it is the one place adding a page needs a second edit.
+The sitemap picks it up on its own — `src/pages/sitemap.xml.js` is generated
+at build time from the same data the pages are built from, so there is no
+second edit and nothing to forget.
 
 ## Deploying
 
@@ -225,6 +226,33 @@ works too; the panel is just the expected route.
 also fills the About section image. Exactly one is featured — the API enforces
 that on every write, so the file cannot drift into a state the homepage has to
 guess about.
+
+## Insights articles
+
+Articles live in `src/content/articles/<slug>.md` — markdown with frontmatter —
+and `src/data/articles.json` is the index the homepage and `/insights/` list
+from. Staff write them at **[/admin/blog/](https://jmcengg.com/admin/blog/)**,
+which commits both files together.
+
+A published article is a real static page at `/insights/<slug>/` with
+`BlogPosting` structured data and a sitemap entry. A draft is not built into
+the public site at all; it is previewed at `/admin/preview/<slug>/`, which the
+`/admin/*` role rule protects.
+
+`src/data/articles.js` loads them at build time and **fails the build** if the
+index lists an article whose file is missing — that combination would put a
+link to a 404 on the homepage.
+
+### The four older articles
+
+`public/blog-*.html` are hand-written standalone pages from an earlier
+generation of the site. They keep their own URLs, because moving them would
+discard whatever ranking they have. They are listed by the index like any
+other article (`legacy: true`) but the panel will not edit them.
+
+Two known gaps, neither urgent: they carry no `Article` structured data, and
+they use the site's older fonts and layout. Worth fixing on the day someone
+wants to revise one anyway.
 
 ## Outstanding configuration
 

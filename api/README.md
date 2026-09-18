@@ -27,6 +27,18 @@ It also uses the classic programming model (`function.json` beside
 | `POST /api/photos` | Add photographs — images and manifest in one commit |
 | `PUT /api/photos` | Captions, descriptions, order, which one is featured |
 | `DELETE /api/photos?file=…` | Remove one photograph and its file |
+| `GET /api/articles` | The article index, drafts included |
+| `GET /api/articles?slug=…` | One article, with its markdown body |
+| `POST /api/articles` | Start a draft |
+| `PUT /api/articles?slug=…` | Save it; `status` decides draft or published |
+| `DELETE /api/articles?slug=…` | Delete it |
+
+Publishing is not its own route. It is `PUT` with `status: "published"`, so the
+same validation runs either way and nothing can reach the public site through a
+path that skipped the checks.
+
+Every write is one commit containing every file it touches — the image and the
+manifest, or the markdown and the index. Never two.
 
 ## Access
 
@@ -50,5 +62,6 @@ edit could widen.
 npm run test:api
 ```
 
-Drives the real handler against a simulated GitHub held in memory. No network,
-no token needed. CI runs it on every push, before anything is deployed.
+Drives the real handlers against a simulated GitHub held in memory — 73 cases
+across the two endpoints. No network, no token needed. CI runs them on every
+push, before anything is deployed.

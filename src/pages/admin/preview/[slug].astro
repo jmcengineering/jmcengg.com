@@ -1,0 +1,29 @@
+---
+/* /admin/preview/<slug>/ — what an article looks like before it is published.
+
+   This is the real article page, rendered by the real pipeline, not a
+   simulation of it. The only differences are the draft banner and noindex.
+
+   It sits under /admin/ on purpose. That path carries allowedRoles in
+   staticwebapp.config.json, so Azure refuses it at the edge to anyone without
+   a role — which means an unpublished article is never readable by the public,
+   even by someone who guesses the URL. */
+import Page from '../../../layouts/Page.astro';
+import ArticleBody from '../../../components/ArticleBody.astro';
+import { previewable } from '../../../data/articles.js';
+
+export function getStaticPaths() {
+  return previewable.map((a) => ({ params: { slug: a.slug }, props: { article: a } }));
+}
+
+const { article } = Astro.props;
+---
+<Page
+  title={`Preview: ${article.title} | JMC Engineering`}
+  description={article.description}
+  noindex={true}
+>
+  <div class="art-wrap">
+    <ArticleBody article={article} draft={article.status !== 'published'} />
+  </div>
+</Page>

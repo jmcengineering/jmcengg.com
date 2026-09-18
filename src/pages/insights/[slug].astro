@@ -1,0 +1,53 @@
+---
+/* /insights/<slug>/ — a published article.
+
+   Drafts are deliberately absent from getStaticPaths: an unpublished article
+   is not built into the public site at all, so there is no URL to guess.
+   Previews live under /admin/preview/, which Azure refuses to anyone without
+   a role. */
+import Page from '../../layouts/Page.astro';
+import ArticleBody from '../../components/ArticleBody.astro';
+import { hosted } from '../../data/articles.js';
+import { isoDate } from '../../data/article-meta.js';
+
+export function getStaticPaths() {
+  return hosted.map((a) => ({ params: { slug: a.slug }, props: { article: a } }));
+}
+
+const { article } = Astro.props;
+
+const articleLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: article.title,
+  description: article.description,
+  datePublished: isoDate(article.date),
+  dateModified: isoDate(article.updated),
+  articleSection: article.category,
+  inLanguage: 'en-IN',
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': `https://jmcengg.com/insights/${article.slug}/`,
+  },
+  author: { '@type': 'Organization', name: article.author, url: 'https://jmcengg.com/' },
+  publisher: { '@id': 'https://jmcengg.com/#business' },
+  isPartOf: { '@id': 'https://jmcengg.com/insights/#blog' },
+};
+---
+<Page
+  title={`${article.title} | JMC Engineering`}
+  description={article.description}
+  crumbs={[
+    { label: 'Home', href: '/' },
+    { label: 'Insights', href: '/insights/' },
+    { label: article.title, href: `/insights/${article.slug}/` },
+  ]}
+  jsonld={[articleLd]}
+>
+  <div class="art-wrap">
+    <nav class="crumb crumb-art" aria-label="Breadcrumb">
+      <a href="/">Home</a> <span>/</span> <a href="/insights/">Insights</a> <span>/</span> <span>{article.title}</span>
+    </nav>
+    <ArticleBody article={article} />
+  </div>
+</Page>

@@ -11,6 +11,10 @@ const {
   crumbs = [],
   jsonld = [],
   ogImage = '/og-cover.png',
+  /* Set on pages that exist but must never be indexed — the draft previews
+     under /admin/preview/. Azure already refuses those to anyone without a
+     role, so this is belt and braces for a URL that leaks into a link. */
+  noindex = false,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
@@ -70,7 +74,7 @@ const graphs = [business, breadcrumbLd, ...jsonld].filter(Boolean);
   <title>{title}</title>
   <meta name="description" content={description} />
   <meta name="author" content="JMC Engineering" />
-  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'} />
   <link rel="canonical" href={canonical} />
   <link rel="icon" type="image/png" href="/logo.png" />
   <link rel="apple-touch-icon" href="/logo.png" />

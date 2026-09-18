@@ -126,7 +126,7 @@ identities, and the role is attached to the invited one.
 - Sign-in, roles and route protection — **done**
 - The panel shell: header, navigation, who you are signed in as — **done**
 - Photos: upload, name, describe, reorder, remove — **done**
-- Writing — not yet
+- Writing: draft, preview, publish, edit, delete — **done**
 
 `/admin` and `/api` are disallowed in `robots.txt` and every admin page carries
 `noindex, nofollow`. Neither is the actual protection — the role check is — but
@@ -166,6 +166,72 @@ minutes, and the panel says so rather than pretending it is instant.
 
 Removal deletes the file and its manifest entry in one commit. It stays in the
 repository's history, so it can be restored with git — but not from the panel.
+
+## Writing articles
+
+Staff write at **/admin/blog/**. An article is saved as a draft first; nothing
+is public until **Publish** is pressed.
+
+| Field | Becomes |
+|---|---|
+| **Title** | The page heading, the `<title>` Google shows, and the URL — `/insights/minimum-web-between-pierced-holes/` |
+| **Summary** | The line under the title in search results, and the `description` meta tag. 50–160 characters; the panel counts them for you |
+| **Category** | The card colour and the `articleSection` in the structured data |
+| **The article** | Markdown. Headings start at `##` because the title is already the page's only `<h1>` |
+
+Each published article is a real page with `BlogPosting` structured data, its
+own canonical URL, and an entry in the sitemap. Nothing is loaded in
+afterwards by JavaScript, so search engines read the whole article.
+
+### Drafts are genuinely private
+
+A draft is **not built into the public site at all** — there is no URL to
+guess. It is previewed at `/admin/preview/<slug>/`, which sits under `/admin/`
+and is therefore refused by Azure at the edge to anyone without a role.
+
+The preview is the real page, rendered by the real pipeline. The only
+differences are a draft banner and `noindex`.
+
+**The preview shows the last saved version, not what is on screen.** Saving
+commits and the site rebuilds, which takes about two minutes. Save, wait, then
+preview. The panel says so on the page, because an editor who previews
+instantly and sees old text otherwise concludes it is broken.
+
+### What the panel refuses to publish
+
+These are refusals, not warnings, and each says why:
+
+- **A thin article.** Under about 600 characters. A page with very little on it
+  is treated as low quality and drags on the rest of the site — publishing it
+  is worse than not publishing at all.
+- **No headings.** At least one `##`. Long text with no headings is unreadable
+  on a phone, and headings are how a search engine works out what the article
+  covers.
+- **A summary that is too short or too long.** Under 50 characters says
+  nothing; over 160 is cut off by Google mid-sentence.
+- **Repeated keywords** in the title or summary, for the same reason as
+  photographs.
+
+A draft has none of these limits. Save half a thought and come back to it.
+
+### The four older articles
+
+`blog-progressive-dies.html`, `blog-fixture-mistakes.html`,
+`blog-msme-toolmakers.html` and `blog-engineering-business.html` predate this
+system. They are standalone HTML pages in `public/`, on the site's older
+design, and they keep their own URLs — moving them would throw away whatever
+ranking they have earned.
+
+They are **listed** by the new system, so they appear on the homepage and on
+/insights/ alongside new articles, but the panel will not edit them and says
+so. Two things about them are worth knowing:
+
+- They carry no `Article` structured data, so Google has less to work with on
+  them than on anything published from the panel.
+- They use a different font and layout from the rest of the site.
+
+Neither is urgent. Both are worth fixing the day someone wants to touch those
+articles anyway.
 
 ## The GitHub token
 
@@ -231,7 +297,17 @@ else without a code change — a fork, or a test repository.
 | `src/styles/admin.css` | Panel styling, on the site's own tokens |
 | `src/pages/admin/photos/index.astro` | The gallery editor |
 | `src/scripts/admin-photos.js` | Its behaviour, including shrinking photographs in the browser |
-| `api/photos/` | The API the editor talks to |
+| `api/photos/` | The photo API |
+| `api/articles/` | The writing API. Publishing is PUT with status "published", not a separate route, so an article cannot be published by a path that skipped the checks |
+| `api/_lib/articles.js` | Article rules: titles, summaries, categories, what may be published, and the frontmatter it writes |
+| `api/_lib/http.js` | Replies, request bodies, commit attribution, and the one place failures are worded |
+| `src/pages/admin/blog/index.astro` | The writing screen |
+| `src/scripts/admin-blog.js` | Its behaviour |
+| `src/pages/insights/` | The public article index and the article pages |
+| `src/pages/admin/preview/[slug].astro` | Draft previews, protected by the `/admin/*` role rule |
+| `src/data/articles.json` | The article index |
+| `src/data/articles.js` | Loads articles at build time, and fails the build if the index and the files disagree |
+| `src/pages/sitemap.xml.js` | The sitemap, generated — so a published article is in it automatically |
 | `api/_lib/auth.js` | The second role check, from the platform-signed principal header |
 | `api/_lib/github.js` | The commit itself — blobs, tree, commit, ref |
 | `api/_lib/works.js` | The manifest: ordering, the featured photo, adds and removals |

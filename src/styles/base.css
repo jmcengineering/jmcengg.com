@@ -86,6 +86,13 @@ a{color:inherit;}
 .btn-o{background:transparent;color:#fff;font-family:var(--font-d);font-size:14.5px;font-weight:600;padding:14px 30px;border-radius:9px;border:1.5px solid var(--hairline-inv);text-decoration:none;display:inline-flex;align-items:center;gap:9px;letter-spacing:.4px;transition:border-color .25s,background .25s,transform .2s;}
 .btn-o:hover{border-color:var(--line);background:rgba(77,141,255,.08);transform:translateY(-2px);}
 
+/* .btn-o is white-on-transparent: it is built for the dark bands and is
+   invisible on a light background. This is the same button for light
+   sections — the article footer, the Insights strip on the homepage. */
+.btn-o-light{background:transparent;color:var(--ink);font-family:var(--font-d);font-size:14.5px;font-weight:600;padding:14px 30px;border-radius:9px;border:1.5px solid var(--hairline);text-decoration:none;display:inline-flex;align-items:center;gap:9px;letter-spacing:.4px;transition:border-color .25s,background .25s,transform .2s;}
+.btn-o-light:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-2px);}
+.btn-o:focus-visible,.btn-o-light:focus-visible,.btn-p:focus-visible{outline:2px solid var(--blue);outline-offset:3px;}
+
 /* ═══════════════════ FOOTER ═══════════════════ */
 footer{background:var(--ink);padding:54px 6% 26px;border-top:1px solid var(--hairline-inv);}
 .f-top{display:grid;grid-template-columns:2fr 1fr 1fr;gap:44px;margin-bottom:38px;}
@@ -130,3 +137,35 @@ footer{background:var(--ink);padding:54px 6% 26px;border-top:1px solid var(--hai
 }
 
 a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--amber);outline-offset:2px;}
+
+
+/* ══════════ article cards ══════════
+   Used on the homepage and on /insights/. They live here rather than in
+   home.css because both stylesheets need them and duplicating a card that
+   two pages must render identically is how the two slowly stop matching. */
+.blog-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:20px;}
+.blog-card{background:var(--white);border:1px solid var(--hairline);border-radius:var(--r);overflow:hidden;transition:transform .35s var(--ease),box-shadow .35s;display:flex;flex-direction:column;}
+.blog-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);}
+.blog-th{height:130px;background:linear-gradient(140deg,var(--ink),var(--steel-2));position:relative;display:flex;align-items:flex-end;padding:16px;}
+.blog-th svg{position:absolute;top:14px;right:14px;width:30px;height:30px;stroke:rgba(125,165,235,.35);stroke-width:1.3;fill:none;}
+.blog-cat{font-family:var(--font-m);font-size:9.5px;font-weight:500;letter-spacing:1.6px;text-transform:uppercase;color:var(--amber);}
+.blog-bd{padding:20px;flex:1;display:flex;flex-direction:column;}
+.blog-bd h3{font-size:17.5px;font-weight:600;margin-bottom:9px;line-height:1.35;}
+.blog-bd p{font-size:13px;color:var(--txt-mut);margin-bottom:16px;flex:1;}
+.blog-mt{display:flex;justify-content:space-between;align-items:center;}
+.blog-mt time{font-family:var(--font-m);font-size:10.5px;color:var(--txt-mut);letter-spacing:.6px;}
+.blog-mt a{font-size:12.5px;color:var(--blue);font-weight:600;text-decoration:none;display:inline-block;transition:transform .25s var(--ease);}
+.blog-card:hover .blog-mt a{transform:translateX(4px);}
+.blog-mt a:hover{text-decoration:underline;}
+.blog-bd h3 a{color:inherit;text-decoration:none;}
+.blog-card:hover .blog-bd h3 a{color:var(--blue);}
+.blog-bd h3 a:focus-visible,.blog-mt a:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:3px;}
+
+/* The `hidden` attribute must win.
+
+   It sets display:none through a UA rule with the weakest possible weight, so
+   any class that sets `display` — a flex button, a grid wrapper — silently
+   overrides it and the element stays on screen. That is a bug that looks like
+   a JavaScript fault and is not one: it cost an admin panel button that was
+   supposed to appear only after saving. */
+[hidden]{display:none!important;}
