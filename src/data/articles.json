@@ -2,6 +2,15 @@
   "_comment": "The Insights index. Written by the admin panel at /admin/blog/. Entries with `legacy: true` are the four hand-written HTML articles in public/ that predate this system — they keep their own URLs and their own markup, and the panel will not edit them. Everything else is a markdown file in src/content/articles/<slug>.md and is served at /insights/<slug>/. Newest first is the display order; `date` decides it, not position in this file.",
   "articles": [
     {
+      "slug": "copper-hit-record-highs-in-september-tooling-feels-it-too",
+      "title": "Copper Hit Record Highs in September. Tooling Feels It Too",
+      "description": "Copper crossed $14,800 a tonne this month — here's where that shows up in mould and press tool builds, and what to do about it.",
+      "category": "Materials",
+      "date": "2026-09-19",
+      "updated": "2026-09-19",
+      "status": "draft"
+    },
+    {
       "slug": "progressive-dies",
       "title": "How We Design Progressive Dies for Tight Tolerances",
       "description": "Our design methodology for complex progressive dies — from strip layout to final tryout and first-article approval.",
