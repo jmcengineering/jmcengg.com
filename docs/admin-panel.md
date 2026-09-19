@@ -127,6 +127,7 @@ identities, and the role is attached to the invited one.
 - The panel shell: header, navigation, who you are signed in as — **done**
 - Photos: upload, name, describe, reorder, remove — **done**
 - Writing: draft, preview, publish, edit, delete — **done**
+- The twice-monthly drafting job — **done** (needs an Anthropic API key)
 
 `/admin` and `/api` are disallowed in `robots.txt` and every admin page carries
 `noindex, nofollow`. Neither is the actual protection — the role check is — but
@@ -233,6 +234,103 @@ so. Two things about them are worth knowing:
 Neither is urgent. Both are worth fixing the day someone wants to touch those
 articles anyway.
 
+## The drafting job
+
+Twice a month — the **1st and the 15th, at 09:30 Chennai time** — a job
+researches the trade and writes a draft article. It appears in
+**/admin/blog/** marked *Draft*, like any other. Someone reads it, checks it,
+and publishes or deletes it.
+
+### It never publishes
+
+That is the point of it, not a missing feature.
+
+Google's **scaled content abuse** policy targets exactly this shape — a
+machine writes it, a schedule publishes it, nobody reads it — and the penalty
+is not a warning, it is not ranking. For a business whose enquiries come
+through search, that is the whole asset.
+
+The second reason matters more day to day: this site's readers are engineers.
+A page under JMC's name that gets a technical fact wrong costs more than a
+missing article ever would.
+
+So the machine does the slow part — the research and the first draft. A person
+spends five minutes reading it. That five minutes is what makes it JMC's, and
+what keeps it safe.
+
+### What it writes about, in order of preference
+
+1. **A sudden material price move** — tungsten carbide, copper, tool steel
+   (D2, OHNS, EN8), aluminium, mould steel. Only if genuinely reported in the
+   last three weeks. This is the case the job was built for.
+2. **Real news in South Indian manufacturing** that changes what a tooling
+   buyer or an OEM engineer should do.
+3. **A genuine development in AI or manufacturing technology** that a tool
+   room or its customers could act on this year.
+4. **An evergreen technical article** otherwise — a fault and its diagnosis, a
+   material choice, a design rule. Choosing this is not a failure; these are
+   the most reliably useful articles on the site.
+
+It is told never to stretch a weak story into a news hook.
+
+### Who it writes for
+
+Engineers, tool room managers, sourcing engineers and purchase managers — at
+**OEMs** as well as their Tier-1 and Tier-2 suppliers — across **Tamil Nadu,
+Karnataka, Andhra Pradesh, Telangana and Kerala**. Not Chennai alone: JMC is
+in Chennai, its readers are across South India, and an article that assumes
+everyone is in Tamil Nadu reads as provincial in Bengaluru or Sri City.
+
+### The rules it cannot break
+
+Each of these is checked in code, not merely asked for in the prompt:
+
+| Rule | Why |
+|---|---|
+| Never state a price or rate as fact — attribute it to a named source with a date and a link | Customers know the real Chennai market better than this website does. A wrong number costs more credibility than a right one earns |
+| Never state or imply JMC supplies, is approved by, or has any relationship with a named company | That is a false claim about two real businesses. It ends customer relationships rather than starting them |
+| Never invent a JMC capability, machine, certification, customer, tolerance or delivery time | Only the facts in the brief, as written. Note it is told VMC/CNC and wire cut are **partner network, not in-house** |
+| Never invent a statistic, figure or date | If it is not in a search result, it does not go in |
+
+A draft must also clear **the same checks a person meets in the panel** —
+length, headings, summary length, category, keyword stuffing — at *publish*
+standard, not draft standard. A draft this job would not let a person publish
+is one it will not commit.
+
+If a draft fails, it is told what was wrong and tries once more. If the second
+attempt also fails, **the job fails loudly and writes nothing.** That is the
+job refusing to commit a bad draft, not a crash.
+
+### Cost
+
+Roughly **$0.23 a run** on `claude-sonnet-5` — about 8 web searches at $0.01
+each, plus tokens. Twenty-four runs a year is around **$6, near ₹530 a year**.
+
+To draft with a more capable model instead, run the workflow by hand from the
+Actions tab and put a model ID in the **model** box.
+
+### The API key
+
+One secret: `ANTHROPIC_API_KEY`, from
+[console.anthropic.com](https://console.anthropic.com) → API keys, stored in
+GitHub under **Settings → Secrets and variables → Actions**.
+
+Without it the job stops on its first step and says so. It never half-runs.
+
+### Running it by hand
+
+Actions → **Draft an article** → *Run workflow*. Useful for testing, and for
+the fortnight where something happened and you do not want to wait.
+
+### When a draft does not appear
+
+| What happened | Why |
+|---|---|
+| Nothing at all, and no failed run | GitHub disables scheduled workflows after **60 days with no commits** to the repository. Push anything and re-enable it under Actions |
+| The run is late | GitHub's scheduler is delayed under load. Tens of minutes is normal |
+| The run failed on the first step | `ANTHROPIC_API_KEY` is missing or wrong |
+| The run failed after researching | Both drafts were rejected by the checks above. The log says which rule. Nothing was written, which is correct |
+
 ## The GitHub token
 
 This is **the only long-lived secret in the whole setup**, and it is worth
@@ -308,6 +406,10 @@ else without a code change — a fork, or a test repository.
 | `src/data/articles.json` | The article index |
 | `src/data/articles.js` | Loads articles at build time, and fails the build if the index and the files disagree |
 | `src/pages/sitemap.xml.js` | The sitemap, generated — so a published article is in it automatically |
+| `.github/workflows/article-draft.yml` | The twice-monthly schedule |
+| `scripts/draft-article.mjs` | The job: research, validate, write the draft |
+| `scripts/lib/article-brief.mjs` | **What Claude is told.** If a draft comes back wrong, the fix is almost always here |
+| `scripts/test/draft-article.test.mjs` | Its tests — mostly proving bad drafts are refused |
 | `api/_lib/auth.js` | The second role check, from the platform-signed principal header |
 | `api/_lib/github.js` | The commit itself — blobs, tree, commit, ref |
 | `api/_lib/works.js` | The manifest: ordering, the featured photo, adds and removals |

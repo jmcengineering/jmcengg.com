@@ -8,9 +8,12 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "test:api": "node api/test/photos.test.mjs && node api/test/articles.test.mjs"
+    "test:api": "node api/test/photos.test.mjs && node api/test/articles.test.mjs",
+    "test:draft": "node scripts/test/draft-article.test.mjs",
+    "test": "npm run test:api && npm run test:draft"
   },
   "devDependencies": {
+    "@anthropic-ai/sdk": "^0.127.0",
     "astro": "^7.3.2"
   }
 }

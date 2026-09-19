@@ -20,6 +20,12 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, closed]
   workflow_dispatch:
+  # Callable by another workflow. The fortnightly drafting job needs this:
+  # a push made with the default GITHUB_TOKEN deliberately does not trigger
+  # other workflows, so after that job commits a draft the site would never
+  # rebuild and the draft's preview page would 404. It calls this workflow
+  # directly instead of relying on its own push to set it off.
+  workflow_call:
 
 permissions:
   id-token: write
@@ -47,8 +53,8 @@ jobs:
 
       - run: npm run build
 
-      - name: Test the admin API
-        run: npm run test:api
+      - name: Run the tests
+        run: npm test
 
       - name: Check nothing shipped with a placeholder in it
         run: ./scripts/check-placeholders.sh dist

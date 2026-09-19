@@ -1,0 +1,124 @@
+name: Draft an article
+
+# Twice a month, Claude researches the trade and writes a DRAFT article, which
+# lands in the admin panel at /admin/blog/ for someone at JMC to read, edit and
+# publish. It never publishes anything itself.
+#
+# That is a deliberate limit, not an unfinished feature. Google's scaled
+# content abuse policy targets exactly "a machine writes it, a schedule
+# publishes it, nobody reads it", and the penalty is not a warning — the site
+# stops ranking. The second reason matters more here: this site's readers are
+# engineers, and a page under JMC's name that gets a technical fact wrong costs
+# more than a missing article ever would.
+#
+# The job needs one secret: ANTHROPIC_API_KEY, in Settings → Secrets and
+# variables → Actions. Without it the job stops immediately and says so.
+#
+# Two things worth knowing about GitHub's scheduler: runs can be delayed by
+# tens of minutes when GitHub is busy, and a scheduled workflow is disabled
+# automatically after 60 days with no commits to the repository. Neither
+# matters much for a fortnightly job, but a silently missing draft is usually
+# one of the two.
+
+on:
+  schedule:
+    # 04:00 UTC on the 1st and 15th — 09:30 in Chennai, so the draft is waiting
+    # at the start of the working day rather than arriving mid-afternoon.
+    - cron: '0 4 1,15 * *'
+  workflow_dispatch:
+    inputs:
+      model:
+        description: 'Model to draft with (blank uses claude-sonnet-5)'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  id-token: write
+
+concurrency:
+  group: article-draft
+  cancel-in-progress: false
+
+jobs:
+  draft:
+    name: Research and draft
+    runs-on: ubuntu-latest
+    outputs:
+      wrote: ${{ steps.write.outputs.wrote }}
+      slug: ${{ steps.write.outputs.slug }}
+      title: ${{ steps.write.outputs.title }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Check the API key exists
+        run: |
+          if [ -z "${{ secrets.ANTHROPIC_API_KEY }}" ]; then
+            echo "::error::ANTHROPIC_API_KEY is not set. Add it under Settings → Secrets and variables → Actions. Nothing was drafted."
+            exit 1
+          fi
+
+      - name: Research and write the draft
+        id: write
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ARTICLE_MODEL: ${{ inputs.model }}
+        run: node scripts/draft-article.mjs
+
+      # Build BEFORE pushing. The draft is a file the site compiles, and a
+      # malformed one would otherwise be pushed and break the live build. If
+      # this fails, nothing is pushed and the draft is simply lost — which is
+      # the right trade for a job nobody is watching.
+      - name: Prove the draft does not break the site
+        if: steps.write.outputs.wrote == 'true'
+        run: |
+          npm run build
+          ./scripts/check-placeholders.sh dist
+          test -d "dist/admin/preview/${{ steps.write.outputs.slug }}" \
+            || { echo "::error::The draft built, but its preview page is missing."; exit 1; }
+          test ! -d "dist/insights/${{ steps.write.outputs.slug }}" \
+            || { echo "::error::The draft was built as a PUBLIC page. It must be a draft."; exit 1; }
+
+      - name: Commit it
+        if: steps.write.outputs.wrote == 'true'
+        run: |
+          git config user.name "JMC drafting job"
+          git config user.email "noreply@jmcengg.com"
+          git add src/content/articles src/data/articles.json
+          git commit -m "Draft for review: ${{ steps.write.outputs.title }}" -m \
+            "Researched and written by the fortnightly drafting job, not by a person, and not reviewed by one. It is a DRAFT: it is not on the public site and no URL serves it. Read it at /admin/blog/, check every fact and figure in it, then publish or delete it."
+          git push origin HEAD:main
+
+      - name: Say where it went
+        if: steps.write.outputs.wrote == 'true'
+        run: |
+          {
+            echo "### Draft ready for review"
+            echo ""
+            echo "**${{ steps.write.outputs.title }}**"
+            echo ""
+            echo "Read it at <https://jmcengg.com/admin/blog/> — it is a draft, so nothing is public yet."
+            echo ""
+            echo "Check every fact and figure before publishing. Prices especially."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  # The commit above was made with GITHUB_TOKEN, which deliberately does not
+  # trigger other workflows, so the deploy has to be called rather than left
+  # to fire on its own. Without this the draft's preview page would not exist
+  # until somebody else happened to push.
+  deploy:
+    name: Publish the site so the preview exists
+    needs: draft
+    if: needs.draft.outputs.wrote == 'true'
+    permissions:
+      id-token: write
+      contents: read
+    uses: ./.github/workflows/azure-swa.yml
+    secrets: inherit

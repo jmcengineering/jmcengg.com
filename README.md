@@ -254,6 +254,31 @@ Two known gaps, neither urgent: they carry no `Article` structured data, and
 they use the site's older fonts and layout. Worth fixing on the day someone
 wants to revise one anyway.
 
+## The twice-monthly drafting job
+
+On the **1st and 15th**, `.github/workflows/article-draft.yml` asks Claude to
+research the trade and write a **draft** article into
+`src/content/articles/`. It lands in `/admin/blog/` for someone to read, check
+and publish. It never publishes anything itself — see
+[docs/admin-panel.md](docs/admin-panel.md) for why that limit is deliberate.
+
+The prompt lives in `scripts/lib/article-brief.mjs`, separate from the code,
+because that is the file that will actually need editing when a draft comes
+back wrong.
+
+Two things about it are enforced in code rather than merely asked for: a draft
+must clear the **same checks a human meets in the panel**, at publish standard,
+and it may not claim any relationship between JMC and a named company. Fail
+twice and the job writes nothing and fails loudly.
+
+Needs `ANTHROPIC_API_KEY` in the repository's Actions secrets. Around ₹530 a
+year at twice a month.
+
+**Why the workflow calls the deploy workflow instead of just pushing:** a push
+made with the default `GITHUB_TOKEN` deliberately does not trigger other
+workflows. Without that call the draft would sit in the repository and its
+preview page would not exist until somebody else happened to push.
+
 ## Outstanding configuration
 
 ### Enquiry form
