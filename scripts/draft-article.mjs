@@ -132,6 +132,18 @@ export function complain(draft) {
   const body = articles.checkBody(draft.body, { publishing: true });
   if (body.error) return body.error;
 
+  /* A price in the headline or the summary. Those two lines are what a search
+     result shows long after the number is stale, and 160 characters leaves no
+     room to attribute it to anyone. The body may carry figures; it has to
+     name a source for them. */
+  const price = /(?:[$₹£€]\s?[\d,]+(?:\.\d+)?)|(?:[\d,]+(?:\.\d+)?\s*(?:\/|\s(?:a|per)\s)\s*(?:tonne|ton|kg|kilo|lb|pound|mtu|piece))/i;
+  for (const [what, value] of [['title', draft.title], ['summary', draft.description]]) {
+    const hit = price.exec(value);
+    if (hit) {
+      return `The ${what} contains a price ("${hit[0].trim()}"). Those two lines are what a search result still shows months later, when the figure is stale — keep prices in the body, with their source.`;
+    }
+  }
+
   /* Rule 2 in the brief, checked rather than trusted. "JMC supplies Hyundai"
      is a false claim about two real companies, and no amount of prompt
      wording makes an unchecked one acceptable. */

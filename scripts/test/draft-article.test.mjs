@@ -90,6 +90,18 @@ check('a category it invented', /not one of the categories/.test(complain({ ...g
 check('a stuffed title', /once/.test(complain({ ...good, title: 'Press tool press tool press tool Chennai supplier' })));
 check('a clean draft passes', complain(good) === null, complain(good));
 
+console.log('\n[no prices in the title or summary]');
+check('a dollar figure in the summary',
+  /contains a price/.test(complain({ ...good, description: 'Copper crossed $14,800 a tonne this month and it shows up in mould and press tool builds across the south.' }) || ''));
+check('a rupee figure in the title',
+  /contains a price/.test(complain({ ...good, title: 'Tool steel at ₹450 a kg changes the sums' }) || ''));
+check('a per-tonne figure in the summary',
+  /contains a price/.test(complain({ ...good, description: 'Tungsten carbide moved to 58,000 per tonne this month, and it changes what a press tool quotation should look like.' }) || ''));
+check('prices in the BODY are still fine',
+  complain({ ...good, body: `## What moved\n\nBloomberg reported on 7 September that copper passed $14,600 a tonne.\n\n${'Detail follows here for the reader. '.repeat(40)}` }) === null);
+check('an ordinary summary with a number passes',
+  complain({ ...good, description: 'Why the web between two pierced holes should stay above 1.5 times material thickness, and what happens when it does not.' }) === null);
+
 console.log('\n[the claim guard]');
 const claims = [
   'JMC supplies Hyundai with press tools.',

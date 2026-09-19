@@ -102,6 +102,12 @@ real business:
    Never "carbide is up 30%". Readers in this trade know the real market
    better than this website does, and a wrong number is worse than no number.
 
+   The TITLE and the SUMMARY may contain no price at all — not even an
+   attributed one. There is no room to attribute properly in 160 characters,
+   and those two lines are what Google still shows six months later, when the
+   number is stale and nobody remembers where it came from. Put the figure in
+   the body, with its source, and let the summary say that something moved.
+
 2. NEVER state or imply that JMC supplies, has supplied, is approved by, is
    a vendor to, or has any relationship with any named company. You may write
    about what OEMs in the region are doing. You may not connect JMC to them.

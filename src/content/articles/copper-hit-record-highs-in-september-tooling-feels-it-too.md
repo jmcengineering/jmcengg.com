@@ -1,6 +1,6 @@
 ---
 title: "Copper Hit Record Highs in September. Tooling Feels It Too"
-description: "Copper crossed $14,800 a tonne this month — here's where that shows up in mould and press tool builds, and what to do about it."
+description: "Copper set records again this month. Here is where it shows up in mould and press tool builds, and what a buyer should do now."
 category: "Materials"
 date: 2026-09-19
 updated: 2026-09-19
