@@ -58,9 +58,12 @@ jobs:
 
       - run: npm ci
 
+      # Through the environment, not interpolated into the command line.
       - name: Check the API key exists
+        env:
+          KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          if [ -z "${{ secrets.ANTHROPIC_API_KEY }}" ]; then
+          if [ -z "$KEY" ]; then
             echo "::error::ANTHROPIC_API_KEY is not set. Add it under Settings → Secrets and variables → Actions. Nothing was drafted."
             exit 1
           fi

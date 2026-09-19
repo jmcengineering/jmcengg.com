@@ -27,10 +27,13 @@ on:
   # directly instead of relying on its own push to set it off.
   workflow_call:
 
+# Only what every job needs. `pull-requests: write` lives on the two preview
+# jobs instead, because this workflow is also called by article-draft.yml, and
+# a called workflow may not request more than its caller holds — asking for it
+# here made the whole run fail to start, with no jobs and no logs.
 permissions:
   id-token: write
   contents: read
-  pull-requests: write
 
 concurrency:
   group: azure-swa-${{ github.ref }}
@@ -141,6 +144,10 @@ jobs:
   preview:
     name: Publish a preview
     needs: build
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
     if: >-
       github.event_name == 'pull_request'
       && github.event.action != 'closed'
@@ -197,6 +204,10 @@ jobs:
 
   close-preview:
     name: Tear down the preview
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
     if: >-
       github.event_name == 'pull_request'
       && github.event.action == 'closed'
