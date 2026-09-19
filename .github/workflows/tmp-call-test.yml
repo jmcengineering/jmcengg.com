@@ -3,10 +3,12 @@ on: workflow_dispatch
 permissions:
   id-token: write
   contents: read
+  pull-requests: write
 jobs:
   deploy:
     permissions:
       id-token: write
       contents: read
+      pull-requests: write
     uses: ./.github/workflows/azure-swa.yml
     secrets: inherit
