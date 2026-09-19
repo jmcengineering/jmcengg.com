@@ -32,9 +32,15 @@ on:
         required: false
         type: string
 
+# contents: write is for committing the draft. The other two are for the
+# deploy job below: a called workflow may not request more than its caller
+# holds, GitHub checks every job in it including skipped ones, and
+# azure-swa.yml's preview jobs want pull-requests: write. This is the same
+# permission set that workflow already runs with on every push.
 permissions:
   contents: write
   id-token: write
+  pull-requests: write
 
 concurrency:
   group: article-draft
@@ -123,5 +129,6 @@ jobs:
     permissions:
       id-token: write
       contents: read
+      pull-requests: write
     uses: ./.github/workflows/azure-swa.yml
     secrets: inherit

@@ -27,10 +27,16 @@ on:
   # directly instead of relying on its own push to set it off.
   workflow_call:
 
-# Only what every job needs. `pull-requests: write` lives on the two preview
-# jobs instead, because this workflow is also called by article-draft.yml, and
-# a called workflow may not request more than its caller holds — asking for it
-# here made the whole run fail to start, with no jobs and no logs.
+# Only what every job needs; `pull-requests: write` sits on the two preview
+# jobs, which are the only ones that comment on a pull request.
+#
+# Note what this does NOT buy. article-draft.yml calls this workflow, and a
+# called workflow may not request more permission than its caller holds — and
+# GitHub checks EVERY job, including ones that will be skipped. So a caller
+# still has to grant the union of everything below, preview jobs included.
+# Getting that wrong fails the whole run before a single job exists: no jobs,
+# no logs, just "startup_failure". Verified by isolating it in a throwaway
+# workflow rather than guessing.
 permissions:
   id-token: write
   contents: read
