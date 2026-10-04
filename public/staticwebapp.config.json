@@ -27,6 +27,26 @@
       ]
     },
     {
+      "route": "/blog-progressive-dies.html",
+      "redirect": "/insights/progressive-dies/",
+      "statusCode": 301
+    },
+    {
+      "route": "/blog-fixture-mistakes.html",
+      "redirect": "/insights/fixture-mistakes/",
+      "statusCode": 301
+    },
+    {
+      "route": "/blog-msme-toolmakers.html",
+      "redirect": "/insights/msme-toolmakers/",
+      "statusCode": 301
+    },
+    {
+      "route": "/blog-engineering-business.html",
+      "redirect": "/insights/engineering-business/",
+      "statusCode": 301
+    },
+    {
       "route": "/_astro/*",
       "headers": {
         "cache-control": "public, max-age=31536000, immutable"
