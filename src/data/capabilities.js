@@ -189,25 +189,24 @@ export const capabilities = [
   },
 
   {
-    slug: 'gauges-and-spm',
-    nav: 'Gauges & SPM',
-    h1: 'Gauges & Special-Purpose Machines',
-    title: 'Gauge Manufacturer in Chennai | Go/No-Go Gauges & SPM Builders',
+    slug: 'gauges',
+    nav: 'Gauges',
+    h1: 'Inspection Gauges & Checking Fixtures',
+    title: 'Gauge Manufacturer in Chennai | Go/No-Go Plug, Ring & Snap Gauges',
     description:
-      'Inspection gauge and SPM manufacturer in Padi, Chennai. Go/no-go plug and ring gauges, snap gauges, checking fixtures and special-purpose machines built to your quality plan.',
+      'Inspection gauge manufacturer in Padi, Chennai. Go/no-go plug and ring gauges, snap gauges, receiver gauges and functional checking fixtures built to your quality plan.',
     summary:
-      'Inspection gauges, go/no-go gauges, checking fixtures and special-purpose machines built to your quality-control requirements.',
+      'Inspection gauges, go/no-go gauges and checking fixtures built to your quality-control requirements.',
     intro: [
       'A gauge has to be more accurate than the thing it measures, or it is just a second opinion. We build inspection gauges and checking fixtures sized against your drawing tolerance, with gauge tolerance taken as a proportion of the part tolerance.',
-      'We also build special-purpose machines where a standard machine cannot do the operation economically — single-purpose assembly, pressing, drilling or checking stations designed around one component.',
+      'Where the check needs a machine rather than a hand gauge \u2014 a station that presses, drills or verifies one component thousands of times \u2014 that is a special-purpose machine, and it has its own page.',
     ],
     makes: [
-      'Plug gauges — go/no-go, plain and threaded',
+      'Plug gauges \u2014 go/no-go, plain and threaded',
       'Ring and snap gauges',
       'Depth, height and position checking gauges',
       'Receiver and profile gauges for formed components',
       'Functional checking fixtures for assemblies',
-      'Special-purpose machines for pressing, drilling, assembly and checking',
     ],
     specs: [
       ['Gauge members', 'OHNS or EN31, hardened and lapped'],
@@ -215,20 +214,17 @@ export const capabilities = [
       ['Wear allowance', 'Applied on go members per the gauging standard used'],
       ['Handles and bodies', 'Knurled, marked with size and go / no-go'],
       ['Marking', 'Permanently etched with nominal size and tolerance'],
-      ['SPM structure', 'Fabricated and stress-relieved, ground mounting faces'],
     ],
     process: [
       ['Tolerance study', 'We work back from your part tolerance to a gauge tolerance and wear allowance.'],
       ['Gauge design', 'Type, material and marking scheme, confirmed with you.'],
       ['Manufacture', 'Hardened, ground and lapped to size.'],
       ['Verification', 'Checked before despatch and supplied with recorded sizes.'],
-      ['SPM build', 'For machines: concept, design approval, fabrication, assembly and trial.'],
     ],
     send: [
       'Component drawing with the feature and tolerance to be gauged',
       'Which gauging standard you work to',
       'Whether the gauge is for incoming, in-process or final inspection',
-      'For an SPM: the operation, the cycle time and the operator interface you want',
     ],
     faq: [
       {
@@ -240,13 +236,68 @@ export const capabilities = [
         a: 'Gauges are supplied with recorded actual sizes as manufactured. For traceable third-party calibration certification, tell us at enquiry so it can be arranged as part of the order.',
       },
       {
-        q: 'What is an SPM and when is one worth building?',
-        a: 'A special-purpose machine does one job for one component. It is worth building when a standard machine is either too slow, too manual or too imprecise for the volume you are running — typically where an operation is repeated thousands of times and consistency matters more than flexibility.',
+        q: 'Can you work from a sample instead of a drawing?',
+        a: 'A drawing with the tolerance called out is what a gauge is sized from, so it is what we need. If you only have a sample, send it with whatever drawing exists and we will tell you what is missing before quoting.',
       },
     ],
-    industries: ['automotive-tier-1-2', 'industrial-automation-spm', 'general-heavy-engineering'],
+    industries: ['automotive-tier-1-2', 'plastic-injection-moulding', 'general-heavy-engineering'],
   },
-
+  {
+    slug: 'special-purpose-machines',
+    nav: 'Special Purpose Machines',
+    h1: 'Special-Purpose Machines (SPM)',
+    title: 'Special Purpose Machine Manufacturer in Chennai | SPM Builders',
+    description:
+      'Special-purpose machine manufacturer in Padi, Chennai. SPMs for pressing, drilling, assembly and checking \u2014 designed, built and trialled around one component.',
+    summary:
+      'Single-purpose pressing, drilling, assembly and checking stations, designed around one component and one cycle time.',
+    intro: [
+      'A special-purpose machine does one job for one component. It is worth building when a standard machine is either too slow, too manual or too imprecise for the volume you are running \u2014 typically where an operation is repeated thousands of times and consistency matters more than flexibility.',
+      'We build SPMs where a standard machine cannot do the operation economically: single-purpose assembly, pressing, drilling or checking stations designed around the part, the cycle time and the operator who has to run it all day.',
+    ],
+    makes: [
+      'Pressing and insertion stations',
+      'Drilling and tapping stations',
+      'Assembly stations for a single component family',
+      'Checking and verification stations',
+      'Fixturing and tooling built into the machine',
+    ],
+    specs: [
+      ['Structure', 'Fabricated and stress-relieved, with ground mounting faces'],
+      ['Scope', 'One operation on one component family, not a general-purpose machine'],
+      ['Cycle time', 'Agreed at concept and demonstrated at trial'],
+      ['Operator interface', 'Specified by you at enquiry and confirmed at design approval'],
+      ['Handover', 'Assembled and trial run before despatch'],
+    ],
+    process: [
+      ['Concept', 'We work back from the operation, the cycle time and the volume you are running.'],
+      ['Design approval', 'Layout, actuation and operator interface confirmed with you before anything is cut.'],
+      ['Fabrication', 'Structure fabricated and stress-relieved, mounting faces ground.'],
+      ['Assembly', 'Machine built up with its fixturing and tooling.'],
+      ['Trial', 'Run against your component and your cycle time before it leaves.'],
+    ],
+    send: [
+      'The operation the machine has to do, and on which component',
+      'The cycle time you need',
+      'The operator interface you want',
+      'Component drawing, and the volume you are running',
+    ],
+    faq: [
+      {
+        q: 'What is an SPM and when is one worth building?',
+        a: 'A special-purpose machine does one job for one component. It is worth building when a standard machine is either too slow, too manual or too imprecise for the volume you are running \u2014 typically where an operation is repeated thousands of times and consistency matters more than flexibility.',
+      },
+      {
+        q: 'What do you need from us to quote an SPM?',
+        a: 'The operation, the component drawing, the cycle time you need and the volume you are running. The operator interface matters too \u2014 a machine a trained setter runs is a different machine from one an operator loads every twenty seconds.',
+      },
+      {
+        q: 'Do you trial the machine before it is delivered?',
+        a: 'Yes. The machine is assembled and run against your component before despatch, so the cycle time agreed at concept is a figure you have seen rather than one you have been promised.',
+      },
+    ],
+    industries: ['industrial-automation-spm', 'automotive-tier-1-2', 'general-heavy-engineering'],
+  },
   {
     slug: 'forming-tools',
     nav: 'Forming Tools',

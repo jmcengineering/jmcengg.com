@@ -35,7 +35,7 @@ export const industries = [
       'Checking fixtures and go/no-go gauges for in-process control',
       'Forming and restrike tools for structural pressings',
     ],
-    caps: ['press-tools', 'jig-fixtures', 'gauges-and-spm', 'forming-tools'],
+    caps: ['press-tools', 'jig-fixtures', 'gauges', 'forming-tools'],
     faq: [
       {
         q: 'Can you supply documentation for a PPAP submission?',
@@ -74,7 +74,7 @@ export const industries = [
       'Welding and assembly fixtures for sub-assemblies',
       'Checking gauges for in-process quality control',
     ],
-    caps: ['press-tools', 'forming-tools', 'jig-fixtures', 'gauges-and-spm'],
+    caps: ['press-tools', 'forming-tools', 'jig-fixtures', 'gauges'],
     faq: [
       {
         q: 'How do you design a tool for high-volume running?',
@@ -154,7 +154,7 @@ export const industries = [
       'Mould repair, cavity re-polishing and core replacement',
       'Trial and sampling before despatch',
     ],
-    caps: ['plastic-moulds', 'precision-machining', 'gauges-and-spm'],
+    caps: ['plastic-moulds', 'precision-machining', 'gauges'],
     faq: [
       {
         q: 'Will you review my part design before quoting the mould?',
@@ -193,7 +193,7 @@ export const industries = [
       'Replacement parts reverse-engineered from a sample',
       'Special-purpose machines for repeated manual operations',
     ],
-    caps: ['jig-fixtures', 'precision-machining', 'gauges-and-spm'],
+    caps: ['jig-fixtures', 'precision-machining', 'gauges'],
     faq: [
       {
         q: 'Will you take a single part?',
@@ -232,7 +232,7 @@ export const industries = [
       'In-line checking fixtures and gauges',
       'Precision components for automated stations',
     ],
-    caps: ['gauges-and-spm', 'jig-fixtures', 'precision-machining'],
+    caps: ['special-purpose-machines', 'gauges', 'jig-fixtures'],
     faq: [
       {
         q: 'Do you build the complete machine or just the tooling?',

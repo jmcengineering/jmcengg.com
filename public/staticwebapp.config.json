@@ -47,6 +47,11 @@
       "statusCode": 301
     },
     {
+      "route": "/capabilities/gauges-and-spm/",
+      "redirect": "/capabilities/gauges/",
+      "statusCode": 301
+    },
+    {
       "route": "/_astro/*",
       "headers": {
         "cache-control": "public, max-age=31536000, immutable"
