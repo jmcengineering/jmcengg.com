@@ -111,6 +111,12 @@ canvas#shapeCanvas{width:100%;height:100%;display:block;}
 .page-footer{background:var(--navy-dark);padding:18px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
 .page-footer span{color:rgba(255,255,255,.3);font-size:12px;}
 .page-footer a{color:var(--blue-light);font-size:12px;text-decoration:none;}
+
+/* Touch targets. 38px is reachable but fiddly with a thumb on a shop floor;
+   44px is the figure both Apple and Google publish. */
+@media (max-width: 760px){
+  input, select, button, .type-btn{min-height:44px;}
+}
 </style>
 </head>
 <body>

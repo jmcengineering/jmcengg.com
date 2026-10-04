@@ -160,9 +160,17 @@ function paintPlot(m) {
 /* ───────────────────────────── table ───────────────────────────── */
 function paintTable(m) {
   const d = DEC();
+  /* data-label captions each value on a phone, where the table becomes one
+     card per hole and the column headings are off screen. */
   $('tbody').innerHTML = m.pts.map((p) =>
-    '<tr><td>' + p.i + '</td><td>' + F(p.a) + '</td><td>' + F(p.x, d) + '</td><td>' + F(p.y, d) +
-    '</td><td>' + F(p.dx, d) + '</td><td>' + F(p.dy, d) + '</td><td>' + F(p.r, d) + '</td></tr>').join('');
+    '<tr><td data-label="Hole">' + p.i +
+    '</td><td data-label="Angle&deg;">' + F(p.a) +
+    '</td><td data-label="X">' + F(p.x, d) +
+    '</td><td data-label="Y">' + F(p.y, d) +
+    '</td><td data-label="&Delta;X from centre">' + F(p.dx, d) +
+    '</td><td data-label="&Delta;Y from centre">' + F(p.dy, d) +
+    '</td><td data-label="Radius">' + F(p.r, d) +
+    '</td></tr>').join('');
 }
 
 /* ───────────────────────────── reverse ───────────────────────────── */

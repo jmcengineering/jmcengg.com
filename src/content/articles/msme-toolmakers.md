@@ -12,12 +12,7 @@ India is on track to become the third-largest automotive market in the world. OE
 
 This is a perspective from inside that ecosystem. We are one of those MSME toolmakers. And we think this sector deserves more recognition than it gets.
 
-| Figure | What it refers to |
-|---|---|
-| **63M+** | MSMEs registered in India (2024) |
-| **45%** | of India's manufacturing output from MSMEs |
-| **₹22L Cr** | India auto sector market size (2024) |
-| **~70%** | of auto components sourced from MSMEs & Tier-2/3 vendors |
+MSMEs account for a little over a third of India's manufacturing output — 36.2% in 2021-22, and steady at roughly that level for years before it, according to the [Ministry of MSME's annual reporting](https://msme.gov.in/). The point is not the exact figure. It is that a third of what this country manufactures comes out of workshops most people have never heard of.
 
 ## What MSME Toolmakers Actually Do
 

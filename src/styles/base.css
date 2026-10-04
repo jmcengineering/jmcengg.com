@@ -50,6 +50,15 @@ a{color:inherit;}
 .js-on .rv-l{opacity:0;transform:translateX(-30px);transition:opacity .7s var(--ease),transform .7s var(--ease);}
 .js-on .rv-r{opacity:0;transform:translateX(30px);transition:opacity .7s var(--ease),transform .7s var(--ease);}
 .js-on .rv.in-view,.js-on .rv-l.in-view,.js-on .rv-r.in-view{opacity:1;transform:none;}
+/* On a phone the sideways reveal is what pushes the page 7px wider than the
+   viewport: an element waiting to animate sits 30px to the right of where it
+   will end up, and until it scrolls into view that is 30px outside the screen.
+   The horizontal shift is a desktop flourish; on a narrow screen it buys
+   nothing and costs a sideways wobble on every page. Fade upward instead. */
+@media(max-width:760px){
+  .js-on .rv-l,.js-on .rv-r{transform:translateY(28px);}
+}
+
 .d1{transition-delay:.08s!important;}.d2{transition-delay:.16s!important;}.d3{transition-delay:.24s!important;}.d4{transition-delay:.32s!important;}.d5{transition-delay:.4s!important;}
 
 /* ═══════════════════ NAVBAR ═══════════════════ */

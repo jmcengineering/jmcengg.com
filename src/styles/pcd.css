@@ -92,3 +92,43 @@ svg.plot{display:block;width:100%;height:auto;background:#fff;border-radius:4px;
   .dro-cell .v{color:#000;}
   .dro-cell .k{color:#444;}
 }
+
+/* ── phones: the coordinate table becomes one card per hole ──
+   Seven columns do not fit in 390px. The table sat in an overflow-x
+   container, so three of them were off screen with nothing to say so —
+   a machinist reading X and Y off a phone never saw the rest. */
+@media (max-width: 760px){
+  .tw .scroll{max-height:none;overflow:visible;}
+  .tw table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+  .tw table, .tw tbody, .tw tr, .tw td{display:block;width:auto;}
+
+  .tw tr{
+    background:var(--white);
+    border:1px solid var(--hairline);
+    border-radius:var(--r);
+    padding:12px 14px;
+    margin-bottom:10px;
+  }
+  .tw tbody tr:last-child{margin-bottom:0;}
+  /* zebra striping reads as a mistake once rows are separate cards */
+  .tw tbody tr:nth-child(even){background:var(--white);}
+  .tw td{
+    display:flex;align-items:baseline;justify-content:space-between;gap:14px;
+    border:none;padding:7px 0;text-align:right;font-size:14px;
+  }
+  .tw td + td{border-top:1px solid var(--hairline);}
+  .tw td::before{
+    content:attr(data-label);
+    flex:0 0 auto;text-align:left;
+    font-family:var(--font-m);font-size:10.5px;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--txt-mut);
+  }
+  /* hole number is the card's heading */
+  .tw td:first-child{
+    justify-content:flex-start;padding-top:0;padding-bottom:10px;
+    border-bottom:2px solid var(--hairline);
+    font-family:var(--font-d);font-size:17px;font-weight:700;color:var(--ink);
+  }
+  .tw td:first-child::before{content:'Hole ';font-size:17px;letter-spacing:0;
+    text-transform:none;color:var(--ink);font-family:var(--font-d);font-weight:700;}
+}

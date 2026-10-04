@@ -90,9 +90,6 @@ td:first-child{text-align:left;font-family:'Rajdhani',sans-serif;font-size:15px;
 .info-item{background:rgba(255,255,255,.05);border-radius:8px;padding:10px 12px;}
 .info-label{font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
 .info-value{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:var(--blue-light);}
-#canvas-wrap{flex:1;position:relative;overflow:hidden;}
-#drill-canvas{width:100%;height:100%;display:block;}
-.canvas-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;pointer-events:none;}
 .ph-icon{font-size:48px;opacity:.15;}
 .ph-text{color:rgba(255,255,255,.25);font-size:13px;text-align:center;line-height:1.6;max-width:200px;}
 .anim-controls{padding:14px 20px;border-top:1px solid rgba(255,255,255,.07);display:flex;gap:8px;align-items:center;}
@@ -108,6 +105,58 @@ td:first-child{text-align:left;font-family:'Rajdhani',sans-serif;font-size:15px;
 .page-footer{background:var(--navy-dark);padding:18px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
 .page-footer span{color:rgba(255,255,255,.3);font-size:12px;}
 .page-footer a{color:var(--blue-light);font-size:12px;text-decoration:none;}
+
+/* ── phones: the table becomes one card per size ──
+   Eight columns do not fit in 390px. They used to scroll sideways inside the
+   panel with nothing on screen to say so, so four of them were simply
+   invisible. Each row is now a card with every value labelled.
+   Colours come from the light palette above — the card is white. */
+@media (max-width: 760px){
+  #drillTable thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+  /* the desktop min-width is what makes the table scroll sideways; a card
+     layout must drop it or every card is 660px wide and the page overflows */
+  #drillTable{min-width:0;width:100%;background:none;box-shadow:none;}
+  #drillTable, #drillTable tbody, #drillTable tr, #drillTable td{display:block;width:auto;}
+  .table-panel{min-width:0;}
+  .filter-bar{min-width:0;flex-wrap:wrap;}
+  .search-box{min-width:0;width:100%;flex:1 1 100%;}
+
+  #drillTable tr{
+    background:var(--white);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:14px 16px;
+    margin-bottom:12px;
+    box-shadow:0 2px 10px rgba(13,34,80,.06);
+  }
+  #drillTable tbody tr:last-child{margin-bottom:0;}
+  #drillTable td{
+    display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+    border:none;padding:8px 0;text-align:right;font-size:14px;
+  }
+  #drillTable td + td{border-top:1px solid var(--border);}
+  #drillTable td::before{
+    content:attr(data-label);
+    flex:0 0 auto;text-align:left;
+    font-size:11px;letter-spacing:.4px;text-transform:uppercase;
+    color:var(--muted);font-weight:600;
+  }
+  /* the size cell is the card's heading, not a label/value pair */
+  #drillTable td:first-child{
+    justify-content:flex-start;gap:8px;flex-wrap:wrap;
+    padding-top:0;padding-bottom:12px;text-align:left;
+    border-bottom:2px solid var(--border);
+  }
+  #drillTable td:first-child::before{display:none;}
+  #drillTable td:first-child strong{font-size:20px;color:var(--navy);}
+  .anim-panel{display:none;}
+}
+
+/* Touch targets. 38px is reachable but fiddly with a thumb on a shop floor;
+   44px is the figure both Apple and Google publish. */
+@media (max-width: 760px){
+  input, select, button, .type-btn{min-height:44px;}
+}
 </style>
 </head>
 <body>
@@ -166,7 +215,7 @@ td:first-child{text-align:left;font-family:'Rajdhani',sans-serif;font-size:15px;
       </thead>
       <tbody id="tableBody"></tbody>
     </table>
-    <div class="click-hint"><div class="click-dot"></div> Click any row to open the full 3D CNC drilling simulation</div>
+    <div class="click-hint"><div class="click-dot"></div> Tap any row to open the full 3D CNC drilling simulation</div>
   </div>
 
   <!-- SIMULATION PREVIEW PANEL -->
@@ -188,7 +237,7 @@ td:first-child{text-align:left;font-family:'Rajdhani',sans-serif;font-size:15px;
         </div>
       </div>
       <div style="background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.25);border-radius:10px;padding:12px 16px;text-align:center;">
-        <div style="font-size:11px;color:var(--blue-light);font-weight:600;letter-spacing:.5px;">← SELECT ANY ROW TO LAUNCH</div>
+        <div style="font-size:11px;color:var(--blue-light);font-weight:600;letter-spacing:.5px;">SELECT ANY ROW TO LAUNCH</div>
       </div>
     </div>
   </div>
@@ -226,8 +275,6 @@ const DRILLS = [
 let currentFilter = 'all';
 let currentSearch = '';
 let selectedRow = null;
-let animState = null;
-let rafId = null;
 
 // ── TABLE RENDER ──
 function renderTable(){
@@ -240,15 +287,18 @@ function renderTable(){
     return true;
   }).forEach((d,i)=>{
     const tr = document.createElement('tr');
+    // data-label is what the mobile card layout shows beside each value;
+    // on a phone the table becomes one card per size, so the column
+    // headings are not on screen to read across to.
     tr.innerHTML = `
-      <td><strong>${d.s}</strong><span class="tag-type tag-through">Through</span><span class="tag-type tag-cb">CB</span></td>
-      <td class="td-mono">${d.p}</td>
-      <td class="td-mono td-green">${d.tap} mm</td>
-      <td class="td-mono td-blue">${d.cl} mm</td>
-      <td class="td-mono">${d.fr} mm</td>
-      <td class="td-mono td-amber">${d.h7p} µm</td>
-      <td class="td-mono">${d.cb}×${d.cbd}</td>
-      <td class="td-mono">${d.csk} mm</td>
+      <td data-label="Size"><strong>${d.s}</strong><span class="tag-type tag-through">Through</span><span class="tag-type tag-cb">CB</span></td>
+      <td class="td-mono" data-label="Pitch">${d.p}</td>
+      <td class="td-mono td-green" data-label="Tap drill &oslash;">${d.tap} mm</td>
+      <td class="td-mono td-blue" data-label="Close fit &oslash;">${d.cl} mm</td>
+      <td class="td-mono" data-label="Free fit &oslash;">${d.fr} mm</td>
+      <td class="td-mono td-amber" data-label="H7 tolerance">${d.h7p} µm</td>
+      <td class="td-mono" data-label="Counterbore &oslash; &times; depth">${d.cb}×${d.cbd}</td>
+      <td class="td-mono" data-label="Countersink &oslash;">${d.csk} mm</td>
     `;
     tr.onclick = ()=>selectRow(d, tr);
     tbody.appendChild(tr);
@@ -284,489 +334,14 @@ function selectRow(data, tr){
   window.location.href = 'drill-simulation.html?' + params.toString();
 }
 
-// ═══════════════════════════════════════════
-// DRILLING ANIMATION ENGINE
-// ═══════════════════════════════════════════
-const canvas = document.getElementById('drill-canvas');
-const ctx = canvas.getContext('2d');
-let W,H;
+// The drilling animation used to run on a canvas on this page. It now lives
+// on drill-simulation.html, which selectRow() navigates to with the hole
+// data in the query string. The canvas markup went with it; the engine that
+// drew into it did not, so this file kept ~480 lines calling getContext on an
+// element that no longer existed. That threw on load, before the last line of
+// the script, which is the one that fills the table — so the calculator
+// rendered an empty table on every device. Removed.
 
-function resizeCanvas(){
-  const wrap = document.getElementById('canvas-wrap');
-  W = canvas.width = wrap.offsetWidth;
-  H = canvas.height = wrap.offsetHeight;
-}
-resizeCanvas();
-new ResizeObserver(resizeCanvas).observe(document.getElementById('canvas-wrap'));
-
-// Animation state machine
-// Phases: 0=idle, 1=machine-descend, 2=drilling, 3=retract, 4=coolant-clear, 5=result
-let phase=0, phaseT=0;
-let drillY=0, drillDepth=0, targetDepth=0;
-let chips=[], coolantDrops=[];
-let resultAlpha=0;
-let isPlaying=false;
-let spindleRot=0;
-let torchFlash=0;
-
-function resetAnimation(){
-  cancelAnimationFrame(rafId);
-  phase=0; phaseT=0; drillY=0; drillDepth=0; chips=[]; coolantDrops=[];
-  resultAlpha=0; isPlaying=false; torchFlash=0;
-  document.getElementById('progFill').style.width='0%';
-  document.getElementById('playBtn').innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l14 9-14 9z"/></svg> Play Drilling Animation';
-  drawIdle();
-}
-
-function playAnimation(){
-  if(!selectedRow) return;
-  isPlaying=true;
-  document.getElementById('playBtn').disabled=true;
-  document.getElementById('playBtn').innerHTML='⚙ Simulating...';
-  phase=1; phaseT=0;
-  spawnCoolant();
-  animate();
-}
-
-function spawnCoolant(){
-  coolantDrops=[];
-  for(let i=0;i<20;i++){
-    coolantDrops.push({x:0,y:0,vx:(Math.random()-.5)*3,vy:Math.random()*2+1,life:1,r:Math.random()*2+1});
-  }
-}
-
-function spawnChip(cx,cy){
-  const angle=(Math.random()-.5)*Math.PI;
-  chips.push({
-    x:cx, y:cy,
-    vx:Math.cos(angle)*(Math.random()*4+2)*(Math.random()<.5?1:-1),
-    vy:-Math.random()*5-2,
-    rot:Math.random()*Math.PI,
-    vrot:(Math.random()-.5)*0.3,
-    life:1, size:Math.random()*5+2,
-    col:`hsl(${200+Math.random()*20},${40+Math.random()*20}%,${40+Math.random()*20}%)`
-  });
-}
-
-function animate(){
-  if(!isPlaying) return;
-  resizeCanvas();
-  ctx.clearRect(0,0,W,H);
-
-  const mat_top = H*0.38;
-  const mat_h   = H*0.42;
-  const drill_cx = W*0.5;
-
-  // Phase durations (frames at 60fps)
-  const PH = [0, 60, 120, 50, 30, 180]; // idle, descend, drill, retract, clear, result
-
-  phaseT++;
-  const totalFrames = PH.slice(1).reduce((a,b)=>a+b,0);
-  let elapsed=0;
-  for(let i=1;i<phase;i++) elapsed+=PH[i];
-  elapsed+=phaseT;
-  document.getElementById('progFill').style.width=(elapsed/totalFrames*100)+'%';
-
-  if(phaseT>=PH[phase]){
-    phaseT=0;
-    phase++;
-    if(phase>5){ phase=5; isPlaying=false;
-      document.getElementById('playBtn').disabled=false;
-      document.getElementById('playBtn').innerHTML='↺ Replay';
-    }
-  }
-
-  const t = phaseT/PH[phase];
-
-  // ── DRAW BACKGROUND ──
-  const bg=ctx.createLinearGradient(0,0,W,H);
-  bg.addColorStop(0,'#050e24'); bg.addColorStop(1,'#091535');
-  ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
-
-  // Grid
-  ctx.strokeStyle='rgba(37,99,235,.05)'; ctx.lineWidth=1;
-  for(let x=0;x<W;x+=30){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
-  for(let y=0;y<H;y+=30){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
-
-  // ── MACHINE BODY ──
-  drawMachine(drill_cx, mat_top, phase, t);
-
-  // ── MATERIAL BLOCK ──
-  drawMaterial(drill_cx, mat_top, mat_h, phase, t, phaseT);
-
-  // ── DRILL BIT ──
-  if(phase>=1 && phase<=3){
-    let dy=0;
-    if(phase===1) dy = easeOut(t) * (mat_top - H*0.04);
-    if(phase===2) dy = (mat_top - H*0.04);
-    if(phase===3) dy = (mat_top - H*0.04) * (1-easeOut(t));
-
-    const drill_tip_y = H*0.04 + dy;
-    if(phase===2){
-      drillDepth = easeInOut(t) * mat_h * 0.72;
-      if(Math.random()<0.4) spawnChip(drill_cx + (Math.random()-.5)*20, mat_top+drillDepth);
-      spindleRot += 0.4;
-      torchFlash = Math.random()*0.5;
-    } else {
-      spindleRot += 0.1;
-    }
-    drawDrillBit(drill_cx, drill_tip_y, drillDepth, spindleRot);
-  }
-
-  // ── CHIPS ──
-  chips = chips.filter(c=>{
-    c.x+=c.vx; c.y+=c.vy; c.vy+=0.3; c.rot+=c.vrot; c.life-=0.025;
-    if(c.life<=0) return false;
-    ctx.save();
-    ctx.translate(c.x,c.y); ctx.rotate(c.rot);
-    ctx.fillStyle=c.col.replace(')',`,${c.life})`).replace('hsl','hsla');
-    ctx.fillRect(-c.size/2,-c.size/4,c.size,c.size/2);
-    ctx.restore();
-    return true;
-  });
-
-  // ── COOLANT MIST ──
-  if(phase===2){
-    coolantDrops.forEach(cd=>{
-      const cx = drill_cx + cd.vx*phaseT*0.3;
-      const cy = mat_top + drillDepth - cd.vy*phaseT*0.2;
-      ctx.beginPath();
-      ctx.arc(cx,cy,cd.r,0,Math.PI*2);
-      ctx.fillStyle=`rgba(147,197,253,${0.3*cd.life})`;
-      ctx.fill();
-    });
-  }
-
-  // ── RESULT ──
-  if(phase>=5){
-    resultAlpha = Math.min(1, resultAlpha+0.025);
-    drawResult(drill_cx, mat_top, mat_h, resultAlpha);
-  }
-
-  rafId=requestAnimationFrame(animate);
-}
-
-function drawMachine(cx, mat_top, phase, t){
-  // Machine column
-  const colX=cx-90, colW=180, colH=mat_top*0.55;
-  ctx.fillStyle='rgba(30,58,138,0.4)';
-  ctx.fillRect(colX,0,colW,colH);
-  ctx.strokeStyle='rgba(59,130,246,0.3)';
-  ctx.lineWidth=1.5; ctx.strokeRect(colX,0,colW,colH);
-
-  // Machine head box
-  const hx=cx-50, hy=colH-30, hw=100, hh=40;
-  const hg=ctx.createLinearGradient(hx,hy,hx,hy+hh);
-  hg.addColorStop(0,'#1e3a8a'); hg.addColorStop(1,'#1e40af');
-  ctx.fillStyle=hg; ctx.beginPath();
-  ctx.roundRect(hx,hy,hw,hh,6); ctx.fill();
-  ctx.strokeStyle='rgba(96,165,250,0.5)'; ctx.lineWidth=1.5; ctx.stroke();
-
-  // Spindle
-  const sg=ctx.createLinearGradient(cx-8,0,cx+8,0);
-  sg.addColorStop(0,'#374151'); sg.addColorStop(.5,'#6b7280'); sg.addColorStop(1,'#374151');
-  ctx.fillStyle=sg;
-  ctx.fillRect(cx-8, hy+hh, 16, mat_top-hy-hh+10);
-
-  // Control panel lights
-  for(let i=0;i<3;i++){
-    ctx.beginPath(); ctx.arc(cx-30+i*20, hy+hh/2, 4, 0, Math.PI*2);
-    ctx.fillStyle = i===1&&phase>=2?`rgba(74,222,128,${0.5+Math.sin(Date.now()*.01)*0.5})`:'rgba(96,165,250,0.6)';
-    ctx.fill();
-  }
-
-  // JMC label on machine
-  ctx.fillStyle='rgba(255,255,255,0.25)';
-  ctx.font='bold 11px Rajdhani,sans-serif';
-  ctx.textAlign='center'; ctx.textBaseline='middle';
-  ctx.fillText('VMC SPINDLE', cx, hy+hh*.35);
-  ctx.fillText('JMC ENG.', cx, hy+hh*.7);
-}
-
-function drawDrillBit(cx, tip_y, depth, rot){
-  const flute_l = 120 + depth;
-  const d=selectedRow;
-  const dia = Math.min(30, (d?d.tap:6)*4);
-
-  ctx.save(); ctx.translate(cx, tip_y);
-
-  // Tool holder / chuck
-  const cg=ctx.createLinearGradient(-18,0,18,0);
-  cg.addColorStop(0,'#374151'); cg.addColorStop(.5,'#9ca3af'); cg.addColorStop(1,'#374151');
-  ctx.fillStyle=cg;
-  ctx.beginPath();
-  ctx.moveTo(-14,-20); ctx.lineTo(14,-20);
-  ctx.lineTo(dia/2+2,0); ctx.lineTo(-dia/2-2,0);
-  ctx.closePath(); ctx.fill();
-  ctx.strokeStyle='rgba(156,163,175,.5)'; ctx.lineWidth=1; ctx.stroke();
-
-  // Flutes (helix)
-  const fCount=2;
-  for(let f=0;f<fCount;f++){
-    const baseAngle = rot + (f/fCount)*Math.PI;
-    ctx.save(); ctx.rotate(baseAngle);
-    ctx.strokeStyle=`rgba(107,114,128,0.8)`;
-    ctx.lineWidth=dia*0.15+1;
-    ctx.lineCap='round';
-    ctx.beginPath();
-    for(let s=0;s<=flute_l;s+=4){
-      const x=Math.sin(s*0.1)*dia*.35;
-      const y=s;
-      s===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
-    }
-    ctx.stroke();
-    ctx.restore();
-  }
-
-  // Body
-  const bg2=ctx.createLinearGradient(-dia/2,0,dia/2,0);
-  bg2.addColorStop(0,'#1f2937'); bg2.addColorStop(.4,'#6b7280'); bg2.addColorStop(.6,'#9ca3af'); bg2.addColorStop(1,'#374151');
-  ctx.fillStyle=bg2;
-  ctx.fillRect(-dia/2, 0, dia, flute_l);
-
-  // Tip (118° point)
-  const tg=ctx.createLinearGradient(-dia/2,flute_l,dia/2,flute_l+dia/2);
-  tg.addColorStop(0,'#374151'); tg.addColorStop(.5,'#9ca3af'); tg.addColorStop(1,'#374151');
-  ctx.fillStyle=tg;
-  ctx.beginPath();
-  ctx.moveTo(-dia/2, flute_l);
-  ctx.lineTo(dia/2, flute_l);
-  ctx.lineTo(0, flute_l+dia/2);
-  ctx.closePath(); ctx.fill();
-
-  // Cutting edge highlights
-  ctx.strokeStyle='rgba(147,197,253,0.6)';
-  ctx.lineWidth=1;
-  ctx.beginPath();
-  ctx.moveTo(-dia/2,flute_l); ctx.lineTo(0,flute_l+dia/2);
-  ctx.moveTo(dia/2,flute_l); ctx.lineTo(0,flute_l+dia/2);
-  ctx.stroke();
-
-  // Cutting glow
-  if(depth>5){
-    const gg=ctx.createRadialGradient(0,flute_l+dia/2,0,0,flute_l+dia/2,dia*1.5);
-    gg.addColorStop(0,'rgba(251,191,36,0.5)');
-    gg.addColorStop(1,'transparent');
-    ctx.fillStyle=gg; ctx.beginPath();
-    ctx.arc(0,flute_l+dia/2,dia*1.5,0,Math.PI*2); ctx.fill();
-  }
-
-  ctx.restore();
-}
-
-function drawMaterial(cx, top, h, phase, t, pT){
-  const w=W*0.72, lx=cx-w/2;
-
-  // Shadow
-  ctx.fillStyle='rgba(0,0,0,.3)';
-  ctx.fillRect(lx+4, top+4, w, h);
-
-  // Material gradient (steel)
-  const mg=ctx.createLinearGradient(lx,top,lx,top+h);
-  mg.addColorStop(0,'#374151'); mg.addColorStop(.3,'#4b5563');
-  mg.addColorStop(.7,'#374151'); mg.addColorStop(1,'#1f2937');
-  ctx.fillStyle=mg; ctx.fillRect(lx,top,w,h);
-
-  // Surface sheen
-  ctx.fillStyle='rgba(156,163,175,0.15)';
-  ctx.fillRect(lx,top,w,6);
-  ctx.strokeStyle='rgba(107,114,128,0.6)';
-  ctx.lineWidth=1.5; ctx.strokeRect(lx,top,w,h);
-
-  // Grain lines
-  ctx.strokeStyle='rgba(75,85,99,0.4)'; ctx.lineWidth=1;
-  for(let i=1;i<5;i++){
-    ctx.beginPath(); ctx.moveTo(lx,top+h*i/5);
-    ctx.lineTo(lx+w,top+h*i/5); ctx.stroke();
-  }
-
-  // Label
-  ctx.fillStyle='rgba(156,163,175,0.4)';
-  ctx.font='600 12px DM Sans,sans-serif';
-  ctx.textAlign='left'; ctx.textBaseline='middle';
-  ctx.fillText('WORKPIECE — MILD STEEL (EN8)', lx+14, top+h-16);
-
-  // Drill hole cut (dark region as drill goes through)
-  if(phase>=2 || drillDepth>0){
-    const holeD = selectedRow ? Math.min(28, selectedRow.tap*3.8) : 20;
-    const holeDepth = drillDepth;
-    ctx.save(); ctx.beginPath();
-    ctx.rect(cx-holeD/2, top, holeD, holeDepth+holeD/2);
-    ctx.clip();
-    ctx.fillStyle='#060f1e'; ctx.fillRect(cx-holeD/2,top,holeD,holeDepth+holeD/2);
-
-    // Machined surface (shiny walls)
-    const wg=ctx.createLinearGradient(cx-holeD/2,0,cx+holeD/2,0);
-    wg.addColorStop(0,'rgba(156,163,175,0.3)');
-    wg.addColorStop(.5,'rgba(209,213,219,0.1)');
-    wg.addColorStop(1,'rgba(156,163,175,0.3)');
-    ctx.fillStyle=wg; ctx.fillRect(cx-holeD/2,top,holeD,holeDepth);
-    ctx.restore();
-
-    // Drill tip conical end
-    if(holeDepth>5){
-      const tipD=holeD/2;
-      ctx.save();
-      ctx.beginPath();
-      ctx.moveTo(cx-holeD/2, top+holeDepth);
-      ctx.lineTo(cx+holeD/2, top+holeDepth);
-      ctx.lineTo(cx, top+holeDepth+tipD);
-      ctx.closePath(); ctx.fillStyle='#060f1e'; ctx.fill();
-      ctx.restore();
-    }
-  }
-}
-
-function drawResult(cx, top, mat_h, alpha){
-  if(!selectedRow) return;
-  const d=selectedRow;
-  const holeD=Math.min(28,d.tap*3.8);
-  const holeDepth=mat_h*0.72;
-  const lx=cx-W*0.36;
-
-  // Transparent material overlay
-  ctx.save(); ctx.globalAlpha=alpha;
-
-  // Ghost material
-  ctx.fillStyle='rgba(55,65,81,0.35)';
-  ctx.strokeStyle='rgba(107,114,128,0.5)';
-  ctx.lineWidth=1.5;
-  ctx.fillRect(lx,top,W*0.72,mat_h);
-  ctx.strokeRect(lx,top,W*0.72,mat_h);
-
-  // Hole walls (machined surface)
-  const wallG=ctx.createLinearGradient(cx-holeD/2,0,cx+holeD/2,0);
-  wallG.addColorStop(0,'rgba(96,165,250,0.25)');
-  wallG.addColorStop(.5,'rgba(147,197,253,0.08)');
-  wallG.addColorStop(1,'rgba(96,165,250,0.25)');
-  ctx.fillStyle=wallG;
-  ctx.fillRect(cx-holeD/2, top, holeD, holeDepth);
-
-  // Thread profile on walls
-  const pitch=d.p*3;
-  const tDepth=4;
-  ctx.strokeStyle='rgba(96,165,250,0.8)';
-  ctx.lineWidth=1.2;
-  for(let y=top+10;y<top+holeDepth-10;y+=pitch){
-    // Left wall threads
-    ctx.beginPath();
-    ctx.moveTo(cx-holeD/2, y);
-    ctx.lineTo(cx-holeD/2+tDepth, y+pitch*0.4);
-    ctx.lineTo(cx-holeD/2, y+pitch*0.8);
-    ctx.stroke();
-    // Right wall threads
-    ctx.beginPath();
-    ctx.moveTo(cx+holeD/2, y);
-    ctx.lineTo(cx+holeD/2-tDepth, y+pitch*0.4);
-    ctx.lineTo(cx+holeD/2, y+pitch*0.8);
-    ctx.stroke();
-  }
-
-  // Hole walls outline
-  ctx.strokeStyle='rgba(96,165,250,0.6)';
-  ctx.lineWidth=1.5;
-  ctx.beginPath();
-  ctx.moveTo(cx-holeD/2,top); ctx.lineTo(cx-holeD/2,top+holeDepth);
-  ctx.moveTo(cx+holeD/2,top); ctx.lineTo(cx+holeD/2,top+holeDepth);
-  ctx.stroke();
-
-  // Drill tip at bottom
-  ctx.strokeStyle='rgba(96,165,250,0.5)';
-  ctx.beginPath();
-  ctx.moveTo(cx-holeD/2,top+holeDepth);
-  ctx.lineTo(cx,top+holeDepth+holeD/2);
-  ctx.lineTo(cx+holeD/2,top+holeDepth);
-  ctx.stroke();
-
-  // Dimension arrows
-  drawDimArrow(cx, top-5, holeD, `⌀${d.tap} mm (Tap Drill)`, 'rgba(74,222,128,0.9)', alpha, -1);
-  drawDimArrow(cx, top+holeDepth+holeD/2+20, holeDepth, `Depth: ${Math.round(holeDepth/3.8*10)/10} × D`, 'rgba(251,191,36,0.9)', alpha, 0, true);
-
-  // Info callout
-  const bx=lx-5, by=top;
-  const lines=[
-    {l:'Thread:', v:`${d.s} × ${d.p} pitch`},
-    {l:'Tap Drill:', v:`⌀ ${d.tap} mm`},
-    {l:'Clearance:', v:`⌀ ${d.cl} mm`},
-    {l:'H7 Tol.:', v:`${d.h7p} µm`},
-    {l:'CB:', v:`⌀${d.cb} × ${d.cbd} deep`},
-  ];
-  const bw=155,bh=lines.length*22+20;
-  ctx.fillStyle='rgba(5,14,36,0.88)';
-  ctx.strokeStyle='rgba(37,99,235,0.4)';
-  ctx.lineWidth=1;
-  roundRect(ctx,lx+W*0.72+10,top,bw,bh,8);
-  ctx.fill(); ctx.stroke();
-
-  lines.forEach((ln,i)=>{
-    ctx.fillStyle='rgba(148,163,184,0.8)';
-    ctx.font='500 10px DM Sans,sans-serif';
-    ctx.textAlign='left';
-    ctx.fillText(ln.l, lx+W*0.72+20, top+18+i*22);
-    ctx.fillStyle='rgba(147,197,253,0.95)';
-    ctx.font='600 11px JetBrains Mono,monospace';
-    ctx.fillText(ln.v, lx+W*0.72+20, top+30+i*22);
-  });
-
-  // COMPLETE badge
-  ctx.fillStyle='rgba(22,163,74,0.9)';
-  ctx.font='bold 13px Rajdhani,sans-serif';
-  ctx.textAlign='center';
-  roundRect(ctx,cx-60,top+mat_h+10,120,28,6);
-  ctx.fill();
-  ctx.fillStyle='#fff';
-  ctx.fillText('DRILLING COMPLETE ✓', cx, top+mat_h+27);
-
-  ctx.restore();
-}
-
-function drawDimArrow(cx,y,w,label,col,alpha,dir,vertical=false){
-  if(vertical){
-    ctx.save(); ctx.globalAlpha=alpha*0.8;
-    ctx.strokeStyle=col; ctx.fillStyle=col; ctx.lineWidth=1;
-    ctx.setLineDash([3,4]);
-    ctx.beginPath(); ctx.moveTo(cx+50,y-w); ctx.lineTo(cx+50,y); ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.font='600 10px JetBrains Mono,monospace'; ctx.textAlign='left';
-    ctx.fillText(label, cx+56, y-w/2);
-    ctx.restore(); return;
-  }
-  ctx.save(); ctx.globalAlpha=alpha*0.9;
-  ctx.strokeStyle=col; ctx.fillStyle=col; ctx.lineWidth=1;
-  // Line
-  ctx.beginPath(); ctx.moveTo(cx-w/2,y+dir*20); ctx.lineTo(cx+w/2,y+dir*20); ctx.stroke();
-  // Arrows
-  [[cx-w/2,-1],[cx+w/2,1]].forEach(([x,d])=>{
-    ctx.beginPath(); ctx.moveTo(x,y+dir*20); ctx.lineTo(x+d*5,y+dir*17); ctx.lineTo(x+d*5,y+dir*23); ctx.closePath(); ctx.fill();
-  });
-  ctx.font='600 10px JetBrains Mono,monospace'; ctx.textAlign='center';
-  ctx.fillText(label, cx, y+dir*35);
-  ctx.restore();
-}
-
-function roundRect(ctx,x,y,w,h,r){
-  ctx.beginPath();
-  ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.arcTo(x+w,y,x+w,y+r,r);
-  ctx.lineTo(x+w,y+h-r); ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
-  ctx.lineTo(x+r,y+h); ctx.arcTo(x,y+h,x,y+h-r,r);
-  ctx.lineTo(x,y+r); ctx.arcTo(x,y,x+r,y,r);
-  ctx.closePath();
-}
-
-function drawIdle(){
-  resizeCanvas();
-  const bg=ctx.createLinearGradient(0,0,W,H);
-  bg.addColorStop(0,'#050e24'); bg.addColorStop(1,'#091535');
-  ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
-  ctx.strokeStyle='rgba(37,99,235,.05)'; ctx.lineWidth=1;
-  for(let x=0;x<W;x+=30){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
-  for(let y=0;y<H;y+=30){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
-}
-
-function easeOut(t){return 1-(1-t)*(1-t)*(1-t);}
-function easeInOut(t){return t<.5?4*t*t*t:(t-1)*(2*t-2)*(2*t-2)+1;}
-
-drawIdle();
 renderTable();
 </script>
 </body>

@@ -8,7 +8,7 @@ author: "JMC Engineering"
 status: published
 ---
 
-A well-designed jig fixture is invisible — it just works, batch after batch, without variation. A poorly designed one shows up in your inspection reports, in rework hours, and eventually in rejected shipments. After designing fixtures for automotive, aerospace, and industrial clients over 30+ years, we've seen the same mistakes come up repeatedly. Here are the five most damaging ones — and exactly how we prevent them.
+A well-designed jig fixture is invisible — it just works, batch after batch, without variation. A poorly designed one shows up in your inspection reports, in rework hours, and eventually in rejected shipments. Our founder has spent 30+ years in this trade, in Singapore and in Chennai, designing fixtures for automotive, sheet metal and general engineering work. Over that time the same mistakes come up repeatedly. Here are the five most damaging ones — and exactly how we prevent them.
 
 ### Mistake #1 — No Proper Datum Reference Frame (DRF)
 

@@ -8,7 +8,7 @@ author: "JMC Engineering"
 status: published
 ---
 
-Progressive die tooling is one of the most demanding disciplines in precision engineering. A poorly designed progressive die doesn't just produce bad parts — it causes costly downtime, scrap, and tool damage. At JMC Engineering, we've designed and built progressive dies for automotive, electrical, and industrial clients, and over 30+ years we've refined a methodology that consistently delivers tight-tolerance results from first article onwards.
+Progressive die tooling is one of the most demanding disciplines in precision engineering. A poorly designed progressive die doesn't just produce bad parts — it causes costly downtime, scrap, and tool damage. At JMC Engineering we build progressive dies for automotive, electrical and industrial work, on a methodology our founder refined over 30+ years in the trade. It is aimed at one thing: tight-tolerance results from the first article onwards.
 
 Here's a transparent look at exactly how we approach it.
 
@@ -94,6 +94,6 @@ Common adjustments at tryout:
 
 ## Conclusion
 
-Progressive die design is a discipline where details determine outcomes. From strip layout through to first article, every decision impacts part quality, tool life, and production cost. At JMC Engineering, our 30+ years of combined expertise means we've seen what goes wrong — and we design to prevent it.
+Progressive die design is a discipline where details determine outcomes. From strip layout through to first article, every decision impacts part quality, tool life, and production cost. At JMC Engineering, three decades of our founder’s experience in this trade means we have seen what goes wrong — and we design to prevent it.
 
 If you have a component that requires progressive die tooling, share your drawing with us. We'll review it and give you honest feedback within 24 hours.
