@@ -414,7 +414,7 @@ function buildPDF(m) {
   doc.text('Precision tooling — jigs, fixtures, press tools, forming tools, plastic moulds', L, 23);
   doc.text('Padi, Chennai', R, 14, { align: 'right' });
   doc.text('GSTIN 33AXRPJ5951H1Z5', R, 18, { align: 'right' });
-  doc.text('Ph 7305187874', R, 22, { align: 'right' });
+  doc.text('Ph 6382387874', R, 22, { align: 'right' });
   doc.setTextColor(0); rule(26, 0.6);
 
   doc.setFont('helvetica', 'bold'); doc.setFontSize(11);
@@ -527,7 +527,7 @@ function buildPDF(m) {
   const pages = doc.internal.getNumberOfPages();
   for (let pg = 1; pg <= pages; pg++) {
     doc.setPage(pg); doc.setFontSize(7); doc.setTextColor(130);
-    doc.text('JMC Engineering, Padi, Chennai · GSTIN 33AXRPJ5951H1Z5 · Ph 7305187874', L, 289);
+    doc.text('JMC Engineering, Padi, Chennai · GSTIN 33AXRPJ5951H1Z5 · Ph 6382387874', L, 289);
     doc.text('Page ' + pg + ' of ' + pages, R, 289, { align: 'right' });
     doc.setTextColor(0);
   }
