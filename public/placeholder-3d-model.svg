@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 440" role="img" aria-label="Placeholder: example 3D STEP model. Real example to be supplied.">
+  <rect width="640" height="440" fill="#0D2350"/>
+  <g stroke="#4C8DFF" stroke-width="0.5" opacity="0.25">
+    <path d="M0 110 H640 M0 220 H640 M0 330 H640 M160 0 V440 M320 0 V440 M480 0 V440"/>
+  </g>
+  <g>
+    <path d="M190 180 L330 140 L470 180 L330 220 Z" fill="#6FA0F0"/>
+    <path d="M190 180 L190 290 L330 330 L330 220 Z" fill="#3C6FC4"/>
+    <path d="M470 180 L470 290 L330 330 L330 220 Z" fill="#274F96"/>
+    <ellipse cx="275" cy="183" rx="17" ry="9" fill="#0D2350" opacity="0.65"/>
+    <ellipse cx="385" cy="183" rx="17" ry="9" fill="#0D2350" opacity="0.65"/>
+  </g>
+  <g font-family="monospace" font-size="12" fill="#9BC0FF">
+    <text x="32" y="56">STEP &#183; AP214</text>
+    <text x="32" y="76">PLACEHOLDER MODEL</text>
+    <text x="32" y="96">Real example to be supplied</text>
+  </g>
+  <text x="32" y="420" font-family="monospace" font-size="12" fill="#FFB4A8">PLACEHOLDER IMAGE &#8212; NOT A REAL JOB</text>
+</svg>

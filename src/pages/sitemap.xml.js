@@ -26,6 +26,7 @@ const STATIC = [
   { path: '/capabilities/', changefreq: 'weekly', priority: '0.9', lastmod: '2026-09-15' },
   { path: '/industries/', changefreq: 'weekly', priority: '0.9', lastmod: '2026-09-15' },
   { path: '/insights/', changefreq: 'weekly', priority: '0.8', lastmod: '2026-09-18' },
+  { path: '/services/2d-to-3d-cad-conversion/', changefreq: 'monthly', priority: '0.9', lastmod: '2026-10-13' },
   { path: '/pcd-calculator/', changefreq: 'monthly', priority: '0.8', lastmod: '2026-09-15' },
   { path: '/drill-calculator.html', changefreq: 'monthly', priority: '0.8', lastmod: '2026-09-15' },
   { path: '/weight-calculator.html', changefreq: 'monthly', priority: '0.8', lastmod: '2026-09-15' },

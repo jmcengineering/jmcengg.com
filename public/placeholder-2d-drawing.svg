@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 440" role="img" aria-label="Placeholder: example 2D drawing. Real example to be supplied.">
+  <rect width="640" height="440" fill="#F1F4F9"/>
+  <rect x="14" y="14" width="612" height="412" fill="none" stroke="#0D2350" stroke-width="2"/>
+  <rect x="14" y="14" width="612" height="412" fill="none" stroke="#0D2350" stroke-width="1" stroke-dasharray="4 4" transform="translate(8,8) scale(0.975)"/>
+  <g stroke="#0D2350" stroke-width="1.6" fill="none">
+    <path d="M150 130 h220 v80 h-70 v90 h-150 z"/>
+    <circle cx="200" cy="175" r="18"/><circle cx="320" cy="175" r="18"/>
+  </g>
+  <g stroke="#4C8DFF" stroke-width="1" fill="none">
+    <path d="M150 110 h220"/><path d="M150 104 v12"/><path d="M370 104 v12"/>
+    <path d="M400 130 v170"/><path d="M394 130 h12"/><path d="M394 300 h12"/>
+  </g>
+  <g font-family="monospace" font-size="13" fill="#0D2350">
+    <text x="245" y="100">220</text><text x="410" y="220">170</text>
+    <text x="150" y="340">2 × &#8960;36 THRU</text>
+  </g>
+  <rect x="396" y="340" width="230" height="86" fill="#FFFFFF" stroke="#0D2350" stroke-width="1.6"/>
+  <g font-family="monospace" font-size="12" fill="#64748B">
+    <text x="408" y="362">PLACEHOLDER DRAWING</text>
+    <text x="408" y="382">Real example to be supplied</text>
+    <text x="408" y="402">by JMC Engineering</text>
+  </g>
+  <text x="32" y="420" font-family="monospace" font-size="12" fill="#B42318">PLACEHOLDER IMAGE &#8212; NOT A REAL JOB</text>
+</svg>

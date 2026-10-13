@@ -45,6 +45,16 @@ a{color:inherit;}
 .dark .eyebrow::before{background:var(--line);}
 .dark .eyebrow .idx{color:var(--txt-inv-mut);}
 
+/* Nothing may create a horizontal scrollbar.
+
+   The reveal animations park an element 30px to one side until it scrolls
+   into view, so between the mobile breakpoint and the full desktop width the
+   page was 29px wider than the screen — a sideways wobble on a laptop, and
+   earlier an 8px one on a phone. `clip` is deliberate rather than `hidden`:
+   hidden makes body a scroll container and silently breaks position:sticky,
+   which the PCD calculator's table header relies on. */
+html,body{overflow-x:clip;}
+
 /* ── REVEAL (JS adds .js-on, so a script failure can never hide the page) ── */
 .js-on .rv{opacity:0;transform:translateY(28px);transition:opacity .7s var(--ease),transform .7s var(--ease);}
 .js-on .rv-l{opacity:0;transform:translateX(-30px);transition:opacity .7s var(--ease),transform .7s var(--ease);}
@@ -132,7 +142,18 @@ footer{background:var(--ink);padding:54px 6% 26px;border-top:1px solid var(--hai
 
 
 /* ── RESPONSIVE: chrome only. Page layouts keep their own breakpoints. ── */
-@media(max-width:820px){
+/* Nine nav items plus the logo and the CTA do not fit on one row below about
+   1200px at the full gap, and below 1000px they do not fit at all. So the
+   burger now takes over at 999px rather than 820px — it already carries the
+   same links — and the spacing tightens through the band above it. A nav that
+   wraps onto a second row reads as broken rather than as a design. */
+@media(min-width:1000px) and (max-width:1199px){
+  .nav-links{gap:15px;}
+  .nav-links a{font-size:12.5px;}
+  .nav-cta{padding-inline:14px;font-size:12.5px;}
+}
+
+@media(max-width:999px){
   .nav-links,.nav-cta{display:none;}
   .hamburger{display:flex;}
   .f-top{grid-template-columns:1fr;}

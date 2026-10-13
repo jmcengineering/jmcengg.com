@@ -41,9 +41,10 @@ PATTERNS='REPLACE_WITH[A-Za-z0-9_]*|REPLACE:|\[REPLACE[^]]*|lorem ipsum|TODO_BEF
 # An empty pattern would match every line, so this is a string nothing equals.
 ALLOWED_VALUES='<<<no-exceptions>>>'
 
-# blog-post-template.html is a working template full of [REPLACE: …] markers.
-# It carries noindex,nofollow and is linked from nowhere.
-ALLOWED_FILES='blog-post-template.html'
+# Nothing is excepted by filename any more. blog-post-template.html held the
+# only entry and was deleted when the article system replaced it. An empty
+# pattern would match every file, so this is a name nothing equals.
+ALLOWED_FILES='<<<no-exceptions>>>'
 
 fail=0
 

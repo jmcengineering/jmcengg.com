@@ -1,0 +1,60 @@
+/* Service pages.
+   Only what the Drawing Sheet does not already have: the before/after figure
+   pair, the pricing tiers, and the enquiry form — whose styles live in
+   home.css, which inner pages do not load. Everything else on the page uses
+   band / wrap / cols / panel / ticks / specs / steps / faq from site.css. */
+
+/* ── before / after ── */
+.ba{display:grid;grid-template-columns:1fr;gap:18px;margin-top:20px;}
+@media(min-width:720px){.ba{grid-template-columns:1fr 1fr;}}
+.ba figure{margin:0;background:var(--white);border:1px solid var(--hairline);
+  border-radius:var(--r);overflow:hidden;}
+.ba img{display:block;width:100%;height:auto;background:var(--paper);}
+.ba figcaption{font-family:var(--font-m);font-size:11.5px;letter-spacing:.04em;
+  color:var(--txt-mut);padding:11px 14px;border-top:1px solid var(--hairline);}
+.ba figcaption b{color:var(--ink);font-family:var(--font-d);font-size:13px;
+  letter-spacing:0;display:block;margin-bottom:3px;}
+
+.addon{margin-top:16px;background:var(--white);border:1px solid var(--hairline);
+  border-left:3px solid var(--amber);border-radius:0 var(--r) var(--r) 0;padding:16px 18px;
+  font-size:14.5px;color:var(--txt-mut);}
+.addon b{color:var(--ink);}
+
+/* ── the free-trial and confidentiality blocks ── */
+.callout-box{background:var(--white);border:1px solid var(--hairline);
+  border-left:3px solid var(--blue);border-radius:0 var(--r) var(--r) 0;
+  padding:20px 22px;margin-top:20px;}
+.callout-box h3{font-family:var(--font-d);font-size:17px;font-weight:600;color:var(--ink);margin:0 0 8px;}
+.callout-box p{margin:0 0 10px;font-size:15px;color:var(--txt-mut);line-height:1.65;max-width:64ch;}
+.callout-box p:last-child{margin-bottom:0;}
+.callout-box b{color:var(--ink);}
+
+.smallprint{margin-top:22px;font-size:13px;line-height:1.65;color:var(--txt-mut);
+  border-top:1px solid var(--hairline);padding-top:14px;max-width:70ch;}
+
+/* ── enquiry form ──
+   Same shapes as the homepage form; those live in home.css, which this page
+   does not load, so they are restated rather than imported wholesale. */
+.svc-form{background:var(--white);border:1px solid var(--hairline);border-radius:var(--r);
+  padding:24px;margin-top:22px;}
+.svc-form h2{margin:0 0 4px;}
+.svc-form .fnote{font-family:var(--font-m);font-size:11px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--txt-mut);margin:0 0 18px;}
+.frow2{display:grid;grid-template-columns:1fr;gap:14px;}
+@media(min-width:620px){.frow2{grid-template-columns:1fr 1fr;}}
+.fld{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
+.fld label{font-family:var(--font-m);font-size:11px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--txt-mut);}
+.fld input,.fld select,.fld textarea{font-family:var(--font-b);font-size:15px;color:var(--txt);
+  background:var(--paper);border:1px solid var(--hairline);border-radius:8px;
+  padding:11px 13px;width:100%;min-height:46px;}
+.fld textarea{min-height:104px;resize:vertical;}
+.fld input:focus,.fld select:focus,.fld textarea:focus{outline:2px solid var(--blue);
+  outline-offset:-1px;background:var(--white);}
+.fld .hint{font-family:var(--font-b);font-size:12.5px;letter-spacing:0;text-transform:none;
+  color:var(--txt-mut);}
+.fld .hint a{color:var(--blue);}
+.consent2{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;
+  color:var(--txt-mut);line-height:1.55;margin:4px 0 18px;}
+.consent2 input{margin-top:3px;flex:none;width:17px;height:17px;accent-color:var(--blue);}
+.consent2 a{color:var(--blue);}

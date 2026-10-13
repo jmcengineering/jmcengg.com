@@ -1,0 +1,414 @@
+---
+/* /services/2d-to-3d-cad-conversion/
+   A service page rather than a capability page. Capability pages are
+   generated from a fixed shape in capabilities.js — makes, specs, process,
+   send, faq — which has nowhere to put pricing, a trial offer or a form.
+   Capabilities are what JMC manufactures; services are what it does for a
+   customer remotely. */
+import Page from '../../layouts/Page.astro';
+import '../../styles/service.css';
+
+const TURNAROUND = '2–3 working days';   // standard, non-rush
+
+const faq = [
+  {
+    q: 'What file formats do you accept?',
+    a: 'PDF, TIF, PNG and JPG for the drawing. A clean PDF export gives the best result because the linework stays sharp; a photograph of a print on a desk is usable but slower to work from. If you also have a DXF or an older STEP file, send it — it saves time and we will say so in the quotation.',
+  },
+  {
+    q: 'How long does a conversion take?',
+    a: `Standard turnaround is ${TURNAROUND} per drawing from the point we have everything we need. Rush delivery is available as an add-on. A batch of twenty is not twenty times slower — tell us the volume and we will give you a date rather than a formula.`,
+  },
+  {
+    q: 'How accurate is the model, and what if something is wrong?',
+    a: 'The model is built to the dimensions called out on your drawing, and checked by a tooling engineer before it goes back to you. Revisions against the original drawing are included — if we have read a dimension wrong, that is ours to fix. A change to the drawing itself is a new revision and we will say so before starting it.',
+  },
+  {
+    q: 'What happens if a drawing cannot be fully modelled?',
+    a: 'It goes in the conversion report. Drawings have missing views, unreadable scans, contradictory dimensions and features called out only in a note. Where we have had to make an assumption, the report says which feature, what we assumed and why, so you can check that one thing instead of re-checking the whole model. Nothing is hidden and nothing is guessed silently.',
+  },
+  {
+    q: 'Will you sign an NDA?',
+    a: 'Yes, on request, before you send anything. Drawings are used only for your job.',
+  },
+  {
+    q: 'Do you offer bulk pricing?',
+    a: 'Yes, for twenty or more drawings a month. Tell us the expected monthly volume and the mix of part types and we will quote a rate for the batch rather than per drawing.',
+  },
+];
+
+const SITE = 'https://jmcengg.com';
+const url = `${SITE}/services/2d-to-3d-cad-conversion/`;
+
+const serviceLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  '@id': `${url}#service`,
+  serviceType: '2D to 3D CAD Conversion',
+  name: '2D to 3D CAD Conversion — drawings to STEP models and flat-pattern DXF',
+  description:
+    'Conversion of 2D engineering drawings (PDF, TIF, PNG, JPG) into manufacturable 3D STEP models, with flat-pattern DXF for sheet-metal parts and a conversion report. Chennai, India.',
+  provider: { '@id': `${SITE}/#business` },
+  areaServed: [
+    { '@type': 'Country', name: 'India' },
+    { '@type': 'AdministrativeArea', name: 'Tamil Nadu' },
+  ],
+  availableChannel: {
+    '@type': 'ServiceChannel',
+    serviceUrl: url,
+    servicePhone: '+916382387874',
+  },
+};
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  '@id': `${url}#faq`,
+  mainEntity: faq.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+<Page
+  title="2D to 3D CAD Conversion in India | Drawing to STEP & Flat-Pattern DXF | JMC Engineering"
+  description="2D to 3D CAD conversion from a precision tooling company in Chennai. We turn PDF, TIF, PNG and JPG engineering drawings into manufacturable STEP models, with flat-pattern DXF for sheet metal and a conversion report. First 3 drawings free."
+  crumbs={[
+    { label: 'Home', href: '/' },
+    { label: 'Services', href: '/services/2d-to-3d-cad-conversion/' },
+    { label: '2D to 3D CAD Conversion', href: '/services/2d-to-3d-cad-conversion/' },
+  ]}
+  jsonld={[serviceLd, faqLd]}
+>
+
+  <header class="band">
+    <div class="band-in">
+      <nav class="crumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> <span>/</span> <span>2D to 3D CAD Conversion</span>
+      </nav>
+      <h1>2D Drawings to Manufacturable 3D CAD, Fast</h1>
+      <p class="lede">
+        We convert 2D engineering drawings — PDF, TIF, PNG or JPG — into STEP
+        models, plus flat-pattern DXF for sheet-metal parts. Every model is
+        checked by a tooling engineer before it goes back to you.
+      </p>
+      <div class="band-acts">
+        <a class="btn btn-p" href="#enquire">Get 3 free conversions</a>
+        <a class="btn btn-o" href="#enquire">Request a quote</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="cols">
+      <div>
+
+        <!-- 2 ─ what we convert -->
+        <section class="block rv">
+          <p class="eyebrow">Scope</p>
+          <h2>What we convert</h2>
+          <ul class="ticks" style="margin-top:18px">
+            <li><b>Sheet-metal brackets and stampings</b> — bends, reliefs, forms and the developed blank</li>
+            <li><b>Machined parts</b> — turned and milled components, including threaded and bored features</li>
+            <li><b>JIS-style ordinate-dimensioned drawings</b>, where everything is called from one datum rather than chained</li>
+            <li><b>Indian automotive supplier drawings</b>, including redrawn and rescanned prints that have been round the supply chain a few times</li>
+          </ul>
+
+          <div class="ba">
+            <figure>
+              <img src="/placeholder-2d-drawing.svg" alt="Placeholder showing a 2D engineering drawing with dimensions and a title block. A real example will replace this." width="640" height="440" loading="lazy" decoding="async" />
+              <figcaption><b>The drawing you send</b>PLACEHOLDER — a real example will replace this</figcaption>
+            </figure>
+            <figure>
+              <img src="/placeholder-3d-model.svg" alt="Placeholder showing a 3D STEP model of a sheet-metal bracket. A real example will replace this." width="640" height="440" loading="lazy" decoding="async" />
+              <figcaption><b>The model you get back</b>PLACEHOLDER — a real example will replace this</figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <!-- 3 ─ what you get -->
+        <section class="block rv">
+          <p class="eyebrow">Deliverables</p>
+          <h2>What you get</h2>
+          <table class="specs" style="margin-top:18px">
+            <tbody>
+              <tr><th scope="row">Part STEP file</th><td>One per part, built to the dimensions on your drawing</td></tr>
+              <tr><th scope="row">Assembly STEP</th><td>Where the drawing is an assembly, with the parts positioned</td></tr>
+              <tr><th scope="row">Flat-pattern DXF</th><td>For sheet-metal parts — the developed blank, ready for laser or wire-cut</td></tr>
+              <tr><th scope="row">Conversion report</th><td>Everything that could not be fully modelled, and every assumption we made</td></tr>
+            </tbody>
+          </table>
+          <p style="margin-top:16px;color:var(--txt-mut);font-size:15px;max-width:66ch">
+            The report is the part people do not expect. A drawing that converts
+            cleanly needs one line; a drawing with a missing section view and a
+            note referring to a part number nobody has needs a paragraph. Either
+            way you know what you are looking at before it reaches your machine.
+          </p>
+        </section>
+
+        <!-- 4 ─ how it works -->
+        <section class="block rv">
+          <p class="eyebrow">Process</p>
+          <h2>How it works</h2>
+          <ol class="steps" style="margin-top:22px">
+            <li><b>Send the drawing</b><span>Use the form below, a shared link, or email it to info@jmcengg.com. Tell us the part type and when you need it.</span></li>
+            <li><b>We convert and check</b><span>The model is built from your dimensions, then checked by a tooling engineer against the original drawing.</span></li>
+            <li><b>You review the STEP and the report</b><span>You get the files and a plain list of anything we could not fully model, with the assumptions we made.</span></li>
+            <li><b>Revisions if needed</b><span>If we have read something wrong, we fix it. A change to the drawing itself is a new revision, and we will say so first.</span></li>
+          </ol>
+        </section>
+
+        <!-- 5 ─ pricing -->
+        <section class="block rv" id="pricing">
+          <p class="eyebrow">Pricing</p>
+          <h2>Quoted per drawing, on enquiry</h2>
+          <div class="callout-box">
+            <p>
+              Every drawing is different, so the price is too. Send one and you
+              get a figure back with the quotation — not a rate card you have to
+              work out for yourself.
+            </p>
+            <p>
+              What moves it: <b>a simple part</b> with one or two clean views
+              prices differently from <b>a multi-bend bracket</b> on an
+              ordinate-dimensioned print, which in turn prices differently
+              from <b>an assembly or a degraded scan</b> where geometry has to
+              be reconstructed rather than read.
+            </p>
+          </div>
+          <p class="addon">
+            <b>Rush delivery</b> is available when the quotation is due before
+            the standard {TURNAROUND} is up — say so on the enquiry and we will
+            price it with the job. <b>Bulk pricing</b> applies from twenty
+            drawings a month; tell us the volume and the mix of part types and
+            we will quote the batch rather than each print.
+          </p>
+        </section>
+
+        <!-- 6 ─ free trial -->
+        <section class="block rv">
+          <p class="eyebrow">Trial</p>
+          <h2>First three drawings free</h2>
+          <div class="callout-box">
+            <h3>Try it before you commit anything</h3>
+            <p>
+              New business customers get their <b>first three drawings converted
+              free</b> — the same STEP files, flat-pattern DXF and conversion
+              report as a paid job, so you are judging the real thing rather
+              than a sample we chose.
+            </p>
+            <p>
+              One set per company. Send a drawing that actually matters to you;
+              an easy one proves nothing to either of us.
+            </p>
+          </div>
+        </section>
+
+        <!-- 7 ─ confidentiality -->
+        <section class="block rv">
+          <p class="eyebrow">Confidentiality</p>
+          <h2>Your drawings stay yours</h2>
+          <div class="callout-box">
+            <p>
+              Drawings are handled <b>under NDA on request</b> — ask before you
+              send anything and we will have it signed first.
+            </p>
+            <p>
+              A drawing you send is used <b>only for your job</b>. It is not
+              shown to anyone else, and it is not used as an example on this
+              website or anywhere else without your written permission.
+            </p>
+          </div>
+        </section>
+
+        <!-- 8 ─ disclaimer -->
+        <p class="smallprint">
+          <b>Please note.</b> A converted model is built from the drawing you
+          supply. The customer remains responsible for verifying critical
+          dimensions and tolerances against the original drawing before
+          manufacture. Where a drawing is ambiguous, our conversion report says
+          so — but the final check before cutting metal is yours.
+        </p>
+
+        <!-- 9 ─ FAQ -->
+        <section class="block rv">
+          <p class="eyebrow">Questions</p>
+          <h2>Common questions</h2>
+          <div class="faq" style="margin-top:18px">
+            {faq.map((f, i) => (
+              <details open={i === 0}>
+                <summary>{f.q}</summary>
+                <p>{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <!-- enquiry -->
+        <section class="block rv" id="enquire">
+          <p class="eyebrow">Send a drawing</p>
+          <h2>Start a conversion</h2>
+
+          <form
+            class="svc-form"
+            id="cad-form"
+            action="https://formsubmit.co/info@jmcengg.com"
+            method="POST"
+            enctype="multipart/form-data"
+          >
+            <p class="fnote">Goes straight to our tool room</p>
+
+            <!-- FormSubmit's _subject is a fixed value; the script below
+                 rewrites it to include the company name before the form is
+                 submitted, and this stays as the fallback if JS is off. -->
+            <input type="hidden" name="_subject" id="cad-subject" value="2D to 3D enquiry" />
+            <input type="hidden" name="_template" value="table" />
+            <input type="hidden" name="_next" value="https://jmcengg.com/thanks.html" />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+
+            <div class="frow2">
+              <div class="fld"><label for="c-name">Your name *</label><input id="c-name" name="Name" type="text" required /></div>
+              <div class="fld"><label for="c-company">Company</label><input id="c-company" name="Company" type="text" /></div>
+            </div>
+            <div class="frow2">
+              <div class="fld"><label for="c-email">Email *</label><input id="c-email" name="Email" type="email" required /></div>
+              <div class="fld"><label for="c-phone">Phone *</label><input id="c-phone" name="Phone" type="tel" required /></div>
+            </div>
+            <div class="frow2">
+              <div class="fld">
+                <label for="c-count">How many drawings? *</label>
+                <input id="c-count" name="Number of drawings" type="number" min="1" step="1" required />
+              </div>
+              <div class="fld">
+                <label for="c-type">Part type *</label>
+                <select id="c-type" name="Part type" required>
+                  <option value="">Choose…</option>
+                  <option>Sheet metal</option>
+                  <option>Machined</option>
+                  <option>Other / mixed</option>
+                </select>
+              </div>
+            </div>
+            <div class="fld">
+              <label for="c-turn">Turnaround needed *</label>
+              <select id="c-turn" name="Turnaround" required>
+                <option value="">Choose…</option>
+                <option>Standard</option>
+                <option>Rush</option>
+                <option>Not urgent</option>
+              </select>
+            </div>
+
+            <div class="fld">
+              <label for="c-link">Link to your drawings</label>
+              <input id="c-link" name="Drawing link" type="url" inputmode="url" placeholder="https://drive.google.com/… or a WeTransfer link" />
+              <span class="hint">
+                A shared link is the reliable way to send drawings — scans and
+                multi-sheet PDFs are usually too large to attach. Or email them
+                to <a href="mailto:info@jmcengg.com">info@jmcengg.com</a>.
+              </span>
+            </div>
+
+            <div class="fld">
+              <label for="c-file">Or attach one small file</label>
+              <input id="c-file" name="attachment" type="file" accept=".pdf,.tif,.tiff,.png,.jpg,.jpeg,.dxf,.dwg,.step,.stp" />
+              <span class="hint">Single file, under 10&nbsp;MB. Anything bigger, use the link above.</span>
+            </div>
+
+            <div class="fld">
+              <label for="c-notes">Notes</label>
+              <textarea id="c-notes" name="Notes" placeholder="Material and thickness, whether you need the flat pattern, anything unusual about the print…"></textarea>
+            </div>
+
+            <label class="consent2">
+              <input type="checkbox" name="Consent" value="Yes" required />
+              <span>
+                I agree that JMC Engineering may use these details to respond to
+                my enquiry. Drawings are treated as confidential and are never
+                shared — see our <a href="/privacy-policy.html" target="_blank" rel="noopener">Privacy Policy</a>.
+              </span>
+            </label>
+
+            <button class="btn btn-p" type="submit">Send enquiry</button>
+          </form>
+        </section>
+
+      </div>
+
+      <!-- aside -->
+      <aside class="aside">
+        <div class="panel dark">
+          <h3>What to send us</h3>
+          <ul class="ticks">
+            <li>The drawing — PDF, TIF, PNG or JPG</li>
+            <li>Material and thickness, for sheet metal</li>
+            <li>Whether you need the flat pattern</li>
+            <li>When you need it back</li>
+          </ul>
+          <a class="btn btn-p" href="#enquire">Get 3 free conversions</a>
+          <p class="contact-line">
+            Or send it directly:<br />
+            <a href="mailto:info@jmcengg.com">info@jmcengg.com</a><br />
+            <a href="https://wa.me/916382387874" target="_blank" rel="noopener">WhatsApp +91 63823 87874</a>
+          </p>
+        </div>
+
+        <div class="panel">
+          <h3>Who does the work</h3>
+          <ul class="ticks">
+            <li>A registered precision tooling company in Padi, Chennai</li>
+            <li>30+ years of combined expertise in press tools, jig fixtures and moulds</li>
+            <li>Models checked by the people who build tools from them</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <h3>Tooling we build</h3>
+          <ul class="ticks">
+            <li><a href="/capabilities/press-tools/">Press tools &amp; progressive dies</a></li>
+            <li><a href="/capabilities/jig-fixtures/">Jig fixtures</a></li>
+            <li><a href="/capabilities/special-purpose-machines/">Special-purpose machines</a></li>
+            <li><a href="/capabilities/">All capabilities</a></li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <h3>Free engineering tools</h3>
+          <ul class="ticks">
+            <li><a href="/pcd-calculator/">PCD hole calculator</a></li>
+            <li><a href="/drill-calculator.html">Drill &amp; tolerance calculator</a></li>
+            <li><a href="/weight-calculator.html">Material weight calculator</a></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script is:inline>
+    /* FormSubmit's _subject is a static hidden field — it has no templating.
+       This puts the company name into it before the form goes, which is what
+       makes "2D to 3D enquiry – Acme Stampings" land in the inbox instead of
+       twenty identical subject lines. If JS is off the hidden field keeps its
+       static value and the enquiry still arrives. */
+    (function () {
+      var form = document.getElementById('cad-form');
+      if (!form) return;
+      form.addEventListener('submit', function () {
+        var company = (document.getElementById('c-company') || {}).value || '';
+        company = company.trim().replace(/\s+/g, ' ').slice(0, 60);
+        var subject = document.getElementById('cad-subject');
+        /* Always assign, never only-when-present: someone who fills the
+           company in, trips validation, clears it and submits again would
+           otherwise send the previous company's name in the subject. */
+        if (subject) {
+          subject.value = company
+            ? '2D to 3D enquiry – ' + company
+            : '2D to 3D enquiry';
+        }
+      });
+    })();
+  </script>
+
+</Page>
