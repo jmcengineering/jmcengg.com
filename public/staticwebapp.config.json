@@ -52,6 +52,11 @@
       "statusCode": 301
     },
     {
+      "route": "/og-cover.png",
+      "redirect": "/og-cover.jpg",
+      "statusCode": 301
+    },
+    {
       "route": "/_astro/*",
       "headers": {
         "cache-control": "public, max-age=31536000, immutable"

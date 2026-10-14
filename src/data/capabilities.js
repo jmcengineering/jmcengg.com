@@ -13,9 +13,9 @@ export const capabilities = [
     slug: 'press-tools',
     nav: 'Press Tools',
     h1: 'Press Tools & Dies',
-    title: 'Press Tool Manufacturer in Chennai | Blanking, Piercing & Compound Dies',
+    title: 'Press Tool Manufacturer, Chennai | Blanking & Piercing Dies',
     description:
-      'Press tool manufacturer in Padi, Chennai. Blanking, piercing, compound and progressive dies in D2 and HCHCr, hardened 58–62 HRC, wire-cut to drawing. Send a drawing for a 24-hour review.',
+      'Press tool manufacturer in Padi, Chennai. Blanking, piercing, compound and progressive dies in D2 and HCHCr, hardened 58-62 HRC, wire-cut to drawing.',
     summary:
       'Blanking, piercing, forming, bending, compound and progressive dies engineered for precision sheet-metal work at production volume.',
     intro: [
@@ -73,9 +73,9 @@ export const capabilities = [
     slug: 'jig-fixtures',
     nav: 'Jig Fixtures',
     h1: 'Jig & Fixture Manufacturing',
-    title: 'Jig and Fixture Manufacturer in Chennai | Machining & Welding Fixtures',
+    title: 'Jig & Fixture Manufacturer in Chennai | Machining Fixtures',
     description:
-      'Jig and fixture manufacturer in Padi, Chennai. Machining jigs, welding fixtures, assembly and inspection fixtures built on 3-2-1 location for repeatable production. Free drawing review in 24 hours.',
+      'Jig and fixture manufacturer in Padi, Chennai. Machining jigs, welding, assembly and inspection fixtures built on 3-2-1 location for repeatable production.',
     summary:
       'Custom machining, welding, assembly and inspection fixtures built for repeatability across automotive and industrial production.',
     intro: [
@@ -132,9 +132,9 @@ export const capabilities = [
     slug: 'plastic-moulds',
     nav: 'Plastic Moulds',
     h1: 'Plastic Injection Moulds',
-    title: 'Injection Mould Manufacturer in Chennai | Plastic Mould Tool Room',
+    title: 'Injection Mould Manufacturer in Chennai | Mould Tool Room',
     description:
-      'Plastic injection mould manufacturer in Padi, Chennai. Two-plate and three-plate moulds, multi-cavity tooling, P20 and hardened cores. Send a part drawing for a 24-hour feasibility review.',
+      'Plastic injection mould manufacturer in Padi, Chennai. Two-plate and three-plate moulds, multi-cavity tooling, P20 and hardened cores, built to your drawing.',
     summary:
       'Injection mould tooling for plastic components, designed for dimensional accuracy and long production life.',
     intro: [
@@ -192,9 +192,9 @@ export const capabilities = [
     slug: 'gauges',
     nav: 'Gauges',
     h1: 'Inspection Gauges & Checking Fixtures',
-    title: 'Gauge Manufacturer in Chennai | Go/No-Go Plug, Ring & Snap Gauges',
+    title: 'Gauge Manufacturer in Chennai | Go/No-Go Plug & Ring Gauges',
     description:
-      'Inspection gauge manufacturer in Padi, Chennai. Go/no-go plug and ring gauges, snap gauges, receiver gauges and functional checking fixtures built to your quality plan.',
+      'Inspection gauge manufacturer in Padi, Chennai. Go/no-go plug and ring gauges, snap gauges, receiver gauges and checking fixtures built to your quality plan.',
     summary:
       'Inspection gauges, go/no-go gauges and checking fixtures built to your quality-control requirements.',
     intro: [
@@ -246,7 +246,7 @@ export const capabilities = [
     slug: 'special-purpose-machines',
     nav: 'Special Purpose Machines',
     h1: 'Special-Purpose Machines (SPM)',
-    title: 'Special Purpose Machine Manufacturer in Chennai | SPM Builders',
+    title: 'SPM Manufacturer in Chennai | Special Purpose Machines',
     description:
       'Special-purpose machine manufacturer in Padi, Chennai. SPMs for pressing, drilling, assembly and checking \u2014 designed, built and trialled around one component.',
     summary:
@@ -302,9 +302,9 @@ export const capabilities = [
     slug: 'forming-tools',
     nav: 'Forming Tools',
     h1: 'Forming & Deep Draw Tools',
-    title: 'Deep Draw & Forming Tool Manufacturer in Chennai | JMC Engineering',
+    title: 'Forming & Deep Draw Tool Manufacturer in Chennai',
     description:
-      'Deep draw and forming tool manufacturer in Padi, Chennai. Draw dies, restrike and compound forming tools for complex sheet-metal geometry with tight tolerance control.',
+      'Deep draw and forming tool manufacturer in Padi, Chennai. Draw dies, restrike and compound forming tools for sheet metal with tight tolerance control.',
     summary:
       'Deep draw, stretch forming and compound forming tools for complex geometries that need tight tolerance control.',
     intro: [
@@ -361,7 +361,7 @@ export const capabilities = [
     slug: 'precision-machining',
     nav: 'Precision Machining',
     h1: 'Precision Machining & Engineering Works',
-    title: 'Precision Machining in Chennai | CNC, Wire EDM & Surface Grinding',
+    title: 'Precision Machining in Chennai | CNC & Wire EDM',
     description:
       'Precision machining in Padi, Chennai. 3-axis VMC, wire EDM, surface grinding, turning and milling for tooling components, prototypes and low-volume production.',
     summary:

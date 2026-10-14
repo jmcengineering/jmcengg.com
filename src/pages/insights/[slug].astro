@@ -16,6 +16,14 @@ export function getStaticPaths() {
 
 const { article } = Astro.props;
 
+/* Google cuts a title off around 60 characters. "<title> | JMC Engineering"
+   pushes every article past that, and the brand is the least useful part of
+   an article's result — the headline is what earns the click. So the suffix
+   is added only when it still fits. */
+const SUFFIX = ' | JMC Engineering';
+const pageTitle =
+  article.title.length + SUFFIX.length <= 60 ? article.title + SUFFIX : article.title;
+
 const articleLd = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
@@ -35,7 +43,7 @@ const articleLd = {
 };
 ---
 <Page
-  title={`${article.title} | JMC Engineering`}
+  title={pageTitle}
   description={article.description}
   crumbs={[
     { label: 'Home', href: '/' },

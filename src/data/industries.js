@@ -13,7 +13,7 @@ export const industries = [
     slug: 'automotive-tier-1-2',
     nav: 'Automotive',
     h1: 'Tooling for Automotive Tier-1 and Tier-2 Suppliers',
-    title: 'Automotive Tooling Supplier, Chennai | Tier-1 & Tier-2 Press Tools & Fixtures',
+    title: 'Automotive Tooling Supplier, Chennai | Tier-1 & Tier-2',
     description:
       'Press tools, jig fixtures and checking gauges for automotive Tier-1 and Tier-2 suppliers around Chennai. PPAP-ready documentation, drawing review in 24 hours.',
     summary:
@@ -52,7 +52,7 @@ export const industries = [
     slug: 'two-wheeler-oem',
     nav: 'Two-Wheeler',
     h1: 'Tooling for the Two-Wheeler OEM Supply Chain',
-    title: 'Two-Wheeler Component Tooling, Chennai | Press Tools & Fixtures',
+    title: 'Two-Wheeler Component Tooling, Chennai | Press Tools',
     description:
       'Press tools, forming dies and fixtures for two-wheeler OEM supply chain components. High-volume sheet-metal tooling built in Padi, Chennai.',
     summary:
@@ -91,7 +91,7 @@ export const industries = [
     slug: 'sheet-metal-stamping',
     nav: 'Sheet Metal',
     h1: 'Tooling for Sheet Metal & Stamping',
-    title: 'Sheet Metal Stamping Tool Manufacturer, Chennai | Blanking & Forming Dies',
+    title: 'Sheet Metal Stamping Tool Manufacturer, Chennai',
     description:
       'Sheet-metal stamping tools from Padi, Chennai. Blanking, piercing, forming and deep-draw dies for CRCA, HR, stainless and aluminium at production volume.',
     summary:
@@ -131,7 +131,7 @@ export const industries = [
     slug: 'plastic-injection-moulding',
     nav: 'Plastic Moulding',
     h1: 'Tooling for Plastic Injection Moulding',
-    title: 'Injection Mould Tooling, Chennai | Multi-Cavity & Insert Moulds',
+    title: 'Injection Mould Tooling, Chennai | Multi-Cavity Moulds',
     description:
       'Injection mould tooling for plastic moulders in and around Chennai. Two-plate, three-plate and multi-cavity moulds, plus mould repair and refurbishment.',
     summary:
