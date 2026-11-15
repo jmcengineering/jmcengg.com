@@ -2,6 +2,15 @@
   "_comment": "The Insights index. Written by the admin panel at /admin/blog/. Every entry is a markdown file in src/content/articles/<slug>.md, served at /insights/<slug>/. Newest first is the display order; `date` decides it, not position in this file.",
   "articles": [
     {
+      "slug": "tungsten-carbide-is-turning-upward-again-three-weeks-in",
+      "title": "Tungsten Carbide Is Turning Upward Again, Three Weeks In",
+      "description": "China carbide prices dipped after their spring spike, then reversed in early November — here's what moved and why it matters.",
+      "category": "Materials",
+      "date": "2026-11-15",
+      "updated": "2026-11-15",
+      "status": "draft"
+    },
+    {
       "slug": "copper-hit-record-highs-in-september-tooling-feels-it-too",
       "title": "Copper Hit Record Highs in September. Tooling Feels It Too",
       "description": "Copper set records again this month. Here is where it shows up in mould and press tool builds, and what a buyer should do now.",
